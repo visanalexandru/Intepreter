@@ -30,6 +30,16 @@ namespace AST {
         /*Deletes the allocated string if it's type is String*/
         ~Value();
 
+        /*Copy constructor*/
+        Value(const Value &other);
+
+        /*Move constructor*/
+        Value(Value&&other) noexcept;
+
+        /*Copy assignment operator.*/
+        Value &operator=(Value other);
+
+
         /*Operators:Return the value corresponding to the result of the operation.
          * Throw runtime exceptions if the types are not compatible*/
         Value operator+(const Value &other) const;
@@ -45,6 +55,8 @@ namespace AST {
 
 
     private:
+        /*Swap values*/
+        void swap(Value &other);
 
         /*Union that holds PODs*/
         union Data {
@@ -55,7 +67,7 @@ namespace AST {
         };
         Data data;
 
-        const Type type;
+        Type type;
     };
 
 }

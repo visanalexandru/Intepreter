@@ -3,15 +3,18 @@
 //
 
 #include "Value.h"
-
+#include<iostream>
 namespace AST {
-    Value::Value(int value) : type(Type::Int), data{.ival=value} {
+    Value::Value(int value) : type(Type::Int) {
+        data.ival = value;
     }
 
-    Value::Value(float value) : type(Type::Float), data{.fval=value} {
+    Value::Value(float value) : type(Type::Float) {
+        data.fval = value;
     }
 
-    Value::Value(const std::string &value) : type(Type::String), data{.sval=new std::string(value)} {
+    Value::Value(const std::string &value) : type(Type::String) {
+        data.sval = new std::string(value);
     }
 
     Value::Value() : type(Type::None) {
@@ -21,6 +24,35 @@ namespace AST {
     Value::~Value() {
         if (type == Type::String)
             delete data.sval;
+    }
+
+    void Value::swap(Value &other) {
+        std::swap(data, other.data);
+        std::swap(type, other.type);
+    }
+
+    Value::Value(const Value &other) : type(other.type) {
+        switch (other.type) {
+            case Type::Int:
+                data.ival = other.data.ival;
+                break;
+            case Type::Float:
+                data.fval = other.data.fval;
+                break;
+            case Type::String:
+                data.sval = new std::string(*other.data.sval);
+            default://None,do nothing
+                break;
+        }
+    }
+
+    Value &Value::operator=(Value other) {
+        swap(other);
+        return *this;
+    }
+
+    Value::Value(AST::Value&&other) noexcept {
+        swap(other);
     }
 
     std::string Value::toString() const {
