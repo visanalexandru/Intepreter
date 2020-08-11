@@ -3,6 +3,7 @@
 //
 
 #include "Value.h"
+
 namespace AST {
     Value::Value(int value) : type(Type::Int) {
         data.ival = value;
@@ -50,7 +51,7 @@ namespace AST {
         return *this;
     }
 
-    Value::Value(AST::Value&&other) noexcept {
+    Value::Value(AST::Value &&other) noexcept {
         swap(other);
     }
 
@@ -76,14 +77,19 @@ namespace AST {
                         return Value(data.ival + other.data.ival);
                     case Type::Float:
                         return Value(double(data.ival) + other.data.fval);
+                    default:
+                        break;
                 }
                 break;
+
             case Type::Float:
                 switch (other.type) {
                     case Type::Int:
                         return Value(data.fval + (double) other.data.ival);
                     case Type::Float:
                         return Value(data.fval + other.data.fval);
+                    default:
+                        break;
                 }
                 break;
 
@@ -91,7 +97,12 @@ namespace AST {
                 switch (other.type) {
                     case Type::String:
                         return Value(*data.sval + *other.data.sval);
+                    default:
+                        break;
                 }
+                break;
+
+            default:
                 break;
         }
         throw std::runtime_error("Cannot add " + typeToString(other.type) + " to " + typeToString(type));
@@ -105,15 +116,23 @@ namespace AST {
                         return Value(data.ival - other.data.ival);
                     case Type::Float:
                         return Value(double(data.ival) - other.data.fval);
+                    default:
+                        break;
                 }
                 break;
+
             case Type::Float:
                 switch (other.type) {
                     case Type::Int:
                         return Value(data.fval - (double) other.data.ival);
                     case Type::Float:
                         return Value(data.fval - other.data.fval);
+                    default:
+                        break;
                 }
+                break;
+
+            default:
                 break;
         }
         throw std::runtime_error("Cannot subtract " + typeToString(other.type) + " from " + typeToString(type));
@@ -127,15 +146,23 @@ namespace AST {
                         return Value(data.ival * other.data.ival);
                     case Type::Float:
                         return Value(double(data.ival) * other.data.fval);
+                    default:
+                        break;
                 }
                 break;
+
             case Type::Float:
                 switch (other.type) {
                     case Type::Int:
                         return Value(data.fval * (double) other.data.ival);
                     case Type::Float:
                         return Value(data.fval * other.data.fval);
+                    default:
+                        break;
                 }
+                break;
+
+            default:
                 break;
         }
         throw std::runtime_error("Cannot multiply " + typeToString(type) + " by " + typeToString(other.type));
@@ -149,15 +176,23 @@ namespace AST {
                         return Value((double) data.ival / (double) other.data.ival);
                     case Type::Float:
                         return Value(double(data.ival) / other.data.fval);
+                    default:
+                        break;
                 }
                 break;
+
             case Type::Float:
                 switch (other.type) {
                     case Type::Int:
                         return Value(data.fval / (double) other.data.ival);
                     case Type::Float:
                         return Value(data.fval / other.data.fval);
+                    default:
+                        break;
                 }
+                break;
+
+            default:
                 break;
         }
         throw std::runtime_error("Cannot divide " + typeToString(type) + " by " + typeToString(other.type));
