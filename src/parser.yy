@@ -45,6 +45,7 @@
 //Precedence
 %left "+" "-";
 %left "*" "/";
+%precedence UMINUS
 
 
 
@@ -57,6 +58,7 @@ expression: LITERAL
 | expression "-" expression   { $$ = $1 - $3; }
 | expression "*" expression   { $$ = $1 * $3; }
 | expression "/" expression   { $$ = $1 / $3; }
+| "-" expression %prec UMINUS {$$= -$2;}
 | "(" expression ")"   { $$ = $2; }
 %%
 
