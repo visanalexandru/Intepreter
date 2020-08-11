@@ -198,6 +198,17 @@ namespace AST {
         throw std::runtime_error("Unsupported operand types for /: " + typeToString(type) + " and " + typeToString(other.type));
     }
 
+    Value Value::operator-() const {
+        switch(type){
+            case Type ::Int:
+                return Value(-data.ival);
+            case Type::Float:
+                return Value(-data.fval);
+            default:
+                throw std::runtime_error("Unsupported operand for unary -: "+typeToString(type));
+        }
+    }
+
     Type Value::getType() const {
         return type;
     }

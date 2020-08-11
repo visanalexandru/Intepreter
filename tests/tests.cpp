@@ -43,6 +43,11 @@ TEST_CASE("Integer arithmetic","[arithmetic]"){
     REQUIRE(result.toString()=="12.019231");
     REQUIRE(result.getType()==AST::Type::Float);
 
+    //UMINUS INT
+    REQUIRE_NOTHROW(result=-AST::Value(4));
+    REQUIRE(result.toString()=="-4");
+    REQUIRE(result.getType()==AST::Type::Int);
+
 
     //INT STRING
     REQUIRE_THROWS_WITH(AST::Value(410)+AST::Value("first"),"Unsupported operand types for +: Int and String");
@@ -91,6 +96,10 @@ REQUIRE_NOTHROW(result=AST::Value(43.5)/AST::Value(10.4));
 REQUIRE(result.toString()=="4.182692");
 REQUIRE(result.getType()==AST::Type::Float);
 
+//UMINUS FLOAT
+REQUIRE_NOTHROW(result=-AST::Value(-23.44));
+REQUIRE(result.toString()=="23.440000");
+REQUIRE(result.getType()==AST::Type::Float);
 
 //FLOAT STRING
 REQUIRE_THROWS_WITH(AST::Value(2.3)+AST::Value("string"),"Unsupported operand types for +: Float and String");
@@ -114,6 +123,9 @@ REQUIRE_THROWS_WITH(AST::Value("string")+AST::Value(420.69),"Unsupported operand
 REQUIRE_THROWS_WITH(AST::Value("test")-AST::Value(58.22),"Unsupported operand types for -: String and Float");
 REQUIRE_THROWS_WITH(AST::Value("arithmetic")*AST::Value(.232),"Unsupported operand types for *: String and Float");
 REQUIRE_THROWS_WITH(AST::Value("debug")/AST::Value(2323.0),"Unsupported operand types for /: String and Float");
+
+//UMINUS FLOAT
+REQUIRE_THROWS_WITH(-AST::Value("test"),"Unsupported operand for unary -: String");
 
 //STRING STRING
 AST::Value value;
