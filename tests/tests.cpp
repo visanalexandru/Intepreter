@@ -51,6 +51,8 @@ TEST_CASE("Integer arithmetic","[arithmetic]"){
     REQUIRE_THROWS_WITH(AST::Value(2322)/AST::Value("a"),"Cannot divide Int by String");
 }
 
+
+
 TEST_CASE("Float arithmetic","[arithmetic]"){
 
 AST::Value result;
@@ -97,3 +99,29 @@ REQUIRE_THROWS_WITH(AST::Value(123.4)*AST::Value("hhfffa"),"Cannot multiply Floa
 REQUIRE_THROWS_WITH(AST::Value(0.23)/AST::Value("a"),"Cannot divide Float by String");
 }
 
+
+
+
+TEST_CASE("String arithmetic","[arithmetic]"){
+//STRING INT
+REQUIRE_THROWS_WITH(AST::Value("string")+AST::Value(54),"Cannot add Int to String");
+REQUIRE_THROWS_WITH(AST::Value("test")-AST::Value(27),"Cannot subtract Int from String");
+REQUIRE_THROWS_WITH(AST::Value("arithmetic")*AST::Value(4),"Cannot multiply String by Int");
+REQUIRE_THROWS_WITH(AST::Value("debug")/AST::Value(54),"Cannot divide String by Int");
+
+//STRING FLOAT
+REQUIRE_THROWS_WITH(AST::Value("string")+AST::Value(420.69),"Cannot add Float to String");
+REQUIRE_THROWS_WITH(AST::Value("test")-AST::Value(58.22),"Cannot subtract Float from String");
+REQUIRE_THROWS_WITH(AST::Value("arithmetic")*AST::Value(.232),"Cannot multiply String by Float");
+REQUIRE_THROWS_WITH(AST::Value("debug")/AST::Value(2323.0),"Cannot divide String by Float");
+
+//STRING STRING
+AST::Value value;
+REQUIRE_NOTHROW(value=AST::Value("hello ")+AST::Value("world"));
+REQUIRE(value.toString()=="hello world");
+
+REQUIRE_THROWS_WITH(AST::Value("hxc")-AST::Value("axcv"),"Cannot subtract String from String");
+REQUIRE_THROWS_WITH(AST::Value("ar")*AST::Value("axx"),"Cannot multiply String by String");
+REQUIRE_THROWS_WITH(AST::Value("stack")/AST::Value("overflow"),"Cannot divide String by String");
+
+}
