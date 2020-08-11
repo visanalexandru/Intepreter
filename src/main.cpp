@@ -5,7 +5,8 @@
 #include "Value.h"
 int main(int argc,char**argv){
     Driver driver;
-    driver.parse("test.lang");
-    std::cout<<driver.result;
+    int success=driver.parse("test.lang");
+    if(success==0)
+        std::cout<<(driver.result).toString();
     return 0;
 }

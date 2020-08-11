@@ -18,14 +18,15 @@
 %define parse.lac full //improve syntax error handling
 
 
-%code requires {
+%code requires {//add includes here
+  #include <string>
+  #include "Value.h"
   class Driver;
 }
 
 %param { Driver& drv } //parameters to the parser
 
-%code { //add includes here
-# include <string>
+%code {
 #include "Driver.h"
 }
 
@@ -38,8 +39,8 @@
   RPAREN  ")"
 ;
 
-%token <int> NUMBER 
-%nterm <int> expression
+%token <AST::Value> LITERAL
+%nterm <AST::Value> expression
 
 //Precedence
 %left "+" "-";
@@ -51,7 +52,7 @@
 %start unit;
 unit: expression  { drv.result = $1; };
 
-expression: NUMBER
+expression: LITERAL
 | expression "+" expression   { $$ = $1 + $3; }
 | expression "-" expression   { $$ = $1 - $3; }
 | expression "*" expression   { $$ = $1 * $3; }

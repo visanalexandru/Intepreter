@@ -9,7 +9,7 @@ namespace AST {
         data.ival = value;
     }
 
-    Value::Value(float value) : type(Type::Float) {
+    Value::Value(double value) : type(Type::Float) {
         data.fval = value;
     }
 
@@ -76,12 +76,12 @@ namespace AST {
                     case Type::Int:
                         return Value(data.ival + other.data.ival);
                     case Type::Float:
-                        return Value(float(data.ival) + other.data.fval);
+                        return Value(double(data.ival) + other.data.fval);
                 }
             case Type::Float:
                 switch (other.type) {
                     case Type::Int:
-                        return Value(data.fval + (float) other.data.ival);
+                        return Value(data.fval + (double) other.data.ival);
                     case Type::Float:
                         return Value(data.fval + other.data.fval);
                 }
@@ -102,12 +102,12 @@ namespace AST {
                     case Type::Int:
                         return Value(data.ival - other.data.ival);
                     case Type::Float:
-                        return Value(float(data.ival) - other.data.fval);
+                        return Value(double(data.ival) - other.data.fval);
                 }
             case Type::Float:
                 switch (other.type) {
                     case Type::Int:
-                        return Value(data.fval - (float) other.data.ival);
+                        return Value(data.fval - (double) other.data.ival);
                     case Type::Float:
                         return Value(data.fval - other.data.fval);
                 }
@@ -122,12 +122,12 @@ namespace AST {
                     case Type::Int:
                         return Value(data.ival * other.data.ival);
                     case Type::Float:
-                        return Value(float(data.ival) * other.data.fval);
+                        return Value(double(data.ival) * other.data.fval);
                 }
             case Type::Float:
                 switch (other.type) {
                     case Type::Int:
-                        return Value(data.fval * (float) other.data.ival);
+                        return Value(data.fval * (double) other.data.ival);
                     case Type::Float:
                         return Value(data.fval * other.data.fval);
                 }
@@ -140,14 +140,14 @@ namespace AST {
             case Type::Int:
                 switch (other.type) {
                     case Type::Int:
-                        return Value((float) data.ival / (float) other.data.ival);
+                        return Value((double) data.ival / (double) other.data.ival);
                     case Type::Float:
-                        return Value(float(data.ival) / other.data.fval);
+                        return Value(double(data.ival) / other.data.fval);
                 }
             case Type::Float:
                 switch (other.type) {
                     case Type::Int:
-                        return Value(data.fval / (float) other.data.ival);
+                        return Value(data.fval / (double) other.data.ival);
                     case Type::Float:
                         return Value(data.fval / other.data.fval);
                 }

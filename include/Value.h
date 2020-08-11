@@ -19,7 +19,7 @@ namespace AST {
         Value(int value);
 
         /*Creates a value with type Float*/
-        Value(float value);
+        Value(double value);
 
         /*Creates a value with type String. Strings are immutable, so it creates a copy of the parameter*/
         Value(const std::string &value);
@@ -61,7 +61,7 @@ namespace AST {
         /*Union that holds PODs*/
         union Data {
             int ival;
-            float fval;
+            double fval;
             bool bval;
             std::string *sval;
         };

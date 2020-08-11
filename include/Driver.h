@@ -2,6 +2,7 @@
 #define DRIVER_H
 
 #include"parser.hpp"
+#include"Value.h"
 
 #define YY_DECL yy::parser::symbol_type yylex(Driver&drv)
 
@@ -18,7 +19,7 @@ public:
     yy::location location;
 
     /* the result of the parse*/
-    int result;
+    AST::Value result;
 private:
     /*the file that is currently being scanned */
     std::string current_file;
