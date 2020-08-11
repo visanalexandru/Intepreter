@@ -50,6 +50,8 @@ namespace AST {
 
         Value operator/(const Value &other) const;
 
+        Value operator-() const;
+
         /*Converts the value it is holding to a string*/
         std::string toString() const;
 

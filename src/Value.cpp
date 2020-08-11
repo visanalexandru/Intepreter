@@ -105,7 +105,7 @@ namespace AST {
             default:
                 break;
         }
-        throw std::runtime_error("Cannot add " + typeToString(other.type) + " to " + typeToString(type));
+        throw std::runtime_error("Unsupported operand types for +: " + typeToString(type) + " and " + typeToString(other.type));
     }
 
     Value Value::operator-(const Value &other) const {
@@ -135,7 +135,7 @@ namespace AST {
             default:
                 break;
         }
-        throw std::runtime_error("Cannot subtract " + typeToString(other.type) + " from " + typeToString(type));
+        throw std::runtime_error("Unsupported operand types for -: " + typeToString(type) + " and " + typeToString(other.type));
     }
 
     Value Value::operator*(const Value &other) const {
@@ -165,7 +165,7 @@ namespace AST {
             default:
                 break;
         }
-        throw std::runtime_error("Cannot multiply " + typeToString(type) + " by " + typeToString(other.type));
+        throw std::runtime_error("Unsupported operand types for *: " + typeToString(type) + " and " + typeToString(other.type));
     }
 
     Value Value::operator/(const Value &other) const {
@@ -195,7 +195,7 @@ namespace AST {
             default:
                 break;
         }
-        throw std::runtime_error("Cannot divide " + typeToString(type) + " by " + typeToString(other.type));
+        throw std::runtime_error("Unsupported operand types for /: " + typeToString(type) + " and " + typeToString(other.type));
     }
 
     Type Value::getType() const {

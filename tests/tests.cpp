@@ -45,10 +45,10 @@ TEST_CASE("Integer arithmetic","[arithmetic]"){
 
 
     //INT STRING
-    REQUIRE_THROWS_WITH(AST::Value(410)+AST::Value("first"),"Cannot add String to Int");
-    REQUIRE_THROWS_WITH(AST::Value(232)-AST::Value("second"),"Cannot subtract String from Int");
-    REQUIRE_THROWS_WITH(AST::Value(2)*AST::Value("test"),"Cannot multiply Int by String");
-    REQUIRE_THROWS_WITH(AST::Value(2322)/AST::Value("a"),"Cannot divide Int by String");
+    REQUIRE_THROWS_WITH(AST::Value(410)+AST::Value("first"),"Unsupported operand types for +: Int and String");
+    REQUIRE_THROWS_WITH(AST::Value(232)-AST::Value("second"),"Unsupported operand types for -: Int and String");
+    REQUIRE_THROWS_WITH(AST::Value(2)*AST::Value("test"),"Unsupported operand types for *: Int and String");
+    REQUIRE_THROWS_WITH(AST::Value(2322)/AST::Value("a"),"Unsupported operand types for /: Int and String");
 }
 
 
@@ -93,10 +93,10 @@ REQUIRE(result.getType()==AST::Type::Float);
 
 
 //FLOAT STRING
-REQUIRE_THROWS_WITH(AST::Value(2.3)+AST::Value("string"),"Cannot add String to Float");
-REQUIRE_THROWS_WITH(AST::Value(4.5)-AST::Value("test"),"Cannot subtract String from Float");
-REQUIRE_THROWS_WITH(AST::Value(123.4)*AST::Value("hhfffa"),"Cannot multiply Float by String");
-REQUIRE_THROWS_WITH(AST::Value(0.23)/AST::Value("a"),"Cannot divide Float by String");
+REQUIRE_THROWS_WITH(AST::Value(2.3)+AST::Value("string"),"Unsupported operand types for +: Float and String");
+REQUIRE_THROWS_WITH(AST::Value(4.5)-AST::Value("test"),"Unsupported operand types for -: Float and String");
+REQUIRE_THROWS_WITH(AST::Value(123.4)*AST::Value("hhfffa"),"Unsupported operand types for *: Float and String");
+REQUIRE_THROWS_WITH(AST::Value(0.23)/AST::Value("a"),"Unsupported operand types for /: Float and String");
 }
 
 
@@ -104,24 +104,24 @@ REQUIRE_THROWS_WITH(AST::Value(0.23)/AST::Value("a"),"Cannot divide Float by Str
 
 TEST_CASE("String arithmetic","[arithmetic]"){
 //STRING INT
-REQUIRE_THROWS_WITH(AST::Value("string")+AST::Value(54),"Cannot add Int to String");
-REQUIRE_THROWS_WITH(AST::Value("test")-AST::Value(27),"Cannot subtract Int from String");
-REQUIRE_THROWS_WITH(AST::Value("arithmetic")*AST::Value(4),"Cannot multiply String by Int");
-REQUIRE_THROWS_WITH(AST::Value("debug")/AST::Value(54),"Cannot divide String by Int");
+REQUIRE_THROWS_WITH(AST::Value("string")+AST::Value(54),"Unsupported operand types for +: String and Int");
+REQUIRE_THROWS_WITH(AST::Value("test")-AST::Value(27),"Unsupported operand types for -: String and Int");
+REQUIRE_THROWS_WITH(AST::Value("arithmetic")*AST::Value(4),"Unsupported operand types for *: String and Int");
+REQUIRE_THROWS_WITH(AST::Value("debug")/AST::Value(54),"Unsupported operand types for /: String and Int");
 
 //STRING FLOAT
-REQUIRE_THROWS_WITH(AST::Value("string")+AST::Value(420.69),"Cannot add Float to String");
-REQUIRE_THROWS_WITH(AST::Value("test")-AST::Value(58.22),"Cannot subtract Float from String");
-REQUIRE_THROWS_WITH(AST::Value("arithmetic")*AST::Value(.232),"Cannot multiply String by Float");
-REQUIRE_THROWS_WITH(AST::Value("debug")/AST::Value(2323.0),"Cannot divide String by Float");
+REQUIRE_THROWS_WITH(AST::Value("string")+AST::Value(420.69),"Unsupported operand types for +: String and Float");
+REQUIRE_THROWS_WITH(AST::Value("test")-AST::Value(58.22),"Unsupported operand types for -: String and Float");
+REQUIRE_THROWS_WITH(AST::Value("arithmetic")*AST::Value(.232),"Unsupported operand types for *: String and Float");
+REQUIRE_THROWS_WITH(AST::Value("debug")/AST::Value(2323.0),"Unsupported operand types for /: String and Float");
 
 //STRING STRING
 AST::Value value;
 REQUIRE_NOTHROW(value=AST::Value("hello ")+AST::Value("world"));
 REQUIRE(value.toString()=="hello world");
 
-REQUIRE_THROWS_WITH(AST::Value("hxc")-AST::Value("axcv"),"Cannot subtract String from String");
-REQUIRE_THROWS_WITH(AST::Value("ar")*AST::Value("axx"),"Cannot multiply String by String");
-REQUIRE_THROWS_WITH(AST::Value("stack")/AST::Value("overflow"),"Cannot divide String by String");
+REQUIRE_THROWS_WITH(AST::Value("hxc")-AST::Value("axcv"),"Unsupported operand types for -: String and String");
+REQUIRE_THROWS_WITH(AST::Value("ar")*AST::Value("axx"),"Unsupported operand types for *: String and String");
+REQUIRE_THROWS_WITH(AST::Value("stack")/AST::Value("overflow"),"Unsupported operand types for /: String and String");
 
 }
