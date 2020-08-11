@@ -53,6 +53,8 @@ namespace AST {
         /*Converts the value it is holding to a string*/
         std::string toString() const;
 
+        Type getType() const;
+
 
     private:
         /*Swap values*/
