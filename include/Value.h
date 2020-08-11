@@ -30,11 +30,12 @@ namespace AST {
         /*Deletes the allocated string if it's type is String*/
         ~Value();
 
-        /*Copy constructor*/
+        /*Copy constructor. If the other value's type is a string, or another immutable type that requires a pointer ,
+         * allocate a new copy*/
         Value(const Value &other);
 
         /*Move constructor*/
-        Value(Value&&other) noexcept;
+        Value(Value &&other) noexcept;
 
         /*Copy assignment operator.*/
         Value &operator=(Value other);

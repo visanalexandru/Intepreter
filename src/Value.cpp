@@ -33,15 +33,11 @@ namespace AST {
 
     Value::Value(const Value &other) : type(other.type) {
         switch (other.type) {
-            case Type::Int:
-                data.ival = other.data.ival;
-                break;
-            case Type::Float:
-                data.fval = other.data.fval;
-                break;
             case Type::String:
                 data.sval = new std::string(*other.data.sval);
-            default://None,do nothing
+            default:
+                //plain old data, just copy it
+                data=other.data;
                 break;
         }
     }
@@ -51,7 +47,7 @@ namespace AST {
         return *this;
     }
 
-    Value::Value(AST::Value &&other) noexcept {
+    Value::Value(AST::Value &&other) noexcept:Value(){
         swap(other);
     }
 
