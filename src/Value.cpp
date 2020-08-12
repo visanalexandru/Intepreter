@@ -5,19 +5,16 @@
 #include "Value.h"
 
 namespace AST {
-    Value::Value(int value) : type(Type::Int) {
-        data.ival = value;
+    Value::Value(int value) : type(Type::Int),data{.ival=value} {
     }
 
-    Value::Value(double value) : type(Type::Float) {
-        data.fval = value;
+    Value::Value(double value) : type(Type::Float),data{.fval=value} {
     }
 
-    Value::Value(const std::string &value) : type(Type::String) {
-        data.sval = new std::string(value);
+    Value::Value(const std::string &value) : type(Type::String),data{.sval=new std::string(value)} {
     }
 
-    Value::Value() : type(Type::None) {
+    Value::Value() : type(Type::None),data() {
 
     }
 
@@ -31,7 +28,7 @@ namespace AST {
         std::swap(type, other.type);
     }
 
-    Value::Value(const Value &other) : type(other.type) {
+    Value::Value(const Value &other) : type(other.type),data() {
         switch (other.type) {
             case Type::String:
                 data.sval = new std::string(*other.data.sval);
