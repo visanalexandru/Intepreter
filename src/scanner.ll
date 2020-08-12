@@ -15,8 +15,9 @@
 
 %{
     yy::parser::symbol_type make_INT (const std::string &s, const yy::parser::location_type& loc);
+    yy::parser::symbol_type make_STRING (const std::string &s, const yy::parser::location_type& loc);
 %}
-
+string \"[a-zA-Z0-9 ]*\"
 id    [a-zA-Z][a-zA-Z_0-9]*
 int   [0-9]+
 blank [ \t\r]
@@ -43,6 +44,7 @@ blank [ \t\r]
 "("        return yy::parser::make_LPAREN (loc);
 ")"        return yy::parser::make_RPAREN (loc);
 {int}      return make_INT(yytext,loc);
+{string}   return make_STRING(std::string(yytext),loc);
 <<EOF>>    return yy::parser::make_YYEOF (loc);
 %%
 
@@ -56,6 +58,11 @@ yy::parser::symbol_type make_INT (const std::string &s, const yy::parser::locati
   return yy::parser::make_LITERAL ((int) n, loc);
 }
 
+
+yy::parser::symbol_type make_STRING(const std::string &s, const yy::parser::location_type& loc)
+{
+  return yy::parser::make_LITERAL (s.substr(1,s.size()-2), loc);
+}
 
 void Driver::scan_begin ()
 {

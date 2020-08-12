@@ -35,6 +35,7 @@ namespace AST {
         switch (other.type) {
             case Type::String:
                 data.sval = new std::string(*other.data.sval);
+                break;
             default:
                 //plain old data, just copy it
                 data=other.data;
