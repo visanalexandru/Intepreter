@@ -3,7 +3,7 @@
 
 #include"parser.hpp"
 #include"Value.h"
-
+#include "ExpNode.h"
 #define YY_DECL yy::parser::symbol_type yylex(Driver&drv)
 
 YY_DECL;
@@ -19,7 +19,7 @@ public:
     yy::location location;
 
     /* the result of the parse*/
-    AST::Value result;
+    std::unique_ptr<AST::ExpNode> result;
 private:
     /*the file that is currently being scanned */
     std::string current_file;

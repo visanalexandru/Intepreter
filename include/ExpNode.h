@@ -17,6 +17,9 @@ namespace AST {
     public:
         /*Evaluates the expression based on the child nodes*/
         virtual Value evaluate() const = 0;
+
+        /*Default virtual constructor*/
+        virtual ~ExpNode() = default;
     };
 }
 
