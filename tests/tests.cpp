@@ -4,6 +4,7 @@
 #define CATCH_CONFIG_MAIN
 #include"catch.hpp"
 #include "Value.h"
+#include "Context.h"
 
 TEST_CASE("Integer arithmetic","[arithmetic]"){
 
@@ -135,5 +136,48 @@ REQUIRE(value.toString()=="hello world");
 REQUIRE_THROWS_WITH(AST::Value("hxc")-AST::Value("axcv"),"Unsupported operand types for -: String and String");
 REQUIRE_THROWS_WITH(AST::Value("ar")*AST::Value("axx"),"Unsupported operand types for *: String and String");
 REQUIRE_THROWS_WITH(AST::Value("stack")/AST::Value("overflow"),"Unsupported operand types for /: String and String");
+
+}
+
+
+
+TEST_CASE("Variables","[context]"){
+    AST::Context context;
+
+    SECTION("Variable declaration"){
+        context.declareVar("data",AST::Value(200));
+        REQUIRE(context.getVar("data").toString()=="200");
+        SECTION("Variable already defined in current scope"){
+            REQUIRE_THROWS_WITH(context.declareVar("data",AST::Value(23.f)),"Variable has already been declared in this scope: data");
+        }
+        SECTION("Variable not defined"){
+            REQUIRE_THROWS_WITH(context.getVar("stack"),"Variable has not been declared: stack");
+        }
+        SECTION("Multiple scopes"){
+            context.pushScope();
+            REQUIRE_NOTHROW(context.declareVar("data",AST::Value("test")));
+            context.declareVar("test",AST::Value(23));
+            context.popScope();
+            REQUIRE_THROWS_WITH(context.getVar("test"),"Variable has not been declared: test");
+        }
+
+    }
+    SECTION("Variable assignment"){
+        context.declareVar("astest",AST::Value(2.f));
+        SECTION("Simple assignment"){
+            REQUIRE_NOTHROW(context.setVar("astest",AST::Value(20)));
+            REQUIRE(context.getVar("astest").toString()=="20");
+        }
+        SECTION("Variable not defined"){
+            REQUIRE_THROWS_WITH(context.setVar("unknown",AST::Value(2333)),"Variable has not been declared: unknown");
+        }
+        SECTION("Multiple scopes"){
+            context.pushScope();
+            REQUIRE_NOTHROW(context.setVar("astest",AST::Value(2323)));
+            context.declareVar("hhh",AST::Value("not"));
+            context.popScope();
+            REQUIRE_THROWS_WITH(context.setVar("hhh",AST::Value("ok")),"Variable has not been declared: hhh");
+        }
+}
 
 }
