@@ -36,6 +36,12 @@ namespace AST {
         current_scope->insert(std::make_pair(name, value));
     }
 
+    void Context::defineFunc(const std::string &name, std::unique_ptr<Function> function) {
+        if (functions.find(name) != functions.end())
+            throw std::runtime_error("Function has already been defined: " + name);
+        functions.insert(std::make_pair(name, std::move(function)));
+    }
+
     void Context::setVar(const std::string &name, const AST::Value &value) {
         std::unordered_map<std::string, Value> *scope = findScopeOf(name);
         if (scope == nullptr)
@@ -48,6 +54,12 @@ namespace AST {
         if (scope == nullptr)
             throw std::runtime_error("Variable has not been declared: " + name);
         return (*scope)[name];
+    }
+
+    const std::unique_ptr<Function>&Context::getFunc(const std::string &name) {
+        if (functions.find(name) == functions.end())
+            throw std::runtime_error("Function has not been defined: " + name);
+        return functions[name];
     }
 
     void Context::pushScope() {
