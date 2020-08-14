@@ -7,7 +7,7 @@
 
 #include<vector>
 #include<memory>
-#include"Value.h"
+#include"AST/Value/Value.h"
 
 namespace AST {
     /*This class represents an expression node in the AST. Binary, unary, assigment operators etc. derive from this class.*/

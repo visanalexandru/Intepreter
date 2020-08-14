@@ -6,8 +6,8 @@
 #define INTERPRETER_DECLARATIONSTMT_H
 
 #include "StmtNode.h"
-#include "Context.h"
-#include "ExpNode.h"
+#include "AST/Context.h"
+#include "AST/Expression/ExpNode.h"
 
 namespace AST {
     /*This class is responsible for the declaration of a variable at runtime*/

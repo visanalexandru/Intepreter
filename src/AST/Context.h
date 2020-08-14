@@ -8,7 +8,7 @@
 #include<unordered_map>
 #include<deque>
 #include<string>
-#include "Value.h"
+#include "AST/Value/Value.h"
 
 namespace AST {
     /*This class manages scopes and function definitions*/

@@ -3,8 +3,8 @@
 //
 #define CATCH_CONFIG_MAIN
 #include"catch.hpp"
-#include "Value.h"
-#include "Context.h"
+#include "AST/Value/Value.h"
+#include "AST/Context.h"
 
 TEST_CASE("Integer arithmetic","[arithmetic]"){
 

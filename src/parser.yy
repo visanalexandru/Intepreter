@@ -20,13 +20,13 @@
 
 %code requires {//add includes here
   #include <string>
-  #include "UnaryOpExp.h"
-  #include "BinaryOpExp.h"
-  #include "LiteralExp.h"
-  #include "AssignmentExp.h"
-  #include "VariableExp.h"
-  #include "DeclarationStmt.h"
-  #include "ExpressionStmt.h"
+  #include "AST/Expression/UnaryOpExp.h"
+  #include "AST/Expression/BinaryOpExp.h"
+  #include "AST/Expression/LiteralExp.h"
+  #include "AST/Expression/AssignmentExp.h"
+  #include "AST/Expression/VariableExp.h"
+  #include "AST/Statement/DeclarationStmt.h"
+  #include "AST/Statement/ExpressionStmt.h"
   class Driver;
 }
 

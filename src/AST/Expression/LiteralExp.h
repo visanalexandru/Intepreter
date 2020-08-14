@@ -6,7 +6,7 @@
 #define INTERPRETER_LITERALEXP_H
 
 #include "ExpNode.h"
-#include "Value.h"
+#include "AST/Value/Value.h"
 
 namespace AST {
     /*This class represents a literal value, a terminal node in the AST*/

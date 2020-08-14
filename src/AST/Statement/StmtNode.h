@@ -5,7 +5,7 @@
 #ifndef INTERPRETER_STMTNODE_H
 #define INTERPRETER_STMTNODE_H
 
-#include "Value.h"
+#include "AST/Value/Value.h"
 
 namespace AST {
     /*This class represents a statement in the interpreted program.

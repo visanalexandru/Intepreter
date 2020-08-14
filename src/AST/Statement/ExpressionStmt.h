@@ -6,7 +6,7 @@
 #define INTERPRETER_EXPRESSIONSTMT_H
 
 #include"StmtNode.h"
-#include"ExpNode.h"
+#include"AST/Expression/ExpNode.h"
 
 namespace AST {
     /*This class represents an expresion followed by a semicolon*/

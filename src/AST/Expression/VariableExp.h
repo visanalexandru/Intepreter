@@ -6,7 +6,7 @@
 #define INTERPRETER_VARIABLEEXP_H
 
 #include "ExpNode.h"
-#include "Context.h"
+#include "AST/Context.h"
 
 namespace AST {
     /*This class represents a variable read in the interpreted program*/

@@ -2,8 +2,8 @@
 #define DRIVER_H
 
 #include"parser.hpp"
-#include"Value.h"
-#include "StmtNode.h"
+#include"AST/Value/Value.h"
+#include "AST/Statement/StmtNode.h"
 #define YY_DECL yy::parser::symbol_type yylex(Driver&drv)
 
 YY_DECL;
