@@ -24,7 +24,7 @@
   #include "BinaryOpExp.h"
   #include "LiteralExp.h"
   #include "AssignmentExp.h"
-  #include "Declaration.h"
+  #include "DeclarationStmt.h"
   class Driver;
 }
 
@@ -84,8 +84,8 @@ statement_list:
 
 statement:declaration_stmt {$$=std::move($1);}
 
-declaration_stmt: "var" IDENTIFIER "=" expression ";" {$$=std::make_unique<AST::Declaration>($2,std::move($4));}
-| "var" IDENTIFIER ";"                                {$$=std::make_unique<AST::Declaration>($2);}
+declaration_stmt: "var" IDENTIFIER "=" expression ";" {$$=std::make_unique<AST::DeclarationStmt>($2,std::move($4));}
+| "var" IDENTIFIER ";"                                {$$=std::make_unique<AST::DeclarationStmt>($2);}
 
 %%
 

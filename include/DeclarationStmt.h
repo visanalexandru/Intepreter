@@ -2,8 +2,8 @@
 // Created by gvisan on 14.08.2020.
 //
 
-#ifndef INTERPRETER_DECLARATION_H
-#define INTERPRETER_DECLARATION_H
+#ifndef INTERPRETER_DECLARATIONSTMT_H
+#define INTERPRETER_DECLARATIONSTMT_H
 
 #include "StmtNode.h"
 #include "Context.h"
@@ -11,7 +11,7 @@
 
 namespace AST {
     /*This class is responsible for the declaration of a variable at runtime*/
-    class Declaration : public StmtNode {
+    class DeclarationStmt : public StmtNode {
     private:
         std::string name;
 
@@ -22,13 +22,13 @@ namespace AST {
         void execute() override;
 
         /*Declares the variable with value None*/
-        Declaration(std::string varname);
+        DeclarationStmt(std::string varname);
 
         /*Declares the variable with the value of the expression*/
-        Declaration(std::string varname, std::shared_ptr<ExpNode> exp);
+        DeclarationStmt(std::string varname, std::shared_ptr<ExpNode> exp);
 
     };
 }
 
 
-#endif //INTERPRETER_DECLARATION_H
+#endif //INTERPRETER_DECLARATIONSTMT_H
