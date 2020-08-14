@@ -22,7 +22,7 @@ namespace AST {
         void execute() override;
 
         /*Declares the variable with value None*/
-        DeclarationStmt(std::string varname);
+        explicit DeclarationStmt(std::string varname);
 
         /*Declares the variable with the value of the expression*/
         DeclarationStmt(std::string varname, std::shared_ptr<ExpNode> exp);

@@ -14,7 +14,7 @@ namespace AST {
     private:
         const std::string name;
     public:
-        VariableExp(std::string varname);
+        explicit VariableExp(std::string varname);
 
         /*Returns the value of the variable that has that name*/
         Value evaluate() const override;

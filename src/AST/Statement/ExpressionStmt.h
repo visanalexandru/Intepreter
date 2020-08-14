@@ -14,7 +14,7 @@ namespace AST {
     private:
         std::shared_ptr<ExpNode> exp;
     public:
-        ExpressionStmt(std::shared_ptr<ExpNode> expression);
+        explicit ExpressionStmt(std::shared_ptr<ExpNode> expression);
 
         /*Just evaluate the expression*/
         void execute() override;
