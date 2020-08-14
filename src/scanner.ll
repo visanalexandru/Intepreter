@@ -16,10 +16,12 @@
 %{
     yy::parser::symbol_type make_INT (const std::string &s, const yy::parser::location_type& loc);
     yy::parser::symbol_type make_STRING (const std::string &s, const yy::parser::location_type& loc);
+    yy::parser::symbol_type make_FLOAT(const std::string&s,const yy::parser::location_type& loc);
 %}
 string \"[a-zA-Z0-9 ]*\"
-id    [a-zA-Z][a-zA-Z_0-9]*
+id    [a-zA-Z][a-zA-Z0-9]*
 int   [0-9]+
+float [0-9]*\.[0-9]+
 blank [ \t\r]
 
 
@@ -45,19 +47,33 @@ blank [ \t\r]
 ")"        return yy::parser::make_RPAREN (loc);
 {int}      return make_INT(yytext,loc);
 {string}   return make_STRING(std::string(yytext),loc);
+{float}    return make_FLOAT(std::string(yytext),loc);
+{id}       return yy::parser::make_IDENTIFIER(std::string(yytext),loc);
 <<EOF>>    return yy::parser::make_YYEOF (loc);
 %%
 
 
 yy::parser::symbol_type make_INT (const std::string &s, const yy::parser::location_type& loc)
 {
-  errno = 0;
-  long n = strtol (s.c_str(), NULL, 10);
-  if (! (INT_MIN <= n && n <= INT_MAX && errno != ERANGE))
-    throw yy::parser::syntax_error (loc, "integer is out of range: " + s);
-  return yy::parser::make_LITERAL ((int) n, loc);
-}
+   try{
+        int i=std::stoi(s);
+        return yy::parser::make_LITERAL(i,loc);
+   }
+   catch(const std::out_of_range&e){
+        throw yy::parser::syntax_error (loc, "integer is out of range: " + s);
+   }
 
+}
+yy::parser::symbol_type make_FLOAT(const std::string &s, const yy::parser::location_type& loc)
+{
+   try{
+        double i=std::stod(s);
+        return yy::parser::make_LITERAL(i,loc);
+   }
+   catch(const std::out_of_range&e){
+        throw yy::parser::syntax_error (loc, "float is out of range: " + s);
+   }
+}
 
 yy::parser::symbol_type make_STRING(const std::string &s, const yy::parser::location_type& loc)
 {
