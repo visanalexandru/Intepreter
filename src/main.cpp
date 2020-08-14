@@ -9,8 +9,10 @@ int main(int argc,char**argv){
     if(success==0){
         std::cout<<"Parsing successful"<<std::endl;
         float a=clock();
+
+        for(auto&stmt : driver.result)
+            stmt->execute();
         std::cout<<"Took "<<(clock()-a)/CLOCKS_PER_SEC<<std::endl;
-        std::cout<<(driver.result->evaluate()).toString()<<std::endl;
     }
     return 0;
 }
