@@ -23,6 +23,7 @@
   #include "UnaryOp.h"
   #include "BinaryOp.h"
   #include "Literal.h"
+  #include "Assignment.h"
   class Driver;
 }
 
@@ -39,12 +40,15 @@
   SLASH   "/"
   LPAREN  "("
   RPAREN  ")"
+  EQUALS "="
 ;
 
 %token <AST::Value> LITERAL
+%token <std::string> IDENTIFIER
 %nterm <std::unique_ptr<AST::ExpNode>> expression
 
 //Precedence
+%right "="
 %left "+" "-";
 %left "*" "/";
 %precedence UMINUS
@@ -62,6 +66,7 @@ expression: LITERAL {$$=std::make_unique<AST::Literal>($1);}
 | expression "/" expression   { $$ =std::make_unique<AST::BinaryOp>(AST::BinaryOperator::Division,std::move($1),std::move($3)); }
 | "-" expression %prec UMINUS { $$= std::make_unique<AST::UnaryOp>(AST::UnaryOperator::Minus,std::move($2)); }
 | "(" expression ")"   { $$ = std::move($2); }
+| IDENTIFIER "=" expression   { $$=std::make_unique<AST::Assignment>($1,std::move($3));}
 %%
 
 void

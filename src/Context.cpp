@@ -5,6 +5,7 @@
 #include "Context.h"
 
 namespace AST {
+    Context globalContext;
     Context::Context() {
         pushScope();
     }

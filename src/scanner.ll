@@ -45,6 +45,7 @@ blank [ \t\r]
 "/"        return yy::parser::make_SLASH  (loc);
 "("        return yy::parser::make_LPAREN (loc);
 ")"        return yy::parser::make_RPAREN (loc);
+"="        return yy::parser::make_EQUALS(loc);
 {int}      return make_INT(yytext,loc);
 {string}   return make_STRING(std::string(yytext),loc);
 {float}    return make_FLOAT(std::string(yytext),loc);

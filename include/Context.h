@@ -27,7 +27,7 @@ namespace AST {
     public:
         Context();
 
-        /*Will destroy all the active*/
+        /*Will destroy all the active scopes*/
         ~Context();
 
         /*Declare a variable in this scope and assign its value
@@ -48,6 +48,10 @@ namespace AST {
          *Calling this function when there is no scope in the list is undefined*/
         void popScope();
     };
+
+    /*The global context of the interpreted program
+     *Function calls,assignments etc will refer to this variable*/
+    extern Context globalContext;
 
 }
 
