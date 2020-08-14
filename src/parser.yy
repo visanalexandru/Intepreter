@@ -20,10 +20,10 @@
 
 %code requires {//add includes here
   #include <string>
-  #include "UnaryOp.h"
-  #include "BinaryOp.h"
-  #include "Literal.h"
-  #include "Assignment.h"
+  #include "UnaryOpExp.h"
+  #include "BinaryOpExp.h"
+  #include "LiteralExp.h"
+  #include "AssignmentExp.h"
   #include "Declaration.h"
   class Driver;
 }
@@ -66,19 +66,19 @@
 unit:statement_list{ drv.result = std::move($1); };
 
 
-expression: LITERAL {$$=std::make_unique<AST::Literal>($1);}
-| expression "+" expression   { $$ =std::make_unique<AST::BinaryOp>(AST::BinaryOperator::Addition,std::move($1),std::move($3)); }
-| expression "-" expression   { $$ =std::make_unique<AST::BinaryOp>(AST::BinaryOperator::Subtraction,std::move($1),std::move($3));}
-| expression "*" expression   { $$ =std::make_unique<AST::BinaryOp>(AST::BinaryOperator::Multiplication,std::move($1),std::move($3)); }
-| expression "/" expression   { $$ =std::make_unique<AST::BinaryOp>(AST::BinaryOperator::Division,std::move($1),std::move($3)); }
-| "-" expression %prec UMINUS { $$= std::make_unique<AST::UnaryOp>(AST::UnaryOperator::Minus,std::move($2)); }
+expression: LITERAL {$$=std::make_unique<AST::LiteralExp>($1);}
+| expression "+" expression   { $$ =std::make_unique<AST::BinaryOpExp>(AST::BinaryOperator::Addition,std::move($1),std::move($3)); }
+| expression "-" expression   { $$ =std::make_unique<AST::BinaryOpExp>(AST::BinaryOperator::Subtraction,std::move($1),std::move($3));}
+| expression "*" expression   { $$ =std::make_unique<AST::BinaryOpExp>(AST::BinaryOperator::Multiplication,std::move($1),std::move($3)); }
+| expression "/" expression   { $$ =std::make_unique<AST::BinaryOpExp>(AST::BinaryOperator::Division,std::move($1),std::move($3)); }
+| "-" expression %prec UMINUS { $$= std::make_unique<AST::UnaryOpExp>(AST::UnaryOperator::Minus,std::move($2)); }
 | "(" expression ")"   { $$ = std::move($2); }
-| IDENTIFIER "=" expression   { $$=std::make_unique<AST::Assignment>($1,std::move($3));}
+| IDENTIFIER "=" expression   { $$=std::make_unique<AST::AssignmentExp>($1,std::move($3));}
 ;
 
 
 statement_list:
-%empty
+%empty                    {$$=std::vector<std::unique_ptr<AST::StmtNode>>();}
 |statement_list statement { $1.push_back(std::move($2));$$=std::move($1);}
 ;
 

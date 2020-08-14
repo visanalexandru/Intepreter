@@ -10,7 +10,7 @@ flex_target(Scanner src/scanner.ll "${CMAKE_CURRENT_BINARY_DIR}/scanner.cpp")
 
 add_flex_bison_dependency(Scanner Parser)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
-add_executable(interpreter src/main.cpp src/Driver.cpp src/Value.cpp ${BISON_Parser_OUTPUTS} ${FLEX_Scanner_OUTPUTS} include/Type.h include/ExpNode.h include/Operator.h src/BinaryOp.cpp include/BinaryOp.h src/UnaryOp.cpp include/UnaryOp.h src/Literal.cpp include/Literal.h src/Context.cpp include/Context.h src/Assignment.cpp include/Assignment.h src/StmtNode.cpp include/StmtNode.h  src/Declaration.cpp include/Declaration.h)
+add_executable(interpreter src/main.cpp src/Driver.cpp src/Value.cpp ${BISON_Parser_OUTPUTS} ${FLEX_Scanner_OUTPUTS} include/Type.h include/ExpNode.h include/Operator.h src/BinaryOpExp.cpp include/BinaryOpExp.h src/UnaryOpExp.cpp include/UnaryOpExp.h src/LiteralExp.cpp include/LiteralExp.h src/Context.cpp include/Context.h src/AssignmentExp.cpp include/AssignmentExp.h src/StmtNode.cpp include/StmtNode.h  src/Declaration.cpp include/Declaration.h)
 target_include_directories(interpreter PRIVATE include)
 
 add_subdirectory(tests)

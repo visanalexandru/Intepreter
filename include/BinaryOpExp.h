@@ -2,15 +2,15 @@
 // Created by gvisan on 12.08.2020.
 //
 
-#ifndef INTERPRETER_BINARYOP_H
-#define INTERPRETER_BINARYOP_H
+#ifndef INTERPRETER_BINARYOPEXP_H
+#define INTERPRETER_BINARYOPEXP_H
 
 #include "Operator.h"
 #include "ExpNode.h"
 
 namespace AST {
 
-    class BinaryOp : public ExpNode {
+    class BinaryOpExp : public ExpNode {
     private:
         /*The binary operator type*/
         BinaryOperator type;
@@ -22,11 +22,11 @@ namespace AST {
         std::unique_ptr<ExpNode> right;
 
     public:
-        BinaryOp(BinaryOperator t, std::unique_ptr<ExpNode> l, std::unique_ptr<ExpNode> r);
+        BinaryOpExp(BinaryOperator t, std::unique_ptr<ExpNode> l, std::unique_ptr<ExpNode> r);
 
         Value evaluate() const override;
     };
 }
 
 
-#endif //INTERPRETER_BINARYOP_H
+#endif //INTERPRETER_BINARYOPEXP_H

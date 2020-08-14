@@ -2,8 +2,8 @@
 // Created by gvisan on 14.08.2020.
 //
 
-#ifndef INTERPRETER_ASSIGNMENT_H
-#define INTERPRETER_ASSIGNMENT_H
+#ifndef INTERPRETER_ASSIGNMENTEXP_H
+#define INTERPRETER_ASSIGNMENTEXP_H
 
 #include"ExpNode.h"
 #include"Context.h"
@@ -13,7 +13,7 @@ namespace AST {
      * The evaluate() function will call assignValue() on the global context,
      * and will return the value of the expression.
      * This will help us make expressions like this a=b=c=exp;*/
-    class Assignment : public ExpNode {
+    class AssignmentExp : public ExpNode {
     private:
         /*The name of the variable that needs to be assigned*/
         const std::string varname;
@@ -22,11 +22,11 @@ namespace AST {
         std::unique_ptr<ExpNode> exp;
 
     public:
-        Assignment(std::string name, std::unique_ptr<ExpNode> value);
+        AssignmentExp(std::string name, std::unique_ptr<ExpNode> value);
 
         Value evaluate() const override;
     };
 }
 
 
-#endif //INTERPRETER_ASSIGNMENT_H
+#endif //INTERPRETER_ASSIGNMENTEXP_H
