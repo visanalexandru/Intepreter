@@ -13,7 +13,7 @@ namespace AST {
     /*This class is responsible for the declaration of a variable at runtime*/
     class DeclarationStmt : public StmtNode {
     private:
-        std::string name;
+        const std::string name;
 
         /*The expression on the right side of the declaration*/
         std::shared_ptr<ExpNode> value;

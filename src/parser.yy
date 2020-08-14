@@ -25,6 +25,7 @@
   #include "LiteralExp.h"
   #include "AssignmentExp.h"
   #include "DeclarationStmt.h"
+  #include "VariableExp.h"
   class Driver;
 }
 
@@ -72,8 +73,9 @@ expression: LITERAL {$$=std::make_unique<AST::LiteralExp>($1);}
 | expression "*" expression   { $$ =std::make_unique<AST::BinaryOpExp>(AST::BinaryOperator::Multiplication,std::move($1),std::move($3)); }
 | expression "/" expression   { $$ =std::make_unique<AST::BinaryOpExp>(AST::BinaryOperator::Division,std::move($1),std::move($3)); }
 | "-" expression %prec UMINUS { $$= std::make_unique<AST::UnaryOpExp>(AST::UnaryOperator::Minus,std::move($2)); }
-| "(" expression ")"   { $$ = std::move($2); }
+| "(" expression ")"          { $$ = std::move($2); }
 | IDENTIFIER "=" expression   { $$=std::make_unique<AST::AssignmentExp>($1,std::move($3));}
+| IDENTIFIER                  { $$=std::make_unique<AST::VariableExp>($1);}
 ;
 
 
