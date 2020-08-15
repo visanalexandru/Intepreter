@@ -52,8 +52,8 @@
 %token <std::string> IDENTIFIER
 %nterm <std::unique_ptr<AST::ExpNode>> expression
 %nterm <std::unique_ptr<AST::StmtNode>> statement
-%nterm <std::unique_ptr<AST::StmtNode>> declaration_stmt
-%nterm <std::unique_ptr<AST::StmtNode>> expression_stmt
+%nterm <std::unique_ptr<AST::DeclarationStmt>> declaration_stmt
+%nterm <std::unique_ptr<AST::ExpressionStmt>> expression_stmt
 %nterm <std::vector<std::unique_ptr<AST::StmtNode>>> statement_list
 
 //Precedence
@@ -88,11 +88,14 @@ statement_list:
 
 statement:declaration_stmt {$$=std::move($1);}
 |         expression_stmt  {$$=std::move($1);}
+;
 
 declaration_stmt: "var" IDENTIFIER "=" expression ";" {$$=std::make_unique<AST::DeclarationStmt>($2,std::move($4));}
 | "var" IDENTIFIER ";"                                {$$=std::make_unique<AST::DeclarationStmt>($2);}
+;
 
 expression_stmt: expression ";" {$$=std::make_unique<AST::ExpressionStmt>(std::move($1));}
+;
 %%
 
 void
