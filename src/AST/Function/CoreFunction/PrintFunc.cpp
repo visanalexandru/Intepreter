@@ -13,7 +13,7 @@ namespace AST {
     }
 
     Value PrintFunc::execute(const std::vector<Value> &parameters) const {
-        std::cout << parameters[0].toString();
+        std::cout << parameters[0].toString()<<std::endl;
         return Value();//None
     }
 

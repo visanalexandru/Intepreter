@@ -48,6 +48,9 @@ blank [ \t\r]
 "var"      return yy::parser::make_VAR(loc);
 ";"        return yy::parser::make_SEMICOLON(loc);
 ","        return yy::parser::make_COMMA(loc);
+"func"     return yy::parser::make_FUNC(loc);
+"{"        return yy::parser::make_LBLOCK(loc);
+"}"        return yy::parser::make_RBLOCK(loc);
 {int}      return make_INT(yytext,loc);
 {string}   return make_STRING(std::string(yytext),loc);
 {float}    return make_FLOAT(std::string(yytext),loc);

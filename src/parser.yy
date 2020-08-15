@@ -28,6 +28,7 @@
   #include "AST/Expression/FuncCallExp.h"
   #include "AST/Statement/DeclarationStmt.h"
   #include "AST/Statement/ExpressionStmt.h"
+  #include "AST/Statement/FuncDeclarationStmt.h"
   class Driver;
 }
 
@@ -48,17 +49,23 @@
   SEMICOLON ";"
   VAR "var"
   COMMA ","
+  FUNC "func"
+  LBLOCK "{"
+  RBLOCK "}"
 ;
 
 %token <AST::Value> LITERAL
 %token <std::string> IDENTIFIER
 %nterm <std::unique_ptr<AST::ExpNode>> expression
-%nterm <std::unique_ptr<AST::StmtNode>> statement
 %nterm <std::unique_ptr<AST::DeclarationStmt>> declaration_stmt
 %nterm <std::unique_ptr<AST::ExpressionStmt>> expression_stmt
-%nterm <std::vector<std::unique_ptr<AST::StmtNode>>> statement_list
+%nterm <std::vector<std::unique_ptr<AST::StmtNode>>> statement_list //a list of statements
 %nterm <std::vector<std::unique_ptr<AST::ExpNode>>>  expression_list//1 or more comma-separated expressions
 %nterm <std::unique_ptr<AST::FuncCallExp>> function_call;
+%nterm <std::unique_ptr<AST::FuncDeclarationStmt>> function_declaration_stmt;
+%nterm <std::vector<std::string>> identifier_list; //1 or more comma-separated identifiers
+%nterm <std::vector<std::string>> parameter_identifier_list; //0 or more comma-separated identifiers, used for func defs
+%nterm <std::vector<std::unique_ptr<AST::StmtNode>>> block //the body of a function declaration, a list of statements,cannot be another function declaration
 
 //Precedence
 %right "="
@@ -89,17 +96,32 @@ expression_list: expression {$$=std::vector<std::unique_ptr<AST::ExpNode>>();$$.
 |expression_list "," expression {$1.push_back(std::move($3));$$=std::move($1);}
 ;
 
+identifier_list: IDENTIFIER{$$=std::vector<std::string>(); $$.push_back(std::move($1));}
+|identifier_list "," IDENTIFIER {$1.push_back(std::move($3));$$=std::move($1);}
+;
+
+parameter_identifier_list:%empty {$$=std::vector<std::string>();}
+|identifier_list                 {$$=std::move($1);}
+;
+
 function_call: IDENTIFIER "(" expression_list ")" {$$=std::make_unique<AST::FuncCallExp>(std::move($1),std::move($3));}
 |IDENTIFIER "(" ")"                               {$$=std::make_unique<AST::FuncCallExp>(std::move($1),std::vector<std::unique_ptr<AST::ExpNode>>());}
 ;
 
-statement_list:
-%empty                    {$$=std::vector<std::unique_ptr<AST::StmtNode>>();}
-|statement_list statement { $1.push_back(std::move($2));$$=std::move($1);}
+function_declaration_stmt: "func" IDENTIFIER "(" parameter_identifier_list ")" "{" block "}" {$$=std::make_unique<AST::FuncDeclarationStmt>(std::move($2),std::move($4),std::move($7));}
 ;
 
-statement:declaration_stmt {$$=std::move($1);}
-|         expression_stmt  {$$=std::move($1);}
+block:
+%empty                    {$$=std::vector<std::unique_ptr<AST::StmtNode>>();}
+|block declaration_stmt{ $1.push_back(std::move($2));$$=std::move($1);}
+|block expression_stmt{ $1.push_back(std::move($2));$$=std::move($1);}
+;
+
+statement_list:
+%empty                    {$$=std::vector<std::unique_ptr<AST::StmtNode>>();}
+|statement_list expression_stmt{ $1.push_back(std::move($2));$$=std::move($1);}
+|statement_list declaration_stmt{ $1.push_back(std::move($2));$$=std::move($1);}
+|statement_list function_declaration_stmt{ $1.push_back(std::move($2));$$=std::move($1);}
 ;
 
 declaration_stmt: "var" IDENTIFIER "=" expression ";" {$$=std::make_unique<AST::DeclarationStmt>(std::move($2),std::move($4));}

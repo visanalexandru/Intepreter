@@ -10,7 +10,7 @@ int main(int argc,char**argv){
         std::cout<<"Parsing successful"<<std::endl;
         float a=clock();
 
-        for(auto&stmt : driver.result)
+        for(const auto&stmt : driver.result)
             stmt->execute();
         std::cout<<"Took "<<(clock()-a)/CLOCKS_PER_SEC<<std::endl;
     }
