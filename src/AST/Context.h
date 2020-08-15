@@ -10,7 +10,7 @@
 #include<string>
 #include<memory>
 #include "AST/Value/Value.h"
-#include "AST/Function/Function.h"
+#include "AST/Function/CoreFunction/PrintFunc.h"
 
 namespace AST {
     /*This class manages scopes and function definitions*/

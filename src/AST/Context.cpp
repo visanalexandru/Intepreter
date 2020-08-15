@@ -7,6 +7,7 @@
 namespace AST {
     Context globalContext;
     Context::Context() {
+        defineFunc("print",std::make_unique<AST::PrintFunc>());
         pushScope();
     }
 

@@ -25,6 +25,7 @@
   #include "AST/Expression/LiteralExp.h"
   #include "AST/Expression/AssignmentExp.h"
   #include "AST/Expression/VariableExp.h"
+  #include "AST/Expression/FuncCallExp.h"
   #include "AST/Statement/DeclarationStmt.h"
   #include "AST/Statement/ExpressionStmt.h"
   class Driver;
@@ -45,7 +46,8 @@
   RPAREN  ")"
   EQUALS "="
   SEMICOLON ";"
-  VAR "var";
+  VAR "var"
+  COMMA ","
 ;
 
 %token <AST::Value> LITERAL
@@ -55,6 +57,8 @@
 %nterm <std::unique_ptr<AST::DeclarationStmt>> declaration_stmt
 %nterm <std::unique_ptr<AST::ExpressionStmt>> expression_stmt
 %nterm <std::vector<std::unique_ptr<AST::StmtNode>>> statement_list
+%nterm <std::vector<std::unique_ptr<AST::ExpNode>>>  expression_list//1 or more comma-separated expressions
+%nterm <std::unique_ptr<AST::FuncCallExp>> function_call;
 
 //Precedence
 %right "="
@@ -78,8 +82,16 @@ expression: LITERAL {$$=std::make_unique<AST::LiteralExp>($1);}
 | "(" expression ")"          { $$ = std::move($2); }
 | IDENTIFIER "=" expression   { $$=std::make_unique<AST::AssignmentExp>($1,std::move($3));}
 | IDENTIFIER                  { $$=std::make_unique<AST::VariableExp>($1);}
+| function_call               { $$=std::move($1);}
 ;
 
+expression_list: expression {$$=std::vector<std::unique_ptr<AST::ExpNode>>();$$.push_back(std::move($1));}
+|expression_list "," expression {$1.push_back(std::move($3));$$=std::move($1);}
+;
+
+function_call: IDENTIFIER "(" expression_list ")" {$$=std::make_unique<AST::FuncCallExp>($1,std::move($3));}
+|IDENTIFIER "(" ")"                               {$$=std::make_unique<AST::FuncCallExp>($1,std::vector<std::unique_ptr<AST::ExpNode>>());}
+;
 
 statement_list:
 %empty                    {$$=std::vector<std::unique_ptr<AST::StmtNode>>();}
