@@ -80,8 +80,8 @@ expression: LITERAL {$$=std::make_unique<AST::LiteralExp>($1);}
 | expression "/" expression   { $$ =std::make_unique<AST::BinaryOpExp>(AST::BinaryOperator::Division,std::move($1),std::move($3)); }
 | "-" expression %prec UMINUS { $$= std::make_unique<AST::UnaryOpExp>(AST::UnaryOperator::Minus,std::move($2)); }
 | "(" expression ")"          { $$ = std::move($2); }
-| IDENTIFIER "=" expression   { $$=std::make_unique<AST::AssignmentExp>($1,std::move($3));}
-| IDENTIFIER                  { $$=std::make_unique<AST::VariableExp>($1);}
+| IDENTIFIER "=" expression   { $$=std::make_unique<AST::AssignmentExp>(std::move($1),std::move($3));}
+| IDENTIFIER                  { $$=std::make_unique<AST::VariableExp>(std::move($1));}
 | function_call               { $$=std::move($1);}
 ;
 
@@ -89,8 +89,8 @@ expression_list: expression {$$=std::vector<std::unique_ptr<AST::ExpNode>>();$$.
 |expression_list "," expression {$1.push_back(std::move($3));$$=std::move($1);}
 ;
 
-function_call: IDENTIFIER "(" expression_list ")" {$$=std::make_unique<AST::FuncCallExp>($1,std::move($3));}
-|IDENTIFIER "(" ")"                               {$$=std::make_unique<AST::FuncCallExp>($1,std::vector<std::unique_ptr<AST::ExpNode>>());}
+function_call: IDENTIFIER "(" expression_list ")" {$$=std::make_unique<AST::FuncCallExp>(std::move($1),std::move($3));}
+|IDENTIFIER "(" ")"                               {$$=std::make_unique<AST::FuncCallExp>(std::move($1),std::vector<std::unique_ptr<AST::ExpNode>>());}
 ;
 
 statement_list:
@@ -102,8 +102,8 @@ statement:declaration_stmt {$$=std::move($1);}
 |         expression_stmt  {$$=std::move($1);}
 ;
 
-declaration_stmt: "var" IDENTIFIER "=" expression ";" {$$=std::make_unique<AST::DeclarationStmt>($2,std::move($4));}
-| "var" IDENTIFIER ";"                                {$$=std::make_unique<AST::DeclarationStmt>($2);}
+declaration_stmt: "var" IDENTIFIER "=" expression ";" {$$=std::make_unique<AST::DeclarationStmt>(std::move($2),std::move($4));}
+| "var" IDENTIFIER ";"                                {$$=std::make_unique<AST::DeclarationStmt>(std::move($2));}
 ;
 
 expression_stmt: expression ";" {$$=std::make_unique<AST::ExpressionStmt>(std::move($1));}
