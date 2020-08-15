@@ -6,7 +6,7 @@
 
 namespace AST {
 
-    FuncCallExp::FuncCallExp(std::string id, std::vector<std::shared_ptr<ExpNode>> params) :
+    FuncCallExp::FuncCallExp(std::string id, std::vector<std::unique_ptr<ExpNode>> params) :
             name(std::move(id)),
             parameters(std::move(params)) {
 

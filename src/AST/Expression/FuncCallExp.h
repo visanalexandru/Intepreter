@@ -15,9 +15,9 @@ namespace AST {
     private:
         const std::string name;
         /*These must be evaluated */
-        const std::vector<std::shared_ptr<ExpNode>> parameters;
+        const std::vector<std::unique_ptr<ExpNode>> parameters;
     public:
-        FuncCallExp(std::string id, std::vector<std::shared_ptr<ExpNode>> params);
+        FuncCallExp(std::string id, std::vector<std::unique_ptr<ExpNode>> params);
 
         Value evaluate() const override;
 
