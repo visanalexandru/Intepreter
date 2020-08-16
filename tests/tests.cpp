@@ -51,10 +51,10 @@ TEST_CASE("Integer arithmetic","[arithmetic]"){
 
 
     //INT STRING
-    REQUIRE_THROWS_WITH(AST::Value(410)+AST::Value("first"),"Unsupported operand types for +: Int and String");
-    REQUIRE_THROWS_WITH(AST::Value(232)-AST::Value("second"),"Unsupported operand types for -: Int and String");
-    REQUIRE_THROWS_WITH(AST::Value(2)*AST::Value("test"),"Unsupported operand types for *: Int and String");
-    REQUIRE_THROWS_WITH(AST::Value(2322)/AST::Value("a"),"Unsupported operand types for /: Int and String");
+    REQUIRE_THROWS_WITH(AST::Value(410)+AST::Value(std::string("first")),"Unsupported operand types for +: Int and String");
+    REQUIRE_THROWS_WITH(AST::Value(232)-AST::Value(std::string("second")),"Unsupported operand types for -: Int and String");
+    REQUIRE_THROWS_WITH(AST::Value(2)*AST::Value(std::string("test")),"Unsupported operand types for *: Int and String");
+    REQUIRE_THROWS_WITH(AST::Value(2322)/AST::Value(std::string("a")),"Unsupported operand types for /: Int and String");
 }
 
 
@@ -103,10 +103,10 @@ REQUIRE(result.toString()=="23.440000");
 REQUIRE(result.getType()==AST::Type::Float);
 
 //FLOAT STRING
-REQUIRE_THROWS_WITH(AST::Value(2.3)+AST::Value("string"),"Unsupported operand types for +: Float and String");
-REQUIRE_THROWS_WITH(AST::Value(4.5)-AST::Value("test"),"Unsupported operand types for -: Float and String");
-REQUIRE_THROWS_WITH(AST::Value(123.4)*AST::Value("hhfffa"),"Unsupported operand types for *: Float and String");
-REQUIRE_THROWS_WITH(AST::Value(0.23)/AST::Value("a"),"Unsupported operand types for /: Float and String");
+REQUIRE_THROWS_WITH(AST::Value(2.3)+AST::Value(std::string("string")),"Unsupported operand types for +: Float and String");
+REQUIRE_THROWS_WITH(AST::Value(4.5)-AST::Value(std::string("test")),"Unsupported operand types for -: Float and String");
+REQUIRE_THROWS_WITH(AST::Value(123.4)*AST::Value(std::string("hhfffa")),"Unsupported operand types for *: Float and String");
+REQUIRE_THROWS_WITH(AST::Value(0.23)/AST::Value(std::string("a")),"Unsupported operand types for /: Float and String");
 }
 
 
@@ -114,28 +114,28 @@ REQUIRE_THROWS_WITH(AST::Value(0.23)/AST::Value("a"),"Unsupported operand types 
 
 TEST_CASE("String arithmetic","[arithmetic]"){
 //STRING INT
-REQUIRE_THROWS_WITH(AST::Value("string")+AST::Value(54),"Unsupported operand types for +: String and Int");
-REQUIRE_THROWS_WITH(AST::Value("test")-AST::Value(27),"Unsupported operand types for -: String and Int");
-REQUIRE_THROWS_WITH(AST::Value("arithmetic")*AST::Value(4),"Unsupported operand types for *: String and Int");
-REQUIRE_THROWS_WITH(AST::Value("debug")/AST::Value(54),"Unsupported operand types for /: String and Int");
+REQUIRE_THROWS_WITH(AST::Value(std::string("string"))+AST::Value(54),"Unsupported operand types for +: String and Int");
+REQUIRE_THROWS_WITH(AST::Value(std::string("test"))-AST::Value(27),"Unsupported operand types for -: String and Int");
+REQUIRE_THROWS_WITH(AST::Value(std::string("arithmetic"))*AST::Value(4),"Unsupported operand types for *: String and Int");
+REQUIRE_THROWS_WITH(AST::Value(std::string("debug"))/AST::Value(54),"Unsupported operand types for /: String and Int");
 
 //STRING FLOAT
-REQUIRE_THROWS_WITH(AST::Value("string")+AST::Value(420.69),"Unsupported operand types for +: String and Float");
-REQUIRE_THROWS_WITH(AST::Value("test")-AST::Value(58.22),"Unsupported operand types for -: String and Float");
-REQUIRE_THROWS_WITH(AST::Value("arithmetic")*AST::Value(.232),"Unsupported operand types for *: String and Float");
-REQUIRE_THROWS_WITH(AST::Value("debug")/AST::Value(2323.0),"Unsupported operand types for /: String and Float");
+REQUIRE_THROWS_WITH(AST::Value(std::string("string"))+AST::Value(420.69),"Unsupported operand types for +: String and Float");
+REQUIRE_THROWS_WITH(AST::Value(std::string("test"))-AST::Value(58.22),"Unsupported operand types for -: String and Float");
+REQUIRE_THROWS_WITH(AST::Value(std::string("arithmetic"))*AST::Value(.232),"Unsupported operand types for *: String and Float");
+REQUIRE_THROWS_WITH(AST::Value(std::string("debug"))/AST::Value(2323.0),"Unsupported operand types for /: String and Float");
 
 //UMINUS FLOAT
-REQUIRE_THROWS_WITH(-AST::Value("test"),"Unsupported operand for unary -: String");
+REQUIRE_THROWS_WITH(-AST::Value(std::string("test")),"Unsupported operand for unary -: String");
 
 //STRING STRING
 AST::Value value;
-REQUIRE_NOTHROW(value=AST::Value("hello ")+AST::Value("world"));
+REQUIRE_NOTHROW(value=AST::Value(std::string("hello "))+AST::Value(std::string("world")));
 REQUIRE(value.toString()=="hello world");
 
-REQUIRE_THROWS_WITH(AST::Value("hxc")-AST::Value("axcv"),"Unsupported operand types for -: String and String");
-REQUIRE_THROWS_WITH(AST::Value("ar")*AST::Value("axx"),"Unsupported operand types for *: String and String");
-REQUIRE_THROWS_WITH(AST::Value("stack")/AST::Value("overflow"),"Unsupported operand types for /: String and String");
+REQUIRE_THROWS_WITH(AST::Value(std::string("hxc"))-AST::Value(std::string("axcv")),"Unsupported operand types for -: String and String");
+REQUIRE_THROWS_WITH(AST::Value(std::string("ar"))*AST::Value(std::string("axx")),"Unsupported operand types for *: String and String");
+REQUIRE_THROWS_WITH(AST::Value(std::string("stack"))/AST::Value(std::string("overflow")),"Unsupported operand types for /: String and String");
 
 }
 
