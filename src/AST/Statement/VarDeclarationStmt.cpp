@@ -2,23 +2,23 @@
 // Created by gvisan on 14.08.2020.
 //
 
-#include "DeclarationStmt.h"
+#include "VarDeclarationStmt.h"
 
 namespace AST {
 
-    DeclarationStmt::DeclarationStmt(std::string varname) :
+    VarDeclarationStmt::VarDeclarationStmt(std::string varname) :
             name(std::move(varname)), value(nullptr) {
 
 
     }
 
-    DeclarationStmt::DeclarationStmt(std::string varname, std::shared_ptr<ExpNode> exp) :
+    VarDeclarationStmt::VarDeclarationStmt(std::string varname, std::shared_ptr<ExpNode> exp) :
             name(std::move(varname)),
             value(std::move(exp)) {
 
     }
 
-    void DeclarationStmt::execute() {
+    void VarDeclarationStmt::execute() {
         if (value != nullptr) {
             globalContext.declareVar(name, value->evaluate());
         } else {
