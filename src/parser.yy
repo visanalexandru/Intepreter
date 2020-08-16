@@ -40,13 +40,13 @@
 }
 
 %token
-  MINUS   "-"
-  PLUS    "+"
-  STAR    "*"
-  SLASH   "/"
+  SUBTRACTION "-"
+  ADDITION "+"
+  MULTIPLICATION "*"
+  DIVISION "/"
   LPAREN  "("
   RPAREN  ")"
-  EQUALS "="
+  ASSIGNMENT "="
   SEMICOLON ";"
   VAR "var"
   COMMA ","

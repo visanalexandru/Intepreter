@@ -38,13 +38,13 @@ blank [ \t\r]
 
 {blank}+   loc.step ();
 \n+        loc.lines (yyleng); loc.step ();
-"-"        return yy::parser::make_MINUS  (loc);
-"+"        return yy::parser::make_PLUS   (loc);
-"*"        return yy::parser::make_STAR   (loc);
-"/"        return yy::parser::make_SLASH  (loc);
+"-"        return yy::parser::make_SUBTRACTION(loc);
+"+"        return yy::parser::make_ADDITION(loc);
+"*"        return yy::parser::make_MULTIPLICATION(loc);
+"/"        return yy::parser::make_DIVISION(loc);
 "("        return yy::parser::make_LPAREN (loc);
 ")"        return yy::parser::make_RPAREN (loc);
-"="        return yy::parser::make_EQUALS(loc);
+"="        return yy::parser::make_ASSIGNMENT(loc);
 "var"      return yy::parser::make_VAR(loc);
 ";"        return yy::parser::make_SEMICOLON(loc);
 ","        return yy::parser::make_COMMA(loc);
