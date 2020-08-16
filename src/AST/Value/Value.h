@@ -24,6 +24,9 @@ namespace AST {
         /*Creates a value with type String. Strings are immutable, so it creates a copy of the parameter*/
         Value(const std::string &value);
 
+        /*Creates a value with type Bool*/
+        Value(bool value);
+
         /*Creates a value with type None*/
         Value();
 

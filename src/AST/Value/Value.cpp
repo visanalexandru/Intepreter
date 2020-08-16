@@ -14,6 +14,10 @@ namespace AST {
     Value::Value(const std::string &value) : type(Type::String),data{.sval=new std::string(value)} {
     }
 
+    Value::Value(bool value):type(Type::Bool),data{.bval=value} {
+
+    }
+
     Value::Value() : type(Type::None),data() {
 
     }
@@ -59,6 +63,10 @@ namespace AST {
                 return std::to_string(data.ival);
             case Type::Float:
                 return std::to_string(data.fval);
+            case Type ::Bool:
+                if(data.bval)
+                    return "true";
+                return "false";
         }
     }
 

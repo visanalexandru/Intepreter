@@ -13,6 +13,7 @@ namespace AST {
         Float,
         Int,
         String,
+        Bool,
         None
     };
 
@@ -27,6 +28,8 @@ namespace AST {
                 return "Float";
             case Type::None:
                 return "None";
+            case Type::Bool:
+                return "Bool";
         }
     }
 }
