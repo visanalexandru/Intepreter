@@ -51,6 +51,7 @@ blank [ \t\r]
 "func"     return yy::parser::make_FUNC(loc);
 "{"        return yy::parser::make_LBLOCK(loc);
 "}"        return yy::parser::make_RBLOCK(loc);
+"return"   return yy::parser::make_RETURN(loc);
 {int}      return make_INT(yytext,loc);
 {string}   return make_STRING(std::string(yytext),loc);
 {float}    return make_FLOAT(std::string(yytext),loc);

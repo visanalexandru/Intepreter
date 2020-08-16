@@ -29,6 +29,7 @@
   #include "AST/Statement/VarDeclarationStmt.h"
   #include "AST/Statement/ExpressionStmt.h"
   #include "AST/Statement/FuncDeclarationStmt.h"
+  #include "AST/Statement/ReturnStmt.h"
   class Driver;
 }
 
@@ -52,6 +53,7 @@
   FUNC "func"
   LBLOCK "{"
   RBLOCK "}"
+  RETURN "return"
 ;
 
 %token <AST::Value> LITERAL
@@ -66,7 +68,7 @@
 %nterm <std::vector<std::string>> identifier_list; //1 or more comma-separated identifiers
 %nterm <std::vector<std::string>> parameter_identifier_list; //0 or more comma-separated identifiers, used for func defs
 %nterm <std::vector<std::unique_ptr<AST::StmtNode>>> block //the body of a function declaration, a list of statements,cannot be another function declaration
-
+%nterm <std::unique_ptr<AST::ReturnStmt>> return_stmt;
 //Precedence
 %right "="
 %left "+" "-";
@@ -115,6 +117,7 @@ block:
 %empty                    {$$=std::vector<std::unique_ptr<AST::StmtNode>>();}
 |block var_declaration_stmt{ $1.push_back(std::move($2));$$=std::move($1);}
 |block expression_stmt{ $1.push_back(std::move($2));$$=std::move($1);}
+|block return_stmt    { $1.push_back(std::move($2));$$=std::move($1);}
 ;
 
 statement_list:
@@ -130,6 +133,10 @@ var_declaration_stmt: "var" IDENTIFIER "=" expression ";" {$$=std::make_unique<A
 
 expression_stmt: expression ";" {$$=std::make_unique<AST::ExpressionStmt>(std::move($1));}
 ;
+
+return_stmt: "return" expression ";" {$$=std::make_unique<AST::ReturnStmt>(std::move($2));}
+;
+
 %%
 
 void

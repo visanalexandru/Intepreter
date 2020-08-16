@@ -19,12 +19,18 @@ namespace AST {
         for (unsigned i = 0; i < parameters.size(); i++) {
             globalContext.declareVar(parameter_ids[i], parameters[i]);
         }
-        for (const auto &stmt:statements)
-            stmt->execute(); //TODO check for return value
+        Value to_return;//if no return statements, return None
 
+        for (const auto &stmt:statements) {
+            stmt->execute();
+            if (stmt->hasReturned()) {//Statement is/contains a return statement
+                to_return = stmt->getReturnValue();
+                break;
+            }
+        }
         globalContext.popScope();
 
-        return Value();//No return statements, return None
+        return to_return;
     }
 
 

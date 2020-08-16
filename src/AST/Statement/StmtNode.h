@@ -12,7 +12,7 @@ namespace AST {
      *Classes like the declaration-statement,loops etc must derive from this class and implement the execute() method.
     */
     class StmtNode {
-    private:
+    protected:
         /*The return value of the statement. This value is only used if in the called function a return statement occurs.
          *The value is then "propagated" upwards in the call stack.*/
         Value return_value;
