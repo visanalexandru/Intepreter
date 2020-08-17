@@ -56,6 +56,9 @@ namespace AST {
 
         Value operator-() const;
 
+        /*Boolean operators, return bool-type value.*/
+        Value operator==(const Value &other) const;
+
         /*Converts the value it is holding to a string*/
         std::string toString() const;
 

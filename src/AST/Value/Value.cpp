@@ -211,6 +211,54 @@ namespace AST {
         }
     }
 
+    Value Value::operator==(const Value &other) const {
+        switch(type){
+            case Type::Int:
+                switch(other.type){
+                    case Type ::Int:
+                        return Value(data.ival==other.data.ival);
+                    case Type ::Float:
+                        return Value((float)data.ival==other.data.fval);
+                    default:
+                        break;
+                }
+                break;
+
+            case Type::Float:
+                switch(other.type){
+                    case Type ::Int:
+                        return Value(data.fval==(float)other.data.ival);
+                    case Type::Float:
+                        return Value(data.fval==other.data.fval);
+                    default:
+                        break;
+                }
+                break;
+
+            case Type ::String:
+                switch(other.type){
+                    case Type ::String:
+                        return Value(*data.sval==*other.data.sval);
+                    default:
+                        break;
+                }
+                break;
+
+            case Type::Bool:
+                switch (other.type){
+                    case Type ::Bool:
+                        return Value(data.bval==other.data.bval);
+                    default:
+                        break;
+                }
+                break;
+            default:
+                break;
+        }
+
+        throw std::runtime_error("Unsupported operand types for ==: " + typeToString(type) + " and " + typeToString(other.type));
+    }
+
     Type Value::getType() const {
         return type;
     }
