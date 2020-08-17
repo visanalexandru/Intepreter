@@ -13,14 +13,16 @@ namespace AST {
 
     Value BinaryOpExp::evaluate() const {
         switch (type) {
-            case BinaryOperator::Addition:
+            case BinaryOperator::Add:
                 return left->evaluate() + right->evaluate();
-            case BinaryOperator::Subtraction:
+            case BinaryOperator::Subtract:
                 return left->evaluate() - right->evaluate();
-            case BinaryOperator::Multiplication:
+            case BinaryOperator::Multiply:
                 return left->evaluate() * right->evaluate();
-            case BinaryOperator::Division:
+            case BinaryOperator::Divide:
                 return left->evaluate() / right->evaluate();
+            case BinaryOperator ::Equals:
+                return left->evaluate()==right->evaluate();
         }
     }
 }

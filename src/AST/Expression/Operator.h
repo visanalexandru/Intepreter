@@ -9,10 +9,11 @@
 namespace AST {
 
     enum class BinaryOperator {
-        Addition,
-        Subtraction,
-        Multiplication,
-        Division
+        Add,
+        Subtract,
+        Multiply,
+        Divide,
+        Equals,
     };
 
     enum class UnaryOperator {

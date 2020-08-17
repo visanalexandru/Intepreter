@@ -76,6 +76,7 @@
 %nterm <std::unique_ptr<AST::ReturnStmt>> return_stmt;
 //Precedence
 %right "="
+%left "=="
 %left "+" "-";
 %left "*" "/";
 %precedence UMINUS
@@ -88,10 +89,11 @@ unit:statement_list{ drv.result = std::move($1); };
 
 
 expression: LITERAL {$$=std::make_unique<AST::LiteralExp>($1);}
-| expression "+" expression   { $$ =std::make_unique<AST::BinaryOpExp>(AST::BinaryOperator::Addition,std::move($1),std::move($3)); }
-| expression "-" expression   { $$ =std::make_unique<AST::BinaryOpExp>(AST::BinaryOperator::Subtraction,std::move($1),std::move($3));}
-| expression "*" expression   { $$ =std::make_unique<AST::BinaryOpExp>(AST::BinaryOperator::Multiplication,std::move($1),std::move($3)); }
-| expression "/" expression   { $$ =std::make_unique<AST::BinaryOpExp>(AST::BinaryOperator::Division,std::move($1),std::move($3)); }
+| expression "+" expression   { $$ =std::make_unique<AST::BinaryOpExp>(AST::BinaryOperator::Add,std::move($1),std::move($3)); }
+| expression "-" expression   { $$ =std::make_unique<AST::BinaryOpExp>(AST::BinaryOperator::Subtract,std::move($1),std::move($3));}
+| expression "*" expression   { $$ =std::make_unique<AST::BinaryOpExp>(AST::BinaryOperator::Multiply,std::move($1),std::move($3)); }
+| expression "/" expression   { $$ =std::make_unique<AST::BinaryOpExp>(AST::BinaryOperator::Divide,std::move($1),std::move($3)); }
+| expression "==" expression   { $$ =std::make_unique<AST::BinaryOpExp>(AST::BinaryOperator::Equals,std::move($1),std::move($3)); }
 | "-" expression %prec UMINUS { $$= std::make_unique<AST::UnaryOpExp>(AST::UnaryOperator::Minus,std::move($2)); }
 | "(" expression ")"          { $$ = std::move($2); }
 | IDENTIFIER "=" expression   { $$=std::make_unique<AST::AssignmentExp>(std::move($1),std::move($3));}

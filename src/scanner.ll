@@ -41,6 +41,7 @@ blank [ \t\r]
 "-"        return yy::parser::make_SUBTRACTION(loc);
 "+"        return yy::parser::make_ADDITION(loc);
 "*"        return yy::parser::make_MULTIPLICATION(loc);
+"=="        return yy::parser::make_EQUAL(loc);
 "/"        return yy::parser::make_DIVISION(loc);
 "("        return yy::parser::make_LPAREN (loc);
 ")"        return yy::parser::make_RPAREN (loc);
