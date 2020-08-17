@@ -14,6 +14,10 @@ namespace AST {
         Multiply,
         Divide,
         Equals,
+        Greater,
+        GreaterEq,
+        Less,
+        LessEq
     };
 
     enum class UnaryOperator {

@@ -23,6 +23,15 @@ namespace AST {
                 return left->evaluate() / right->evaluate();
             case BinaryOperator ::Equals:
                 return left->evaluate()==right->evaluate();
+            case BinaryOperator ::Greater:
+                return left->evaluate()>right->evaluate();
+            case BinaryOperator::GreaterEq:
+                return left->evaluate()>=right->evaluate();
+            case BinaryOperator ::Less:
+                return left->evaluate()<right->evaluate();
+            case BinaryOperator ::LessEq:
+                return left->evaluate()<=right->evaluate();
+
         }
     }
 }
