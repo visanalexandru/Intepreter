@@ -218,7 +218,7 @@ namespace AST {
                     case Type ::Int:
                         return Value(data.ival==other.data.ival);
                     case Type ::Float:
-                        return Value((float)data.ival==other.data.fval);
+                        return Value((double)data.ival==other.data.fval);
                     default:
                         break;
                 }
@@ -227,7 +227,7 @@ namespace AST {
             case Type::Float:
                 switch(other.type){
                     case Type ::Int:
-                        return Value(data.fval==(float)other.data.ival);
+                        return Value(data.fval==(double)other.data.ival);
                     case Type::Float:
                         return Value(data.fval==other.data.fval);
                     default:
@@ -259,6 +259,127 @@ namespace AST {
         throw std::runtime_error("Unsupported operand types for ==: " + typeToString(type) + " and " + typeToString(other.type));
     }
 
+    Value Value::operator >(const Value&other) const{
+        switch(type){
+            case Type ::Int:
+                switch (other.type){
+                    case Type ::Int:
+                        return Value(data.ival>other.data.ival);
+                    case Type ::Float:
+                        return Value((double) data.ival>other.data.fval);
+                    default:
+                        break;
+                }
+                break;
+
+            case Type ::Float:
+                switch(other.type){
+                    case Type ::Int:
+                        return Value(data.fval>(double)other.data.fval);
+                    case Type ::Float:
+                        return Value(data.fval>other.data.fval);
+                    default:
+                        break;
+                }
+                break;
+
+            default:
+                break;
+        }
+
+        throw std::runtime_error("Unsupported operand types for >: " + typeToString(type) + " and " + typeToString(other.type));
+    }
+
+    Value Value::operator <(const Value&other) const{
+        switch(type){
+            case Type ::Int:
+                switch (other.type){
+                    case Type ::Int:
+                        return Value(data.ival<other.data.ival);
+                    case Type ::Float:
+                        return Value((double) data.ival<other.data.fval);
+                    default:
+                        break;
+                }
+                break;
+
+            case Type ::Float:
+                switch(other.type){
+                    case Type ::Int:
+                        return Value(data.fval<(double)other.data.fval);
+                    case Type ::Float:
+                        return Value(data.fval<other.data.fval);
+                    default:
+                        break;
+                }
+                break;
+
+            default:
+                break;
+        }
+        throw std::runtime_error("Unsupported operand types for <: " + typeToString(type) + " and " + typeToString(other.type));
+    }
+    Value Value::operator >=(const Value&other) const{
+
+        switch(type){
+            case Type ::Int:
+                switch (other.type){
+                    case Type ::Int:
+                        return Value(data.ival>=other.data.ival);
+                    case Type ::Float:
+                        return Value((double) data.ival>=other.data.fval);
+                    default:
+                        break;
+                }
+                break;
+
+            case Type ::Float:
+                switch(other.type){
+                    case Type ::Int:
+                        return Value(data.fval>=(double)other.data.fval);
+                    case Type ::Float:
+                        return Value(data.fval>=other.data.fval);
+                    default:
+                        break;
+                }
+                break;
+
+            default:
+                break;
+        }
+
+        throw std::runtime_error("Unsupported operand types for >=: " + typeToString(type) + " and " + typeToString(other.type));
+    }
+
+    Value Value::operator <=(const Value&other) const{
+        switch(type){
+            case Type ::Int:
+                switch (other.type){
+                    case Type ::Int:
+                        return Value(data.ival<=other.data.ival);
+                    case Type ::Float:
+                        return Value((double) data.ival<=other.data.fval);
+                    default:
+                        break;
+                }
+                break;
+
+            case Type ::Float:
+                switch(other.type){
+                    case Type ::Int:
+                        return Value(data.fval<=(double)other.data.fval);
+                    case Type ::Float:
+                        return Value(data.fval<=other.data.fval);
+                    default:
+                        break;
+                }
+                break;
+
+            default:
+                break;
+        }
+        throw std::runtime_error("Unsupported operand types for <=: " + typeToString(type) + " and " + typeToString(other.type));
+    }
     Type Value::getType() const {
         return type;
     }

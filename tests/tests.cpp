@@ -11,58 +11,45 @@ TEST_CASE("Integer arithmetic","[arithmetic]"){
     AST::Value result;
     //INT INT
     REQUIRE_NOTHROW(result=AST::Value(100)+AST::Value(20));
-    REQUIRE(result.toString()=="120");
-    REQUIRE(result.getType()==AST::Type::Int);
+    REQUIRE((result.toString()=="120"&&result.getType()==AST::Type::Int));
 
     REQUIRE_NOTHROW(result=AST::Value(23)-AST::Value(20));
-    REQUIRE(result.toString()=="3");
-    REQUIRE(result.getType()==AST::Type::Int);
+    REQUIRE((result.toString()=="3"&&result.getType()==AST::Type::Int));
 
     REQUIRE_NOTHROW(result=AST::Value(3)*AST::Value(4));
-    REQUIRE(result.toString()=="12");
-    REQUIRE(result.getType()==AST::Type::Int);
+    REQUIRE((result.toString()=="12"&&result.getType()==AST::Type::Int));
 
     REQUIRE_NOTHROW(result=AST::Value(6)/AST::Value(2));
-    REQUIRE(result.toString()=="3.000000");
-    REQUIRE(result.getType()==AST::Type::Float);
+    REQUIRE((result.toString()=="3.000000"&&result.getType()==AST::Type::Float));
 
     REQUIRE_NOTHROW(result=AST::Value(6)==AST::Value(3));
-    REQUIRE(result.toString()=="false");
-    REQUIRE(result.getType()==AST::Type::Bool);
+    REQUIRE((result.toString()=="false"&&result.getType()==AST::Type::Bool));
 
-    REQUIRE_NOTHROW(result=AST::Value(20)==AST::Value(20));
-    REQUIRE(result.toString()=="true");
-    REQUIRE(result.getType()==AST::Type::Bool);
+    REQUIRE_NOTHROW(result=AST::Value(3)==AST::Value(3));
+    REQUIRE((result.toString()=="true"&&result.getType()==AST::Type::Bool));
 
     //INT FLOAT
     REQUIRE_NOTHROW(result=AST::Value(6)+AST::Value(3.2));
-    REQUIRE(result.toString()=="9.200000");
-    REQUIRE(result.getType()==AST::Type::Float);
+    REQUIRE((result.toString()=="9.200000" &&result.getType()==AST::Type::Float));
 
     REQUIRE_NOTHROW(result=AST::Value(20)-AST::Value(60.0));
-    REQUIRE(result.toString()=="-40.000000");
-    REQUIRE(result.getType()==AST::Type::Float);
+    REQUIRE((result.toString()=="-40.000000" &&result.getType()==AST::Type::Float));
 
     REQUIRE_NOTHROW(result=AST::Value(20)*AST::Value(2.5));
-    REQUIRE(result.toString()=="50.000000");
-    REQUIRE(result.getType()==AST::Type::Float);
+    REQUIRE((result.toString()=="50.000000" &&result.getType()==AST::Type::Float));
 
     REQUIRE_NOTHROW(result=AST::Value(125)/AST::Value(10.4));
-    REQUIRE(result.toString()=="12.019231");
-    REQUIRE(result.getType()==AST::Type::Float);
+    REQUIRE((result.toString()=="12.019231" &&result.getType()==AST::Type::Float));
 
     REQUIRE_NOTHROW(result=AST::Value(100)==AST::Value(100.003));
-    REQUIRE(result.toString()=="false");
-    REQUIRE(result.getType()==AST::Type::Bool);
+    REQUIRE((result.toString()=="false" &&result.getType()==AST::Type::Bool));
 
     REQUIRE_NOTHROW(result=AST::Value(5123)==AST::Value(5123.00));
-    REQUIRE(result.toString()=="true");
-    REQUIRE(result.getType()==AST::Type::Bool);
+    REQUIRE((result.toString()=="true" &&result.getType()==AST::Type::Bool));
 
     //UMINUS INT
     REQUIRE_NOTHROW(result=-AST::Value(4));
-    REQUIRE(result.toString()=="-4");
-    REQUIRE(result.getType()==AST::Type::Int);
+    REQUIRE((result.toString()=="-4" &&result.getType()==AST::Type::Int));
 
 
     //INT STRING
@@ -80,58 +67,45 @@ TEST_CASE("Float arithmetic","[arithmetic]"){
 AST::Value result;
 //FLOAT INT
 REQUIRE_NOTHROW(result=AST::Value(79.23)+AST::Value(20));
-REQUIRE(result.toString()=="99.230000");
-REQUIRE(result.getType()==AST::Type::Float);
+REQUIRE((result.toString()=="99.230000" &&result.getType()==AST::Type::Float));
 
 REQUIRE_NOTHROW(result=AST::Value(42.323)-AST::Value(20));
-REQUIRE(result.toString()=="22.323000");
-REQUIRE(result.getType()==AST::Type::Float);
+REQUIRE((result.toString()=="22.323000" &&result.getType()==AST::Type::Float));
 
 REQUIRE_NOTHROW(result=AST::Value(3.3)*AST::Value(4));
-REQUIRE(result.toString()=="13.200000");
-REQUIRE(result.getType()==AST::Type::Float);
+REQUIRE((result.toString()=="13.200000" &&result.getType()==AST::Type::Float));
 
 REQUIRE_NOTHROW(result=AST::Value(122.823)/AST::Value(2));
-REQUIRE(result.toString()=="61.411500");
-REQUIRE(result.getType()==AST::Type::Float);
+REQUIRE((result.toString()=="61.411500" &&result.getType()==AST::Type::Float));
 
 REQUIRE_NOTHROW(result=AST::Value(64.123)==AST::Value(100));
-REQUIRE(result.toString()=="false");
-REQUIRE(result.getType()==AST::Type::Bool);
+REQUIRE((result.toString()=="false" &&result.getType()==AST::Type::Bool));
 
 REQUIRE_NOTHROW(result=AST::Value(100.000)==AST::Value(100));
-REQUIRE(result.toString()=="true");
-REQUIRE(result.getType()==AST::Type::Bool);
+REQUIRE((result.toString()=="true" &&result.getType()==AST::Type::Bool));
 
 //FLOAT FLOAT
 REQUIRE_NOTHROW(result=AST::Value(26.88)+AST::Value(3.2));
-REQUIRE(result.toString()=="30.080000");
-REQUIRE(result.getType()==AST::Type::Float);
+REQUIRE((result.toString()=="30.080000" &&result.getType()==AST::Type::Float));
 
 REQUIRE_NOTHROW(result=AST::Value(4.3)-AST::Value(1.2));
-REQUIRE(result.toString()=="3.100000");
-REQUIRE(result.getType()==AST::Type::Float);
+REQUIRE((result.toString()=="3.100000" &&result.getType()==AST::Type::Float));
 
 REQUIRE_NOTHROW(result=AST::Value(10.0)*AST::Value(4.0));
-REQUIRE(result.toString()=="40.000000");
-REQUIRE(result.getType()==AST::Type::Float);
+REQUIRE((result.toString()=="40.000000" &&result.getType()==AST::Type::Float));
 
 REQUIRE_NOTHROW(result=AST::Value(43.5)/AST::Value(10.4));
-REQUIRE(result.toString()=="4.182692");
-REQUIRE(result.getType()==AST::Type::Float);
+REQUIRE((result.toString()=="4.182692" &&result.getType()==AST::Type::Float));
 
 REQUIRE_NOTHROW(result=AST::Value(64.123)==AST::Value(123.421));
-REQUIRE(result.toString()=="false");
-REQUIRE(result.getType()==AST::Type::Bool);
+REQUIRE((result.toString()=="false" &&result.getType()==AST::Type::Bool));
 
 REQUIRE_NOTHROW(result=AST::Value(3.1415)==AST::Value(3.1415));
-REQUIRE(result.toString()=="true");
-REQUIRE(result.getType()==AST::Type::Bool);
+REQUIRE((result.toString()=="true" &&result.getType()==AST::Type::Bool));
 
 //UMINUS FLOAT
 REQUIRE_NOTHROW(result=-AST::Value(-23.44));
-REQUIRE(result.toString()=="23.440000");
-REQUIRE(result.getType()==AST::Type::Float);
+REQUIRE((result.toString()=="23.440000" &&result.getType()==AST::Type::Float));
 
 //FLOAT STRING
 REQUIRE_THROWS_WITH(AST::Value(2.3)+AST::Value(std::string("string")),"Unsupported operand types for +: Float and String");
@@ -166,12 +140,10 @@ REQUIRE_NOTHROW(value=AST::Value(std::string("hello "))+AST::Value(std::string("
 REQUIRE(value.toString()=="hello world");
 
 REQUIRE_NOTHROW(value=AST::Value(std::string("test"))==AST::Value(std::string("tester")));
-REQUIRE(value.toString()=="false");
-REQUIRE(value.getType()==AST::Type::Bool);
+REQUIRE((value.toString()=="false" &&value.getType()==AST::Type::Bool));
 
 REQUIRE_NOTHROW(value=AST::Value(std::string("this is a test"))==AST::Value(std::string("this is a test")));
-REQUIRE(value.toString()=="true");
-REQUIRE(value.getType()==AST::Type::Bool);
+REQUIRE((value.toString()=="true" &&value.getType()==AST::Type::Bool));
 
 REQUIRE_THROWS_WITH(AST::Value(std::string("hxc"))-AST::Value(std::string("axcv")),"Unsupported operand types for -: String and String");
 REQUIRE_THROWS_WITH(AST::Value(std::string("ar"))*AST::Value(std::string("axx")),"Unsupported operand types for *: String and String");
