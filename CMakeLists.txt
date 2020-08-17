@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 3.10)
 set(CMAKE_CXX_STANDARD 14)
 project(Interpreter)
 
-find_package(FLEX REQUIRED)
-find_package(BISON REQUIRED)
+find_package(FLEX 2.6.4 REQUIRED)
+find_package(BISON 3.7.1 REQUIRED )
 
 bison_target(Parser src/parser.yy "${CMAKE_CURRENT_BINARY_DIR}/parser.cpp")
 flex_target(Scanner src/scanner.ll "${CMAKE_CURRENT_BINARY_DIR}/scanner.cpp")
