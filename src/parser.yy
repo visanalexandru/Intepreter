@@ -52,6 +52,8 @@
   GREATEREQ ">="
   LESS "<"
   LESSEQ "<="
+  AND "&&"
+  OR  "||"
   SEMICOLON ";"
   VAR "var"
   COMMA ","
@@ -76,6 +78,8 @@
 %nterm <std::unique_ptr<AST::ReturnStmt>> return_stmt;
 //Precedence
 %right "="
+%left "||"
+%left "&&"
 %left "=="
 %left ">" "<" ">=" "<="
 %left "+" "-";
@@ -94,11 +98,13 @@ expression: LITERAL {$$=std::make_unique<AST::LiteralExp>($1);}
 | expression "-" expression   { $$ =std::make_unique<AST::BinaryOpExp>(AST::BinaryOperator::Subtract,std::move($1),std::move($3));}
 | expression "*" expression   { $$ =std::make_unique<AST::BinaryOpExp>(AST::BinaryOperator::Multiply,std::move($1),std::move($3)); }
 | expression "/" expression   { $$ =std::make_unique<AST::BinaryOpExp>(AST::BinaryOperator::Divide,std::move($1),std::move($3)); }
-| expression "==" expression   { $$ =std::make_unique<AST::BinaryOpExp>(AST::BinaryOperator::Equals,std::move($1),std::move($3)); }
+| expression "==" expression   { $$ =std::make_unique<AST::BinaryOpExp>(AST::BinaryOperator::Equal,std::move($1),std::move($3)); }
 | expression ">" expression   { $$ =std::make_unique<AST::BinaryOpExp>(AST::BinaryOperator::Greater,std::move($1),std::move($3)); }
 | expression "<" expression   { $$ =std::make_unique<AST::BinaryOpExp>(AST::BinaryOperator::Less,std::move($1),std::move($3)); }
 | expression ">=" expression   { $$ =std::make_unique<AST::BinaryOpExp>(AST::BinaryOperator::GreaterEq,std::move($1),std::move($3)); }
 | expression "<=" expression   { $$ =std::make_unique<AST::BinaryOpExp>(AST::BinaryOperator::LessEq,std::move($1),std::move($3)); }
+| expression "||" expression   { $$ =std::make_unique<AST::BinaryOpExp>(AST::BinaryOperator::Or,std::move($1),std::move($3)); }
+| expression "&&" expression   { $$ =std::make_unique<AST::BinaryOpExp>(AST::BinaryOperator::And,std::move($1),std::move($3)); }
 | "-" expression %prec UMINUS { $$= std::make_unique<AST::UnaryOpExp>(AST::UnaryOperator::Minus,std::move($2)); }
 | "(" expression ")"          { $$ = std::move($2); }
 | IDENTIFIER "=" expression   { $$=std::make_unique<AST::AssignmentExp>(std::move($1),std::move($3));}

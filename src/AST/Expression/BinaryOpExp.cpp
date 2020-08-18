@@ -21,7 +21,7 @@ namespace AST {
                 return left->evaluate() * right->evaluate();
             case BinaryOperator::Divide:
                 return left->evaluate() / right->evaluate();
-            case BinaryOperator ::Equals:
+            case BinaryOperator ::Equal:
                 return left->evaluate()==right->evaluate();
             case BinaryOperator ::Greater:
                 return left->evaluate()>right->evaluate();
@@ -31,7 +31,10 @@ namespace AST {
                 return left->evaluate()<right->evaluate();
             case BinaryOperator ::LessEq:
                 return left->evaluate()<=right->evaluate();
-
+            case BinaryOperator ::And:
+                return Value(left->evaluate().toBoolObj().asBool() && right->evaluate().toBoolObj().asBool());
+            case BinaryOperator ::Or:
+                return Value(left->evaluate().toBoolObj().asBool() || right->evaluate().toBoolObj().asBool());
         }
     }
 }

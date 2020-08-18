@@ -46,6 +46,8 @@ blank [ \t\r]
 "<"        return yy::parser::make_LESS(loc);
 ">="       return yy::parser::make_GREATEREQ(loc);
 "<="       return yy::parser::make_LESSEQ(loc);
+"||"       return yy::parser::make_OR(loc);
+"&&"       return yy::parser::make_AND(loc);
 "/"        return yy::parser::make_DIVISION(loc);
 "("        return yy::parser::make_LPAREN (loc);
 ")"        return yy::parser::make_RPAREN (loc);

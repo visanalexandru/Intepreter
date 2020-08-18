@@ -13,11 +13,13 @@ namespace AST {
         Subtract,
         Multiply,
         Divide,
-        Equals,
+        Equal,
         Greater,
         GreaterEq,
         Less,
-        LessEq
+        LessEq,
+        And,
+        Or
     };
 
     enum class UnaryOperator {
