@@ -196,9 +196,9 @@ namespace AST {
 
         } else if (type == other.type) {
             if (type == Type::String)
-                return asString() == other.asString();
+                return Value(asString() == other.asString());
             else if (type == Type::Bool)
-                return asBool()== other.asBool();
+                return Value(asBool()== other.asBool());
         }
 
         throw std::runtime_error(

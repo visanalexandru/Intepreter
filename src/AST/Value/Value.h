@@ -16,16 +16,16 @@ namespace AST {
     public:
 
         /*Creates a value with type Int*/
-        Value(int value);
+        explicit Value(int value);
 
         /*Creates a value with type Float*/
-        Value(double value);
+        explicit Value(double value);
 
         /*Creates a value with type String. Strings are immutable, so it creates a copy of the parameter*/
-        Value(const std::string &value);
+        explicit Value(const std::string &value);
 
         /*Creates a value with type Bool*/
-        Value(bool value);
+        explicit Value(bool value);
 
         /*Creates a value with type None*/
         Value();

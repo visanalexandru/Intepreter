@@ -59,8 +59,8 @@ blank [ \t\r]
 "{"        return yy::parser::make_LBLOCK(loc);
 "}"        return yy::parser::make_RBLOCK(loc);
 "return"   return yy::parser::make_RETURN(loc);
-"false"    return yy::parser::make_LITERAL(false,loc);
-"true"    return yy::parser::make_LITERAL(true,loc);
+"false"    return yy::parser::make_LITERAL(AST::Value(false),loc);
+"true"    return yy::parser::make_LITERAL(AST::Value(true),loc);
 {int}      return make_INT(yytext,loc);
 {string}   return make_STRING(std::string(yytext),loc);
 {float}    return make_FLOAT(std::string(yytext),loc);
@@ -73,7 +73,7 @@ yy::parser::symbol_type make_INT (const std::string &s, const yy::parser::locati
 {
    try{
         int i=std::stoi(s);
-        return yy::parser::make_LITERAL(i,loc);
+        return yy::parser::make_LITERAL(AST::Value(i),loc);
    }
    catch(const std::out_of_range&e){
         throw yy::parser::syntax_error (loc, "integer is out of range: " + s);
@@ -84,7 +84,7 @@ yy::parser::symbol_type make_FLOAT(const std::string &s, const yy::parser::locat
 {
    try{
         double i=std::stod(s);
-        return yy::parser::make_LITERAL(i,loc);
+        return yy::parser::make_LITERAL(AST::Value(i),loc);
    }
    catch(const std::out_of_range&e){
         throw yy::parser::syntax_error (loc, "float is out of range: " + s);
@@ -93,7 +93,7 @@ yy::parser::symbol_type make_FLOAT(const std::string &s, const yy::parser::locat
 
 yy::parser::symbol_type make_STRING(const std::string &s, const yy::parser::location_type& loc)
 {
-  return yy::parser::make_LITERAL (s.substr(1,s.size()-2), loc);
+  return yy::parser::make_LITERAL (AST::Value(s.substr(1,s.size()-2)), loc);
 }
 
 void Driver::scan_begin ()
