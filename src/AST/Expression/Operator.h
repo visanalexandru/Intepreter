@@ -14,6 +14,7 @@ namespace AST {
         Multiply,
         Divide,
         Equal,
+        NEqual,
         Greater,
         GreaterEq,
         Less,

@@ -205,6 +205,24 @@ namespace AST {
                 "Unsupported operand types for ==: " + typeToString(type) + " and " + typeToString(other.type));
     }
 
+    Value Value::operator!=(const Value &other) const {
+        if (isNumerical() && other.isNumerical()) {
+            if (other.type == Type::Float || type == Type::Float) {
+                return Value(toFloatObj().asFloat() != other.toFloatObj().asFloat());
+            }
+            return Value(asInt() != other.asInt());
+
+        } else if (type == other.type) {
+            if (type == Type::String)
+                return Value(asString() != other.asString());
+            else if (type == Type::Bool)
+                return Value(asBool()!= other.asBool());
+        }
+
+        throw std::runtime_error(
+                "Unsupported operand types for !=: " + typeToString(type) + " and " + typeToString(other.type));
+    }
+
     Value Value::operator>(const Value &other) const {
         if (isNumerical() && other.isNumerical()) {
             if (other.type == Type::Float || type == Type::Float) {

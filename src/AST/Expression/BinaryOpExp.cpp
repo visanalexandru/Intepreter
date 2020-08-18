@@ -35,6 +35,8 @@ namespace AST {
                 return Value(left->evaluate().toBoolObj().asBool() && right->evaluate().toBoolObj().asBool());
             case BinaryOperator ::Or:
                 return Value(left->evaluate().toBoolObj().asBool() || right->evaluate().toBoolObj().asBool());
+            case BinaryOperator ::NEqual:
+                return left->evaluate()!=right->evaluate();
         }
     }
 }

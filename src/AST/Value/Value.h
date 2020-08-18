@@ -59,6 +59,8 @@ namespace AST {
         /*Boolean operators, return bool-type value.*/
         Value operator==(const Value &other) const;
 
+        Value operator!=(const Value&other) const;
+
         Value operator>(const Value &other) const;
 
         Value operator<(const Value &other) const;

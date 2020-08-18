@@ -48,6 +48,7 @@
   RPAREN  ")"
   ASSIGNMENT "="
   EQUAL "=="
+  NEQUAL "!="
   GREATER ">"
   GREATEREQ ">="
   LESS "<"
@@ -80,7 +81,7 @@
 %right "="
 %left "||"
 %left "&&"
-%left "=="
+%left "==" "!="
 %left ">" "<" ">=" "<="
 %left "+" "-";
 %left "*" "/";
@@ -99,6 +100,7 @@ expression: LITERAL {$$=std::make_unique<AST::LiteralExp>($1);}
 | expression "*" expression   { $$ =std::make_unique<AST::BinaryOpExp>(AST::BinaryOperator::Multiply,std::move($1),std::move($3)); }
 | expression "/" expression   { $$ =std::make_unique<AST::BinaryOpExp>(AST::BinaryOperator::Divide,std::move($1),std::move($3)); }
 | expression "==" expression   { $$ =std::make_unique<AST::BinaryOpExp>(AST::BinaryOperator::Equal,std::move($1),std::move($3)); }
+| expression "!=" expression   { $$ =std::make_unique<AST::BinaryOpExp>(AST::BinaryOperator::NEqual,std::move($1),std::move($3)); }
 | expression ">" expression   { $$ =std::make_unique<AST::BinaryOpExp>(AST::BinaryOperator::Greater,std::move($1),std::move($3)); }
 | expression "<" expression   { $$ =std::make_unique<AST::BinaryOpExp>(AST::BinaryOperator::Less,std::move($1),std::move($3)); }
 | expression ">=" expression   { $$ =std::make_unique<AST::BinaryOpExp>(AST::BinaryOperator::GreaterEq,std::move($1),std::move($3)); }
