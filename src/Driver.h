@@ -20,6 +20,9 @@ public:
 
     /* the result of the parse*/
     std::vector<std::unique_ptr<AST::StmtNode>> result;
+
+    /*Check control-flow syntax errors etc. for each statement*/
+    void semanticAnalysis();
 private:
     /*the file that is currently being scanned */
     std::string current_file;

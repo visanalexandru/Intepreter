@@ -26,6 +26,8 @@ namespace AST {
         ReturnStmt();
 
         void execute() override;
+
+        void checkControlFlow(FlowState&state) const override;
     };
 
 }

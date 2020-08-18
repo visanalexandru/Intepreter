@@ -24,6 +24,8 @@ namespace AST {
                             std::vector<std::unique_ptr<StmtNode>> stmts);
 
         void execute() override;
+
+        void checkControlFlow(FlowState&state) const;
     };
 
 }

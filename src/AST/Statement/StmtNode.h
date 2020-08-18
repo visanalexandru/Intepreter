@@ -6,6 +6,7 @@
 #define INTERPRETER_STMTNODE_H
 
 #include "AST/Value/Value.h"
+#include "FlowState.h"
 
 namespace AST {
     /*This class represents a statement in the interpreted program.
@@ -31,6 +32,11 @@ namespace AST {
 
         /*Return the return_value*/
         Value getReturnValue() const;
+
+        /*Check if syntax errors regarding control flow are present.
+         * Example: return statement outside function, break statement outside loop etc.
+         * Throws syntax exception if found control flow errors */
+        virtual void checkControlFlow(FlowState&state) const =0;
 
         StmtNode();
 

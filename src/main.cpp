@@ -8,6 +8,8 @@ int main(int argc,char**argv){
     int success=driver.parse("test.lang");
     if(success==0){
         std::cout<<"Parsing successful"<<std::endl;
+        std::cout<<"Semantic analysis"<<std::endl;
+        driver.semanticAnalysis();
         float a=clock();
 
         for(const auto&stmt : driver.result)

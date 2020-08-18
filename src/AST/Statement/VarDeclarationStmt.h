@@ -27,6 +27,8 @@ namespace AST {
         /*Declares the variable with the value of the expression*/
         VarDeclarationStmt(std::string varname, std::shared_ptr<ExpNode> exp);
 
+        void checkControlFlow(FlowState&state) const override{};//no control flow errors can happen here
+
     };
 }
 

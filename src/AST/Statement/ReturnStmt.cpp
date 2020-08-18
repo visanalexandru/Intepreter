@@ -21,5 +21,10 @@ namespace AST {
         else setReturnValue(Value());
     }
 
+    void ReturnStmt::checkControlFlow(AST::FlowState &state) const {
+        if(!state.isInFunction())
+            throw std::runtime_error("Return statement outside function");
+    }
+
 
 }

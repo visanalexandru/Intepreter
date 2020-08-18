@@ -12,3 +12,10 @@ int Driver::parse(const std::string&f){
 }
 
 
+void Driver::semanticAnalysis() {
+    AST::FlowState state;
+    for(const auto&stmt:result)
+        stmt->checkControlFlow(state);
+}
+
+

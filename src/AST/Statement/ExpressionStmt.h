@@ -18,6 +18,8 @@ namespace AST {
 
         /*Just evaluate the expression*/
         void execute() override;
+
+        void checkControlFlow(FlowState&state) const override{};//no control flow errors can happen here
     };
 
 

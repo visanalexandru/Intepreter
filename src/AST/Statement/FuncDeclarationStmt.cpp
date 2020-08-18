@@ -19,5 +19,12 @@ namespace AST {
                                                                               std::move(statements)));
     }
 
+    void FuncDeclarationStmt::checkControlFlow(AST::FlowState &state) const {
+        state.enterFunction();
+        for(const auto&stmt:statements)
+            stmt->checkControlFlow(state);
+        state.exitFunction();
+    }
+
 
 }
