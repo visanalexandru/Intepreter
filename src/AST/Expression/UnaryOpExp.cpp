@@ -15,6 +15,8 @@ namespace AST {
         switch (type) {
             case UnaryOperator::Minus:
                 return -exp->evaluate();
+            case UnaryOperator ::Not:
+                return Value(!(exp->evaluate().toBoolObj().asBool()));
         }
     }
 

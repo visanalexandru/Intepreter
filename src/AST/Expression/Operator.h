@@ -25,6 +25,7 @@ namespace AST {
 
     enum class UnaryOperator {
         Minus,
+        Not
     };
 
 }

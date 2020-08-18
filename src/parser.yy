@@ -50,6 +50,7 @@
   EQUAL "=="
   NEQUAL "!="
   GREATER ">"
+  NOT "!"
   GREATEREQ ">="
   LESS "<"
   LESSEQ "<="
@@ -85,7 +86,7 @@
 %left ">" "<" ">=" "<="
 %left "+" "-";
 %left "*" "/";
-%precedence UMINUS
+%right "!"
 
 
 
@@ -107,7 +108,8 @@ expression: LITERAL {$$=std::make_unique<AST::LiteralExp>($1);}
 | expression "<=" expression   { $$ =std::make_unique<AST::BinaryOpExp>(AST::BinaryOperator::LessEq,std::move($1),std::move($3)); }
 | expression "||" expression   { $$ =std::make_unique<AST::BinaryOpExp>(AST::BinaryOperator::Or,std::move($1),std::move($3)); }
 | expression "&&" expression   { $$ =std::make_unique<AST::BinaryOpExp>(AST::BinaryOperator::And,std::move($1),std::move($3)); }
-| "-" expression %prec UMINUS { $$= std::make_unique<AST::UnaryOpExp>(AST::UnaryOperator::Minus,std::move($2)); }
+| "-" expression %prec "!"    { $$= std::make_unique<AST::UnaryOpExp>(AST::UnaryOperator::Minus,std::move($2)); }
+| "!" expression              { $$= std::make_unique<AST::UnaryOpExp>(AST::UnaryOperator::Not,std::move($2)); }
 | "(" expression ")"          { $$ = std::move($2); }
 | IDENTIFIER "=" expression   { $$=std::make_unique<AST::AssignmentExp>(std::move($1),std::move($3));}
 | IDENTIFIER                  { $$=std::make_unique<AST::VariableExp>(std::move($1));}
