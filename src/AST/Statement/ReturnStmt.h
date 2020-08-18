@@ -19,7 +19,11 @@ namespace AST {
         std::unique_ptr<ExpNode> expression;
 
     public:
+        /*Returns the value of the expression*/
         explicit ReturnStmt(std::unique_ptr<ExpNode> to_return);
+
+        /*Returns None*/
+        ReturnStmt();
 
         void execute() override;
     };

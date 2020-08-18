@@ -157,6 +157,7 @@ expression_stmt: expression ";" {$$=std::make_unique<AST::ExpressionStmt>(std::m
 ;
 
 return_stmt: "return" expression ";" {$$=std::make_unique<AST::ReturnStmt>(std::move($2));}
+|"return" ";" {$$=std::make_unique<AST::ReturnStmt>();}
 ;
 
 %%

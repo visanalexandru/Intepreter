@@ -11,8 +11,15 @@ namespace AST {
 
     }
 
-    void ReturnStmt::execute() {
-        setReturnValue(expression->evaluate());
+    ReturnStmt::ReturnStmt() : expression(nullptr) {
+
     }
+
+    void ReturnStmt::execute() {
+        if (expression != nullptr)
+            setReturnValue(expression->evaluate());
+        else setReturnValue(Value());
+    }
+
 
 }
