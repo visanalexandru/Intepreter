@@ -27,6 +27,7 @@ namespace AST {
 
         void execute() override;
 
+        /*Throws exception if the return statement is out of a function declaration*/
         void checkControlFlow(FlowState&state) const override;
     };
 
