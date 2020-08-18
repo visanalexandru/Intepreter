@@ -72,6 +72,27 @@ namespace AST {
 
         Type getType() const;
 
+        /*Converts this value object to other value object.Throws exception if conversion is not possible.*/
+        Value toIntObj() const;
+
+        Value toFloatObj() const;
+
+        Value toStringObj() const;
+
+        Value toBoolObj() const;
+
+        bool isNumerical() const;
+
+        /*Returns the union's members. Use this functions only if you know the object type!
+         *Ex: using asInt() when the obj type is Float is undefined!*/
+        int asInt() const;
+
+        double asFloat() const;
+
+        bool asBool() const;
+
+        std::string asString() const;
+
 
     private:
         /*Swap values*/
