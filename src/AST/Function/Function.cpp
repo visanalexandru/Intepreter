@@ -5,7 +5,7 @@
 #include "Function.h"
 
 namespace AST {
-    Function::Function(std::string identifier, int num_params) :
+    Function::Function(std::string identifier, unsigned long num_params) :
             name(std::move(identifier)),
             arity(num_params) {
 

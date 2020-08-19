@@ -17,14 +17,14 @@ namespace AST {
         const std::string name;
 
         /*The number of parameters*/
-        const int arity;
+        const unsigned long arity;
 
         /*Execute the function. Consider the size of the list of parameters to be equal to the function arity,
          * it is checked when calling run()*/
         virtual Value execute(const std::vector<Value> &parameters) const = 0;
 
     public:
-        Function(std::string identifier, int num_params);
+        Function(std::string identifier, unsigned long num_params);
 
         virtual ~Function() = default;
 
