@@ -30,6 +30,8 @@ namespace AST {
         /*The location of the statement in the interpreted program*/
         yy::location location;
 
+        void resetReturnValue();
+
     public:
         virtual void execute() = 0;
 

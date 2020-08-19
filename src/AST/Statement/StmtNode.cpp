@@ -24,4 +24,9 @@ namespace AST {
         return return_value;
     }
 
+    void StmtNode::resetReturnValue() {
+        has_returned=false;
+        return_value=Value();
+    }
+
 }

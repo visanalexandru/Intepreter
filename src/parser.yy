@@ -30,6 +30,7 @@
   #include "AST/Statement/ExpressionStmt.h"
   #include "AST/Statement/FuncDeclarationStmt.h"
   #include "AST/Statement/ReturnStmt.h"
+  #include "AST/Statement/IfElseStmt.h"
   class Driver;
 }
 
@@ -63,6 +64,8 @@
   LBLOCK "{"
   RBLOCK "}"
   RETURN "return"
+  IF "if"
+  ELSE "else"
 ;
 
 %token <AST::Value> LITERAL
@@ -72,6 +75,7 @@
 %nterm <std::unique_ptr<AST::VarDeclarationStmt>> var_declaration_stmt
 %nterm <std::unique_ptr<AST::ReturnStmt>> return_stmt;
 %nterm <std::unique_ptr<AST::ExpressionStmt>> expression_stmt
+%nterm <std::unique_ptr<AST::IfElseStmt>> ifelse_stmt
 %nterm <std::unique_ptr<AST::StmtNode>> statement;
 
 %nterm <std::vector<std::unique_ptr<AST::StmtNode>>> block //a list of statements
@@ -155,6 +159,7 @@ instruction_list:
 statement: var_declaration_stmt {$$=std::move($1);}
 |expression_stmt {$$=std::move($1);}
 |return_stmt     {$$=std::move($1);}
+|ifelse_stmt     {$$=std::move($1);}
 
 var_declaration_stmt: "var" IDENTIFIER "=" expression ";" {$$=std::make_unique<AST::VarDeclarationStmt>(@1,std::move($2),std::move($4));}
 | "var" IDENTIFIER ";"                                    {$$=std::make_unique<AST::VarDeclarationStmt>(@1,std::move($2));}
@@ -166,6 +171,10 @@ expression_stmt: expression ";" {$$=std::make_unique<AST::ExpressionStmt>(@1,std
 return_stmt: "return" expression ";" {$$=std::make_unique<AST::ReturnStmt>(@1,std::move($2));}
 |"return" ";" {$$=std::make_unique<AST::ReturnStmt>(@1);}
 ;
+
+ifelse_stmt: "if" "(" expression ")" "{" block"}" {$$=std::make_unique<AST::IfElseStmt>(@1,std::move($3),std::move($6));}
+|"if" "(" expression ")" "{" block "}" "else" "{" block "}" {$$=std::make_unique<AST::IfElseStmt>(@1,std::move($3),std::move($6),std::move($10));}
+
 
 %%
 

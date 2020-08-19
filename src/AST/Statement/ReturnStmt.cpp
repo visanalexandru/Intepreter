@@ -20,6 +20,7 @@ namespace AST {
     }
 
     void ReturnStmt::execute() {
+        resetReturnValue();
         if (expression != nullptr)
             setReturnValue(expression->evaluate());
         else setReturnValue(Value());

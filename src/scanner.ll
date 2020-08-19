@@ -55,6 +55,8 @@ blank [ \t\r]
 ")"        return yy::parser::make_RPAREN (loc);
 "="        return yy::parser::make_ASSIGNMENT(loc);
 "var"      return yy::parser::make_VAR(loc);
+"if"       return yy::parser::make_IF(loc);
+"else"       return yy::parser::make_ELSE(loc);
 ";"        return yy::parser::make_SEMICOLON(loc);
 ","        return yy::parser::make_COMMA(loc);
 "func"     return yy::parser::make_FUNC(loc);
