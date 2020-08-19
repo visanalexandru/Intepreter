@@ -22,12 +22,13 @@ namespace AST {
         void execute() override;
 
         /*Declares the variable with value None*/
-        explicit VarDeclarationStmt(std::string varname);
+        VarDeclarationStmt(yy::location loc, std::string varname);
 
         /*Declares the variable with the value of the expression*/
-        VarDeclarationStmt(std::string varname, std::shared_ptr<ExpNode> exp);
+        VarDeclarationStmt(yy::location loc, std::string varname, std::shared_ptr<ExpNode> exp);
 
-        void checkControlFlow(FlowState&state) const override{};//no control flow errors can happen here
+        void checkControlFlow(FlowState &state,
+                              std::vector<Error> &errors) const override {};//no control flow errors can happen here
 
     };
 }

@@ -4,6 +4,7 @@
 #include"parser.hpp"
 #include"AST/Value/Value.h"
 #include "AST/Statement/StmtNode.h"
+#include "Error.h"
 #define YY_DECL yy::parser::symbol_type yylex(Driver&drv)
 
 YY_DECL;
@@ -20,6 +21,8 @@ public:
 
     /* the result of the parse*/
     std::vector<std::unique_ptr<AST::StmtNode>> result;
+
+    std::vector<Error> errors;
 
     /*Check control-flow syntax errors etc. for each statement*/
     void semanticAnalysis();

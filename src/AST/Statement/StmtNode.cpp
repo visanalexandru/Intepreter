@@ -6,7 +6,7 @@
 
 namespace AST {
 
-    StmtNode::StmtNode() : return_value(), has_returned(false) {
+    StmtNode::StmtNode(yy::location loc) : return_value(), has_returned(false),location(loc) {
 
     }
 

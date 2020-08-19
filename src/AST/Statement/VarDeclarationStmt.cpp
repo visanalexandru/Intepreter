@@ -6,13 +6,15 @@
 
 namespace AST {
 
-    VarDeclarationStmt::VarDeclarationStmt(std::string varname) :
+    VarDeclarationStmt::VarDeclarationStmt(yy::location loc, std::string varname) :
+            StmtNode(loc),
             name(std::move(varname)), value(nullptr) {
 
 
     }
 
-    VarDeclarationStmt::VarDeclarationStmt(std::string varname, std::shared_ptr<ExpNode> exp) :
+    VarDeclarationStmt::VarDeclarationStmt(yy::location loc, std::string varname, std::shared_ptr<ExpNode> exp) :
+            StmtNode(loc),
             name(std::move(varname)),
             value(std::move(exp)) {
 

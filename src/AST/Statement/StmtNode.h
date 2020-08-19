@@ -7,6 +7,9 @@
 
 #include "AST/Value/Value.h"
 #include "FlowState.h"
+#include "location.hh"
+#include<vector>
+#include"Error.h"
 
 namespace AST {
     /*This class represents a statement in the interpreted program.
@@ -24,6 +27,9 @@ namespace AST {
         /*Sets the return_value and sets has_returned to true*/
         void setReturnValue(const Value &value);
 
+        /*The location of the statement in the interpreted program*/
+        yy::location location;
+
     public:
         virtual void execute() = 0;
 
@@ -35,10 +41,10 @@ namespace AST {
 
         /*Check if syntax errors regarding control flow are present.
          * Example: return statement outside function, break statement outside loop etc.
-         * Throws syntax exception if found control flow errors */
-        virtual void checkControlFlow(FlowState&state) const =0;
+         * Add a syntax error to the list if it has  found control flow errors */
+        virtual void checkControlFlow(FlowState&state,std::vector<Error>&errors) const =0;
 
-        StmtNode();
+        explicit StmtNode(yy::location loc);
 
         virtual ~StmtNode() = default;
 

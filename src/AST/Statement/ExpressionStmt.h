@@ -14,12 +14,12 @@ namespace AST {
     private:
         std::shared_ptr<ExpNode> exp;
     public:
-        explicit ExpressionStmt(std::shared_ptr<ExpNode> expression);
+        ExpressionStmt(yy::location loc,std::shared_ptr<ExpNode> expression);
 
         /*Just evaluate the expression*/
         void execute() override;
 
-        void checkControlFlow(FlowState&state) const override{};//no control flow errors can happen here
+        void checkControlFlow(FlowState&state,std::vector<Error>&errors) const override{};//no control flow errors can happen here
     };
 
 

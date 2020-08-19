@@ -6,12 +6,16 @@
 
 namespace AST {
 
-    ReturnStmt::ReturnStmt(std::unique_ptr<ExpNode> to_return) : expression(std::move(to_return)) {
+    ReturnStmt::ReturnStmt(yy::location loc,std::unique_ptr<ExpNode> to_return) :
+    StmtNode(loc),
+    expression(std::move(to_return)) {
 
 
     }
 
-    ReturnStmt::ReturnStmt() : expression(nullptr) {
+    ReturnStmt::ReturnStmt(yy::location loc) :
+    StmtNode(loc),
+    expression(nullptr) {
 
     }
 
@@ -21,9 +25,9 @@ namespace AST {
         else setReturnValue(Value());
     }
 
-    void ReturnStmt::checkControlFlow(AST::FlowState &state) const {
+    void ReturnStmt::checkControlFlow(FlowState &state,std::vector<Error>&errors) const {
         if(!state.isInFunction())
-            throw std::runtime_error("Return statement outside function");
+            errors.emplace_back("semantic error, return statement outside function",location);
     }
 
 

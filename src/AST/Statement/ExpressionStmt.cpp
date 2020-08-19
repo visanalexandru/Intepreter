@@ -7,7 +7,9 @@
 
 namespace AST {
 
-    ExpressionStmt::ExpressionStmt(std::shared_ptr<ExpNode> expression) : exp(std::move(expression)) {
+    ExpressionStmt::ExpressionStmt(yy::location loc, std::shared_ptr<ExpNode> expression) :
+            StmtNode(loc),
+            exp(std::move(expression)) {
 
     }
 

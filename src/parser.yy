@@ -138,7 +138,7 @@ function_call: IDENTIFIER "(" expression_list ")" {$$=std::make_unique<AST::Func
 |IDENTIFIER "(" ")"                               {$$=std::make_unique<AST::FuncCallExp>(std::move($1),std::vector<std::unique_ptr<AST::ExpNode>>());}
 ;
 
-function_declaration: "func" IDENTIFIER "(" parameter_identifier_list ")" "{" block "}" {$$=std::make_unique<AST::FuncDeclarationStmt>(std::move($2),std::move($4),std::move($7));}
+function_declaration: "func" IDENTIFIER "(" parameter_identifier_list ")" "{" block "}" {$$=std::make_unique<AST::FuncDeclarationStmt>(@1,std::move($2),std::move($4),std::move($7));}
 ;
 
 block:
@@ -156,15 +156,15 @@ statement: var_declaration_stmt {$$=std::move($1);}
 |expression_stmt {$$=std::move($1);}
 |return_stmt     {$$=std::move($1);}
 
-var_declaration_stmt: "var" IDENTIFIER "=" expression ";" {$$=std::make_unique<AST::VarDeclarationStmt>(std::move($2),std::move($4));}
-| "var" IDENTIFIER ";"                                    {$$=std::make_unique<AST::VarDeclarationStmt>(std::move($2));}
+var_declaration_stmt: "var" IDENTIFIER "=" expression ";" {$$=std::make_unique<AST::VarDeclarationStmt>(@1,std::move($2),std::move($4));}
+| "var" IDENTIFIER ";"                                    {$$=std::make_unique<AST::VarDeclarationStmt>(@1,std::move($2));}
 ;
 
-expression_stmt: expression ";" {$$=std::make_unique<AST::ExpressionStmt>(std::move($1));}
+expression_stmt: expression ";" {$$=std::make_unique<AST::ExpressionStmt>(@1,std::move($1));}
 ;
 
-return_stmt: "return" expression ";" {$$=std::make_unique<AST::ReturnStmt>(std::move($2));}
-|"return" ";" {$$=std::make_unique<AST::ReturnStmt>();}
+return_stmt: "return" expression ";" {$$=std::make_unique<AST::ReturnStmt>(@1,std::move($2));}
+|"return" ";" {$$=std::make_unique<AST::ReturnStmt>(@1);}
 ;
 
 %%
@@ -172,5 +172,5 @@ return_stmt: "return" expression ";" {$$=std::make_unique<AST::ReturnStmt>(std::
 void
 yy::parser::error (const location_type& l, const std::string& m)
 {
-  std::cerr << l << ": " << m << '\n';
+  drv.errors.push_back(Error(m,l));
 }

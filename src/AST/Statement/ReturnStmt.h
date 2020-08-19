@@ -20,15 +20,15 @@ namespace AST {
 
     public:
         /*Returns the value of the expression*/
-        explicit ReturnStmt(std::unique_ptr<ExpNode> to_return);
+        ReturnStmt(yy::location loc,std::unique_ptr<ExpNode> to_return);
 
         /*Returns None*/
-        ReturnStmt();
+        explicit ReturnStmt(yy::location loc);
 
         void execute() override;
 
         /*Throws exception if the return statement is out of a function declaration*/
-        void checkControlFlow(FlowState&state) const override;
+        void checkControlFlow(FlowState&state,std::vector<Error>&errors) const override;
     };
 
 }

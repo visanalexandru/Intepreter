@@ -5,8 +5,9 @@
 #include "FuncDeclarationStmt.h"
 
 namespace AST {
-    FuncDeclarationStmt::FuncDeclarationStmt(std::string id, std::vector<std::string> parameter_ids,
+    FuncDeclarationStmt::FuncDeclarationStmt(yy::location loc, std::string id, std::vector<std::string> parameter_ids,
                                              std::vector<std::unique_ptr<StmtNode>> stmts) :
+            StmtNode(loc),
             name(std::move(id)),
             identifiers(std::move(parameter_ids)),
             statements(std::move(stmts)) {
@@ -19,10 +20,10 @@ namespace AST {
                                                                               std::move(statements)));
     }
 
-    void FuncDeclarationStmt::checkControlFlow(AST::FlowState &state) const {
+    void FuncDeclarationStmt::checkControlFlow(FlowState &state,std::vector<Error>&errors) const {
         state.enterFunction();
-        for(const auto&stmt:statements)
-            stmt->checkControlFlow(state);
+        for (const auto &stmt:statements)
+            stmt->checkControlFlow(state,errors);
         state.exitFunction();
     }
 

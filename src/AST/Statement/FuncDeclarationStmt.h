@@ -20,12 +20,12 @@ namespace AST {
 
         std::string name;
     public:
-        FuncDeclarationStmt(std::string id, std::vector<std::string> parameter_ids,
+        FuncDeclarationStmt(yy::location loc,std::string id, std::vector<std::string> parameter_ids,
                             std::vector<std::unique_ptr<StmtNode>> stmts);
 
         void execute() override;
 
-        void checkControlFlow(FlowState&state) const override ;
+        void checkControlFlow(FlowState&state,std::vector<Error>&errors) const override ;
     };
 
 }
