@@ -16,7 +16,7 @@ namespace AST {
     /*This class manages scopes and function definitions*/
     class Context {
     private:
-        std::deque<std::unordered_map<std::string, Value> *> scopes;
+        std::deque<std::unordered_map<std::string, Value>> scopes;
 
         std::unordered_map<std::string, std::unique_ptr<Function>> functions;
 
@@ -25,14 +25,11 @@ namespace AST {
          * If no scope was found that contains the variable, return nullptr .*/
         std::unordered_map<std::string, Value> *findScopeOf(const std::string &varname);
 
-        /*Returns a pointer to the current scope*/
-        std::unordered_map<std::string, Value> *getCurrentScope();
+        /*Returns a reference to the current scope*/
+        std::unordered_map<std::string, Value>&getCurrentScope();
 
     public:
         Context();
-
-        /*Will destroy all the active scopes*/
-        ~Context();
 
         /*Declare a variable in this scope and assign its value
          *If the variable has been declared in this scope already, throw an exception*/
