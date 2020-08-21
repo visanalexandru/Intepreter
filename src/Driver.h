@@ -5,6 +5,7 @@
 #include"AST/Value/Value.h"
 #include "AST/Statement/StmtNode.h"
 #include "Error.h"
+
 #define YY_DECL yy::parser::symbol_type yylex(Driver&drv)
 
 YY_DECL;
@@ -24,9 +25,17 @@ public:
 
     std::vector<Error> errors;
 
+
+    /*Try running the program,print errors*/
+    void start();
+
+private:
+    /*Solve function calls,variables, apply semantic analysis etc.*/
+    void preprocess();
+
     /*Check control-flow syntax errors etc. for each statement*/
     void semanticAnalysis();
-private:
+
     /*the file that is currently being scanned */
     std::string current_file;
 
