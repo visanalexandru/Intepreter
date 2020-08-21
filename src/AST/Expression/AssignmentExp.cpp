@@ -5,8 +5,8 @@
 #include "AssignmentExp.h"
 
 namespace AST {
-    AssignmentExp::AssignmentExp(std::string name, std::unique_ptr<ExpNode> value) :
-            varname(std::move(name)),
+    AssignmentExp::AssignmentExp(Symbol sym, std::unique_ptr<ExpNode> value) :
+            symbol(std::move(sym)),
             exp(std::move(value)) {
 
 
@@ -14,7 +14,7 @@ namespace AST {
 
     Value AssignmentExp::evaluate() const {
         Value result = exp->evaluate();
-        globalContext.setVar(varname, result);
+        globalContext.setVar(symbol.symbol_name, result);
         return result;
     }
 }

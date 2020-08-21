@@ -6,12 +6,12 @@
 
 namespace AST {
 
-    VariableExp::VariableExp(std::string varname) : name(std::move(varname)) {
+    VariableExp::VariableExp(Symbol sym) :symbol(std::move(sym)) {
 
 
     }
 
     Value VariableExp::evaluate() const {
-        return globalContext.getVar(name);
+        return globalContext.getVar(symbol.symbol_name);
     }
 }

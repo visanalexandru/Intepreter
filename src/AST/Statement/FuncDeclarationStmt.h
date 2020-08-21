@@ -7,20 +7,21 @@
 
 #include"StmtNode.h"
 #include"AST/Function/DefinedFunction.h"
-
+#include "AST/Symbol.h"
 namespace AST {
     /*This class is responsible for a function declaration. execute() will construct a function and add
      *to the global context*/
     class FuncDeclarationStmt : public StmtNode {
     private:
         /*These lists will be invalidated after the execute() call because they will be passed as rvalues to the function obj*/
-        std::vector<std::string> identifiers;
+        std::vector<Symbol> parameter_symbols;
 
         std::vector<std::unique_ptr<StmtNode>> statements;
 
-        std::string name;
+        /*The symbol of the function*/
+        const Symbol symbol;
     public:
-        FuncDeclarationStmt(yy::location loc,std::string id, std::vector<std::string> parameter_ids,
+        FuncDeclarationStmt(yy::location loc,Symbol sym, std::vector<Symbol> p_syms,
                             std::vector<std::unique_ptr<StmtNode>> stmts);
 
         void execute() override;

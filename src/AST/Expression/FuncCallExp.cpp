@@ -6,8 +6,8 @@
 
 namespace AST {
 
-    FuncCallExp::FuncCallExp(std::string id, std::vector<std::unique_ptr<ExpNode>> params) :
-            name(std::move(id)),
+    FuncCallExp::FuncCallExp(Symbol sym, std::vector<std::unique_ptr<ExpNode>> params) :
+            symbol(std::move(sym)),
             parameters(std::move(params)) {
 
 
@@ -18,7 +18,7 @@ namespace AST {
         for (const auto &expression:parameters) {
             values.push_back(expression->evaluate());
         }
-        return globalContext.getFunc(name)->run(values);
+        return globalContext.getFunc(symbol.symbol_name)->run(values);
     }
 
 }

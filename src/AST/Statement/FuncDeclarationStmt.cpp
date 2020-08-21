@@ -5,18 +5,18 @@
 #include "FuncDeclarationStmt.h"
 
 namespace AST {
-    FuncDeclarationStmt::FuncDeclarationStmt(yy::location loc, std::string id, std::vector<std::string> parameter_ids,
+    FuncDeclarationStmt::FuncDeclarationStmt(yy::location loc, Symbol sym, std::vector<Symbol> p_syms,
                                              std::vector<std::unique_ptr<StmtNode>> stmts) :
             StmtNode(loc),
-            name(std::move(id)),
-            identifiers(std::move(parameter_ids)),
+            symbol(std::move(sym)),
+            parameter_symbols(std::move(p_syms)),
             statements(std::move(stmts)) {
 
 
     }
 
     void FuncDeclarationStmt::execute() {
-        globalContext.defineFunc(name, std::make_unique<AST::DefinedFunction>(name, std::move(identifiers),
+        globalContext.defineFunc(symbol.symbol_name, std::make_unique<AST::DefinedFunction>(symbol.symbol_name, std::move(parameter_symbols),
                                                                               std::move(statements)));
     }
 

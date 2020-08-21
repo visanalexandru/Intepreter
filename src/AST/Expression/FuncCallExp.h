@@ -7,17 +7,19 @@
 
 #include"ExpNode.h"
 #include"AST/Context.h"
+#include "AST/Symbol.h"
 
 namespace AST {
     /*This class represents a function call. The evaluate() function will evaluate the parameter expressions,
      *and then run the function that has that name with the corresponding values*/
     class FuncCallExp : public ExpNode {
     private:
-        const std::string name;
+        /*The symbol of the function that needs to be called*/
+        const Symbol symbol;
         /*These must be evaluated */
         const std::vector<std::unique_ptr<ExpNode>> parameters;
     public:
-        FuncCallExp(std::string id, std::vector<std::unique_ptr<ExpNode>> params);
+        FuncCallExp(Symbol sym, std::vector<std::unique_ptr<ExpNode>> params);
 
         Value evaluate() const override;
 

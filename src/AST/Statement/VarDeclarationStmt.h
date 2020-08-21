@@ -8,12 +8,13 @@
 #include "StmtNode.h"
 #include "AST/Context.h"
 #include "AST/Expression/ExpNode.h"
+#include "AST/Symbol.h"
 
 namespace AST {
     /*This class is responsible for the declaration of a variable at runtime*/
     class VarDeclarationStmt : public StmtNode {
     private:
-        const std::string name;
+        const Symbol symbol;
 
         /*The expression on the right side of the declaration*/
         std::shared_ptr<ExpNode> value;
@@ -22,10 +23,10 @@ namespace AST {
         void execute() override;
 
         /*Declares the variable with value None*/
-        VarDeclarationStmt(yy::location loc, std::string varname);
+        VarDeclarationStmt(yy::location loc, Symbol sym);
 
         /*Declares the variable with the value of the expression*/
-        VarDeclarationStmt(yy::location loc, std::string varname, std::shared_ptr<ExpNode> exp);
+        VarDeclarationStmt(yy::location loc, Symbol sym, std::shared_ptr<ExpNode> exp);
 
         void checkControlFlow(FlowState &state,
                               std::vector<Error> &errors) const override {};//no control flow errors can happen here

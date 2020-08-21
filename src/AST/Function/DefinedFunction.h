@@ -9,7 +9,7 @@
 #include "Function.h"
 #include "AST/Context.h"
 #include"AST/Statement/StmtNode.h"
-
+#include "AST/Symbol.h"
 namespace AST {
     /*This class represents a user-defined function. We should create this class when we reach a function declaration
      * in the interpreted program.
@@ -17,14 +17,14 @@ namespace AST {
      * in the current scope by its parameter id (given by its order) with the values provided.*/
     class DefinedFunction : public Function {
     private:
-        /*The names of the parameters*/
-        const std::vector<std::string> parameter_ids;
+        /*The symbols of the parameters*/
+        const std::vector<Symbol> parameter_symbols;
 
         /*Statements to execute in order. If one statement has returned a value, stop executing and return its return value.*/
         const std::vector<std::unique_ptr<StmtNode>> statements;
 
     public:
-        DefinedFunction(std::string identifier, std::vector<std::string> parameters,
+        DefinedFunction(std::string identifier, std::vector<Symbol> p_symbols,
                         std::vector<std::unique_ptr<StmtNode>> to_execute);
 
         Value execute(const std::vector<Value> &parameters) const override;

@@ -5,10 +5,10 @@
 #include "DefinedFunction.h"
 
 namespace AST {
-    DefinedFunction::DefinedFunction(std::string identifier, std::vector<std::string> parameters,
+    DefinedFunction::DefinedFunction(std::string identifier, std::vector<Symbol> p_symbols,
                                      std::vector<std::unique_ptr<StmtNode>> to_execute) :
-            Function(std::move(identifier), parameters.size()),
-            parameter_ids(std::move(parameters)),
+            Function(std::move(identifier), p_symbols.size()),
+            parameter_symbols(std::move(p_symbols)),
             statements(std::move(to_execute)) {
 
 
@@ -17,7 +17,7 @@ namespace AST {
     Value DefinedFunction::execute(const std::vector<Value> &parameters) const {
         globalContext.pushScope();
         for (unsigned long i = 0; i < parameters.size(); i++) {
-            globalContext.declareVar(parameter_ids[i], parameters[i]);
+            globalContext.declareVar(parameter_symbols[i].symbol_name, parameters[i]);
         }
         Value to_return;//if no return statements, return None
 

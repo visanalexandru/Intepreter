@@ -5,6 +5,7 @@
 # include <cstring> // strerror
 # include <string>
 # include "Driver.h"
+#include "AST/SymbolTable.h"
 # include "parser.hpp"
 %}
 
@@ -16,6 +17,7 @@
     yy::parser::symbol_type make_INT (const std::string &s, const yy::parser::location_type& loc);
     yy::parser::symbol_type make_STRING (const std::string &s, const yy::parser::location_type& loc);
     yy::parser::symbol_type make_FLOAT(const std::string&s,const yy::parser::location_type& loc);
+    yy::parser::symbol_type make_SYMBOL(const std::string&s,const yy::parser::location_type& loc);
 %}
 string \"[a-zA-Z0-9 ]*\"
 id    [a-zA-Z][a-zA-Z0-9]*
@@ -65,10 +67,10 @@ blank [ \t\r]
 "return"   return yy::parser::make_RETURN(loc);
 "false"    return yy::parser::make_LITERAL(AST::Value(false),loc);
 "true"    return yy::parser::make_LITERAL(AST::Value(true),loc);
-{int}      return make_INT(yytext,loc);
+{int}      return make_INT(std::string(yytext),loc);
 {string}   return make_STRING(std::string(yytext),loc);
 {float}    return make_FLOAT(std::string(yytext),loc);
-{id}       return yy::parser::make_IDENTIFIER(std::string(yytext),loc);
+{id}       return make_SYMBOL(std::string(yytext),loc);
 <<EOF>>    return yy::parser::make_YYEOF (loc);
 %%
 
@@ -99,6 +101,13 @@ yy::parser::symbol_type make_STRING(const std::string &s, const yy::parser::loca
 {
   return yy::parser::make_LITERAL (AST::Value(s.substr(1,s.size()-2)), loc);
 }
+
+yy::parser::symbol_type make_SYMBOL(const std::string &s, const yy::parser::location_type& loc)
+{
+    unsigned long id=AST::globalSymtable.addSymbol(s);
+    return yy::parser::make_IDENTIFIER({s,id},loc);
+}
+
 
 void Driver::scan_begin ()
 {

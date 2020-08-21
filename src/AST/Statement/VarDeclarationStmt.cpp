@@ -6,25 +6,25 @@
 
 namespace AST {
 
-    VarDeclarationStmt::VarDeclarationStmt(yy::location loc, std::string varname) :
+    VarDeclarationStmt::VarDeclarationStmt(yy::location loc, Symbol sym) :
             StmtNode(loc),
-            name(std::move(varname)), value(nullptr) {
+            symbol(std::move(sym)), value(nullptr) {
 
 
     }
 
-    VarDeclarationStmt::VarDeclarationStmt(yy::location loc, std::string varname, std::shared_ptr<ExpNode> exp) :
+    VarDeclarationStmt::VarDeclarationStmt(yy::location loc, Symbol sym, std::shared_ptr<ExpNode> exp) :
             StmtNode(loc),
-            name(std::move(varname)),
+            symbol(std::move(sym)),
             value(std::move(exp)) {
 
     }
 
     void VarDeclarationStmt::execute() {
         if (value != nullptr) {
-            globalContext.declareVar(name, value->evaluate());
+            globalContext.declareVar(symbol.symbol_name, value->evaluate());
         } else {
-            globalContext.declareVar(name, Value());
+            globalContext.declareVar(symbol.symbol_name, Value());
         }
     }
 }

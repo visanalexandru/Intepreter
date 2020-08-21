@@ -31,6 +31,7 @@
   #include "AST/Statement/FuncDeclarationStmt.h"
   #include "AST/Statement/ReturnStmt.h"
   #include "AST/Statement/IfElseStmt.h"
+  #include "AST/Symbol.h"
   class Driver;
 }
 
@@ -69,7 +70,7 @@
 ;
 
 %token <AST::Value> LITERAL
-%token <std::string> IDENTIFIER
+%token <AST::Symbol> IDENTIFIER
 %nterm <std::unique_ptr<AST::ExpNode>> expression
 
 %nterm <std::unique_ptr<AST::VarDeclarationStmt>> var_declaration_stmt
@@ -84,8 +85,8 @@
 %nterm <std::vector<std::unique_ptr<AST::StmtNode>>> instruction_list
 %nterm <std::vector<std::unique_ptr<AST::ExpNode>>>  expression_list//1 or more comma-separated expressions
 %nterm <std::unique_ptr<AST::FuncCallExp>> function_call;
-%nterm <std::vector<std::string>> identifier_list; //1 or more comma-separated identifiers
-%nterm <std::vector<std::string>> parameter_identifier_list; //0 or more comma-separated identifiers, used for func defs
+%nterm <std::vector<AST::Symbol>> identifier_list; //1 or more comma-separated identifiers
+%nterm <std::vector<AST::Symbol>> parameter_identifier_list; //0 or more comma-separated identifiers, used for func defs
 
 
 //Precedence
@@ -130,11 +131,11 @@ expression_list: expression {$$=std::vector<std::unique_ptr<AST::ExpNode>>();$$.
 |expression_list "," expression {$1.push_back(std::move($3));$$=std::move($1);}
 ;
 
-identifier_list: IDENTIFIER{$$=std::vector<std::string>(); $$.push_back(std::move($1));}
+identifier_list: IDENTIFIER{$$=std::vector<AST::Symbol>(); $$.push_back(std::move($1));}
 |identifier_list "," IDENTIFIER {$1.push_back(std::move($3));$$=std::move($1);}
 ;
 
-parameter_identifier_list:%empty {$$=std::vector<std::string>();}
+parameter_identifier_list:%empty {$$=std::vector<AST::Symbol>();}
 |identifier_list                 {$$=std::move($1);}
 ;
 
