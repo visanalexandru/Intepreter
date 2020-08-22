@@ -22,7 +22,7 @@ namespace AST {
         std::unique_ptr<ExpNode> right;
 
     public:
-        BinaryOpExp(BinaryOperator t, std::unique_ptr<ExpNode> l, std::unique_ptr<ExpNode> r);
+        BinaryOpExp(yy::location loc, BinaryOperator t, std::unique_ptr<ExpNode> l, std::unique_ptr<ExpNode> r);
 
         Value evaluate() const override;
     };

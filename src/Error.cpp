@@ -15,3 +15,9 @@ Error::Error(std::string error, yy::location loc) :
 void Error::log() const {
     std::cerr << location << ": " << message << '\n';
 }
+
+std::string Error::toString() const {
+    std::ostringstream stream;
+    stream<<location<<": "<<message<<'\n';
+    return stream.str();
+}

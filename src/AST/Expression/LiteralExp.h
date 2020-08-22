@@ -14,7 +14,7 @@ namespace AST {
     private:
         Value value;
     public:
-        explicit LiteralExp(Value val);
+        LiteralExp(yy::location loc,Value val);
 
         /*Just returns the value*/
         Value evaluate() const override;

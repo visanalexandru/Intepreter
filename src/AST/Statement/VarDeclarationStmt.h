@@ -31,6 +31,7 @@ namespace AST {
         void checkControlFlow(FlowState &state,
                               std::vector<Error> &errors) const override {};//no control flow errors can happen here
 
+        void checkDeclarations(DeclarationStack&stack,std::vector<Error>&errors) const override ;
     };
 }
 

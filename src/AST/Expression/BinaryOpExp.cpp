@@ -5,7 +5,8 @@
 #include "BinaryOpExp.h"
 
 namespace AST {
-    BinaryOpExp::BinaryOpExp(AST::BinaryOperator t, std::unique_ptr<ExpNode> l, std::unique_ptr<ExpNode> r) :
+    BinaryOpExp::BinaryOpExp(yy::location loc,AST::BinaryOperator t, std::unique_ptr<ExpNode> l, std::unique_ptr<ExpNode> r) :
+            ExpNode(loc),
             type(t),
             left(std::move(l)),
             right(std::move(r)) {

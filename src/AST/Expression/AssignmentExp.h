@@ -6,6 +6,7 @@
 #define INTERPRETER_ASSIGNMENTEXP_H
 
 #include"ExpNode.h"
+#include "Error.h"
 #include"AST/Context.h"
 #include "AST/Symbol.h"
 namespace AST {
@@ -22,8 +23,9 @@ namespace AST {
         std::unique_ptr<ExpNode> exp;
 
     public:
-        AssignmentExp(Symbol sym, std::unique_ptr<ExpNode> value);
+        AssignmentExp(yy::location loc,Symbol sym, std::unique_ptr<ExpNode> value);
 
+        /*Throw runtime error if the variable could was not declared*/
         Value evaluate() const override;
     };
 }

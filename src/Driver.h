@@ -4,6 +4,7 @@
 #include"parser.hpp"
 #include"AST/Value/Value.h"
 #include "AST/Statement/StmtNode.h"
+#include "AST/SymbolTable.h"
 #include "Error.h"
 
 #define YY_DECL yy::parser::symbol_type yylex(Driver&drv)
@@ -30,6 +31,9 @@ public:
     void start();
 
 private:
+    /*Add core functions to the context*/
+    void init();
+
     /*Solve function calls,variables, apply semantic analysis etc.*/
     void preprocess();
 

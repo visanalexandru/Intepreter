@@ -8,6 +8,7 @@
 #include"ExpNode.h"
 #include"AST/Context.h"
 #include "AST/Symbol.h"
+#include "Error.h"
 
 namespace AST {
     /*This class represents a function call. The evaluate() function will evaluate the parameter expressions,
@@ -19,8 +20,9 @@ namespace AST {
         /*These must be evaluated */
         const std::vector<std::unique_ptr<ExpNode>> parameters;
     public:
-        FuncCallExp(Symbol sym, std::vector<std::unique_ptr<ExpNode>> params);
+        FuncCallExp(yy::location loc,Symbol sym, std::vector<std::unique_ptr<ExpNode>> params);
 
+        /*Throw runtime error if the function was not declared*/
         Value evaluate() const override;
 
 

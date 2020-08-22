@@ -7,6 +7,7 @@
 
 #include "AST/Value/Value.h"
 #include "AST/Preprocess/FlowState.h"
+#include "AST/Preprocess/DeclarationStack.h"
 #include "location.hh"
 #include<vector>
 #include"Error.h"
@@ -45,6 +46,10 @@ namespace AST {
          * Example: return statement outside function, break statement outside loop etc.
          * Add a syntax error to the list if it has  found control flow errors */
         virtual void checkControlFlow(FlowState&state,std::vector<Error>&errors) const =0;
+
+
+        /*Report duplicate declarations of functions/variables etc.*/
+        virtual void checkDeclarations(DeclarationStack&stack,std::vector<Error>&error) const=0;
 
         explicit StmtNode(yy::location loc);
 

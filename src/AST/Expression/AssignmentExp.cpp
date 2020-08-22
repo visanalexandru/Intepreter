@@ -5,7 +5,8 @@
 #include "AssignmentExp.h"
 
 namespace AST {
-    AssignmentExp::AssignmentExp(Symbol sym, std::unique_ptr<ExpNode> value) :
+    AssignmentExp::AssignmentExp(yy::location loc, Symbol sym, std::unique_ptr<ExpNode> value) :
+            ExpNode(loc),
             symbol(std::move(sym)),
             exp(std::move(value)) {
 
@@ -14,7 +15,10 @@ namespace AST {
 
     Value AssignmentExp::evaluate() const {
         Value result = exp->evaluate();
-        globalContext.setVar(symbol.symbol_name, result);
+        if(!globalContext.isVarDeclared(symbol.symbol_id)){
+            throw std::runtime_error(Error("runtime error, variable has not been declared: " + symbol.symbol_name,location).toString());
+        }
+        globalContext.setVar(symbol.symbol_id, result);
         return result;
     }
 }

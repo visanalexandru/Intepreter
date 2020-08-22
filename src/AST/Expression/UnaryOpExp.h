@@ -19,7 +19,7 @@ namespace AST {
         std::unique_ptr<ExpNode> exp;
 
     public:
-        UnaryOpExp(UnaryOperator t, std::unique_ptr<ExpNode> op);
+        UnaryOpExp(yy::location loc,UnaryOperator t, std::unique_ptr<ExpNode> op);
 
         Value evaluate() const override;
     };

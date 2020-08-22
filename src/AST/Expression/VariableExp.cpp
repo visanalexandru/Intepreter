@@ -6,12 +6,15 @@
 
 namespace AST {
 
-    VariableExp::VariableExp(Symbol sym) :symbol(std::move(sym)) {
+    VariableExp::VariableExp(yy::location loc, Symbol sym) : ExpNode(loc), symbol(std::move(sym)) {
 
 
     }
 
     Value VariableExp::evaluate() const {
-        return globalContext.getVar(symbol.symbol_name);
+        if (!globalContext.isVarDeclared(symbol.symbol_id)) {
+            throw std::runtime_error(Error("runtime error, variable has not been declared: " + symbol.symbol_name,location).toString());
+        }
+        return globalContext.getVar(symbol.symbol_id);
     }
 }

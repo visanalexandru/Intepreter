@@ -16,7 +16,7 @@ namespace AST {
     }
 
     void FuncDeclarationStmt::execute() {
-        globalContext.defineFunc(symbol.symbol_name, std::make_unique<AST::DefinedFunction>(symbol.symbol_name, std::move(parameter_symbols),
+        globalContext.declareFunc(symbol.symbol_id, std::make_unique<AST::DefinedFunction>(symbol.symbol_name, std::move(parameter_symbols),
                                                                               std::move(statements)));
     }
 
@@ -25,6 +25,19 @@ namespace AST {
         for (const auto &stmt:statements)
             stmt->checkControlFlow(state,errors);
         state.exitFunction();
+    }
+
+    void FuncDeclarationStmt::checkDeclarations(AST::DeclarationStack &stack, std::vector<Error> &errors) const {
+        if(stack.functionExists(symbol.symbol_id))
+            errors.emplace_back("semantic error, duplicate declaration of function "+symbol.symbol_name,location);
+        stack.addFunction(symbol.symbol_id);
+
+        stack.push_scope();
+        for(const Symbol&sym:parameter_symbols)
+            stack.addVariable(sym.symbol_id);
+        for(const auto&stmt:statements)
+            stmt->checkDeclarations(stack,errors);
+        stack.pop_scope();
     }
 
 

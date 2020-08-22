@@ -9,6 +9,7 @@
 #include<deque>
 #include<string>
 #include<memory>
+#include<cassert>
 #include "AST/Value/Value.h"
 #include "AST/Function/CoreFunction/PrintFunc.h"
 
@@ -16,37 +17,39 @@ namespace AST {
     /*This class manages scopes and function definitions*/
     class Context {
     private:
-        std::deque<std::unordered_map<std::string, Value>> scopes;
+        std::deque<std::unordered_map<unsigned long, Value>> scopes;
 
-        std::unordered_map<std::string, std::unique_ptr<Function>> functions;
+        std::unordered_map<unsigned long, std::unique_ptr<Function>> functions;
 
         /*Returns a pointer to the scope of a variable referenced by name
          * The search is made "upwards", from the current scope to the base scope
          * If no scope was found that contains the variable, return nullptr .*/
-        std::unordered_map<std::string, Value> *findScopeOf(const std::string &varname);
-
-        /*Returns a reference to the current scope*/
-        std::unordered_map<std::string, Value>&getCurrentScope();
+        std::unordered_map<unsigned long, Value> *findScopeOf(unsigned long varsymbol);
 
     public:
         Context();
 
-        /*Declare a variable in this scope and assign its value
-         *If the variable has been declared in this scope already, throw an exception*/
-        void declareVar(const std::string &name, const Value &value);
+        /*Declare a variable in this scope and assign its value*/
+        void declareVar(unsigned long varsymbol, const Value &value);
 
-        /*Define a function. If the function has already been defined, throw an exception*/
-        void defineFunc(const std::string &name, std::unique_ptr<Function> function);
+        /*Declared a function */
+        void declareFunc(unsigned long funcsymbol, std::unique_ptr<Function> function);
+
+        /*Check if a variable is declared (search for its scope)*/
+        bool isVarDeclared(unsigned long varsymbol);
+
+        /*Check if a function is declared*/
+        bool isFuncDeclared(unsigned long funcsymbol);
 
         /*Get the value of the variable. Will call findScopeOf() function
          * Throw an exception if the variable has not been found*/
-        Value getVar(const std::string &name);
+        Value getVar(unsigned long varsymbol);
 
         /*Get a reference to a function with that name. Throw an exception if the function has not been found*/
-        const std::unique_ptr<Function> &getFunc(const std::string &name);
+        const std::unique_ptr<Function> &getFunc(unsigned long funcsymbol);
 
         /*Assign the value of the variable. Will call findScopeOf() function*/
-        void setVar(const std::string &name, const Value &value);
+        void setVar(unsigned long varsymbol, const Value &value);
 
         /*Creates a new scope and pushes it to the scope list*/
         void pushScope();

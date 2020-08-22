@@ -7,6 +7,7 @@
 
 #include<vector>
 #include<memory>
+#include <location.hh>
 #include"AST/Value/Value.h"
 
 namespace AST {
@@ -14,7 +15,11 @@ namespace AST {
     /*The classes that derive from this class must implement the evaluate() function.*/
 
     class ExpNode {
+    protected:
+        /*The location of the expression.*/
+        yy::location location;
     public:
+        explicit ExpNode(yy::location loc);
         /*Evaluates the expression based on the child nodes*/
         virtual Value evaluate() const = 0;
 

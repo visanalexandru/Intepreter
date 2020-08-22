@@ -8,6 +8,7 @@
 #include "ExpNode.h"
 #include "AST/Context.h"
 #include "AST/Symbol.h"
+#include "Error.h"
 
 namespace AST {
     /*This class represents a variable read in the interpreted program*/
@@ -16,7 +17,7 @@ namespace AST {
         /*The symbol of the variable that needs to be read*/
         const Symbol symbol;
     public:
-        explicit VariableExp(Symbol sym);
+        VariableExp(yy::location loc,Symbol sym);
 
         /*Returns the value of the variable that has that name*/
         Value evaluate() const override;

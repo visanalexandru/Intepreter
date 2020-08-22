@@ -7,55 +7,49 @@
 namespace AST {
     Context globalContext;
     Context::Context() {
-        defineFunc("print",std::make_unique<AST::PrintFunc>());
         pushScope();
     }
 
-    std::unordered_map<std::string, Value>&Context::getCurrentScope() {
-        return scopes.back();
-    }
-
-
-    std::unordered_map<std::string, Value> *Context::findScopeOf(const std::string &varname) {
+    std::unordered_map<unsigned long, Value> *Context::findScopeOf(unsigned long varsymbol) {
         for (auto it = scopes.rbegin(); it != scopes.rend(); it++) {
-            std::unordered_map<std::string, Value>&scope = *it;
-            if (scope.find(varname) != scope.end())
+            std::unordered_map<unsigned long, Value>&scope = *it;
+            if (scope.find(varsymbol) != scope.end())
                 return &scope;
         }
         return nullptr;
     }
 
-    void Context::declareVar(const std::string &name, const Value &value) {
-        auto&current_scope = getCurrentScope();
-        if (current_scope.find(name) != current_scope.end())
-            throw std::runtime_error("Variable has already been declared in this scope: " + name);
-        current_scope.insert(std::make_pair(name, value));
+    void Context::declareVar(unsigned long varsymbol, const Value &value) {
+        assert(scopes.back().insert(std::make_pair(varsymbol, value)).second);
     }
 
-    void Context::defineFunc(const std::string &name, std::unique_ptr<Function> function) {
-        if (functions.find(name) != functions.end())
-            throw std::runtime_error("Function has already been defined: " + name);
-        functions.insert(std::make_pair(name, std::move(function)));
+    bool Context::isVarDeclared(unsigned long varsymbol) {
+        return findScopeOf(varsymbol)!= nullptr;
     }
 
-    void Context::setVar(const std::string &name, const AST::Value &value) {
-        std::unordered_map<std::string, Value> *scope = findScopeOf(name);
-        if (scope == nullptr)
-            throw std::runtime_error("Variable has not been declared: " + name);
-        (*scope)[name] = value;
+    bool Context::isFuncDeclared(unsigned long funcsymbol) {
+        return functions.find(funcsymbol)!=functions.end();
     }
 
-    Value Context::getVar(const std::string &name) {
-        std::unordered_map<std::string, Value> *scope = findScopeOf(name);
-        if (scope == nullptr)
-            throw std::runtime_error("Variable has not been declared: " + name);
-        return (*scope)[name];
+    void Context::declareFunc(unsigned long funcsymbol, std::unique_ptr<Function> function) {
+        assert(functions.insert(std::make_pair(funcsymbol, std::move(function))).second);
     }
 
-    const std::unique_ptr<Function>&Context::getFunc(const std::string &name) {
-        if (functions.find(name) == functions.end())
-            throw std::runtime_error("Function has not been defined: " + name);
-        return functions[name];
+    void Context::setVar(unsigned long varsymbol, const AST::Value &value) {
+        std::unordered_map<unsigned long , Value> *scope = findScopeOf(varsymbol);
+        assert(scope!= nullptr);
+        (*scope)[varsymbol] = value;
+    }
+
+    Value Context::getVar(unsigned long varsymbol) {
+        std::unordered_map<unsigned long , Value> *scope = findScopeOf(varsymbol);
+        assert(scope!= nullptr);
+        return (*scope)[varsymbol];
+    }
+
+    const std::unique_ptr<Function>&Context::getFunc(unsigned long funcsymbol) {
+        assert(isFuncDeclared(funcsymbol));
+        return functions[funcsymbol];
     }
 
     void Context::pushScope() {

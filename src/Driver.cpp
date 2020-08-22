@@ -15,7 +15,12 @@ void Driver::preprocess() {
     semanticAnalysis();
 }
 
+void Driver::init() {
+    AST::globalContext.declareFunc(AST::globalSymtable.addSymbol("print"), std::make_unique<AST::PrintFunc>());
+}
+
 void Driver::start() {
+    init();
     preprocess();
     if (errors.empty()) {
         std::cout << "Parsing successful" << std::endl;
@@ -32,8 +37,13 @@ void Driver::start() {
 
 void Driver::semanticAnalysis() {
     AST::FlowState state;
+    AST::DeclarationStack stack;
+    stack.addFunction(AST::globalSymtable.getSymbolIndex("print"));
     for (const auto &stmt:result)
         stmt->checkControlFlow(state, errors);
+
+    for(const auto&stmt:result)
+        stmt->checkDeclarations(stack,errors);
 }
 
 

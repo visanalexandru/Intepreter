@@ -5,7 +5,8 @@
 #include "UnaryOpExp.h"
 
 namespace AST {
-    UnaryOpExp::UnaryOpExp(AST::UnaryOperator t, std::unique_ptr<ExpNode> op) :
+    UnaryOpExp::UnaryOpExp(yy::location loc,AST::UnaryOperator t, std::unique_ptr<ExpNode> op) :
+            ExpNode(loc),
             type(t),
             exp(std::move(op)) {
     }

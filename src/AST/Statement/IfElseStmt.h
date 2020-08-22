@@ -29,6 +29,8 @@ namespace AST {
         void execute() override;
 
         void checkControlFlow(FlowState&state,std::vector<Error>&errors) const override;
+
+        void checkDeclarations(DeclarationStack&stack,std::vector<Error>&errors) const override ;
     };
 }
 

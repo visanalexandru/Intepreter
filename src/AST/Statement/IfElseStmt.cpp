@@ -55,5 +55,16 @@ namespace AST {
             stmt->checkControlFlow(state,errors);
     }
 
+    void IfElseStmt::checkDeclarations(AST::DeclarationStack &stack, std::vector<Error> &errors) const {
+        stack.push_scope();
+        for(const auto&stmt:ifblock)
+            stmt->checkDeclarations(stack,errors);
+        stack.pop_scope();
+        stack.push_scope();
+        for(const auto&stmt:elseblock)
+            stmt->checkDeclarations(stack,errors);
+        stack.pop_scope();
+    }
+
 
 }

@@ -106,24 +106,24 @@
 unit:instruction_list{ drv.result = std::move($1); };
 
 
-expression: LITERAL {$$=std::make_unique<AST::LiteralExp>($1);}
-| expression "+" expression   { $$ =std::make_unique<AST::BinaryOpExp>(AST::BinaryOperator::Add,std::move($1),std::move($3)); }
-| expression "-" expression   { $$ =std::make_unique<AST::BinaryOpExp>(AST::BinaryOperator::Subtract,std::move($1),std::move($3));}
-| expression "*" expression   { $$ =std::make_unique<AST::BinaryOpExp>(AST::BinaryOperator::Multiply,std::move($1),std::move($3)); }
-| expression "/" expression   { $$ =std::make_unique<AST::BinaryOpExp>(AST::BinaryOperator::Divide,std::move($1),std::move($3)); }
-| expression "==" expression   { $$ =std::make_unique<AST::BinaryOpExp>(AST::BinaryOperator::Equal,std::move($1),std::move($3)); }
-| expression "!=" expression   { $$ =std::make_unique<AST::BinaryOpExp>(AST::BinaryOperator::NEqual,std::move($1),std::move($3)); }
-| expression ">" expression   { $$ =std::make_unique<AST::BinaryOpExp>(AST::BinaryOperator::Greater,std::move($1),std::move($3)); }
-| expression "<" expression   { $$ =std::make_unique<AST::BinaryOpExp>(AST::BinaryOperator::Less,std::move($1),std::move($3)); }
-| expression ">=" expression   { $$ =std::make_unique<AST::BinaryOpExp>(AST::BinaryOperator::GreaterEq,std::move($1),std::move($3)); }
-| expression "<=" expression   { $$ =std::make_unique<AST::BinaryOpExp>(AST::BinaryOperator::LessEq,std::move($1),std::move($3)); }
-| expression "||" expression   { $$ =std::make_unique<AST::BinaryOpExp>(AST::BinaryOperator::Or,std::move($1),std::move($3)); }
-| expression "&&" expression   { $$ =std::make_unique<AST::BinaryOpExp>(AST::BinaryOperator::And,std::move($1),std::move($3)); }
-| "-" expression %prec "!"    { $$= std::make_unique<AST::UnaryOpExp>(AST::UnaryOperator::Minus,std::move($2)); }
-| "!" expression              { $$= std::make_unique<AST::UnaryOpExp>(AST::UnaryOperator::Not,std::move($2)); }
+expression: LITERAL {$$=std::make_unique<AST::LiteralExp>(@1,$1);}
+| expression "+" expression   { $$ =std::make_unique<AST::BinaryOpExp>(@2,AST::BinaryOperator::Add,std::move($1),std::move($3)); }
+| expression "-" expression   { $$ =std::make_unique<AST::BinaryOpExp>(@2,AST::BinaryOperator::Subtract,std::move($1),std::move($3));}
+| expression "*" expression   { $$ =std::make_unique<AST::BinaryOpExp>(@2,AST::BinaryOperator::Multiply,std::move($1),std::move($3)); }
+| expression "/" expression   { $$ =std::make_unique<AST::BinaryOpExp>(@2,AST::BinaryOperator::Divide,std::move($1),std::move($3)); }
+| expression "==" expression   { $$ =std::make_unique<AST::BinaryOpExp>(@2,AST::BinaryOperator::Equal,std::move($1),std::move($3)); }
+| expression "!=" expression   { $$ =std::make_unique<AST::BinaryOpExp>(@2,AST::BinaryOperator::NEqual,std::move($1),std::move($3)); }
+| expression ">" expression   { $$ =std::make_unique<AST::BinaryOpExp>(@2,AST::BinaryOperator::Greater,std::move($1),std::move($3)); }
+| expression "<" expression   { $$ =std::make_unique<AST::BinaryOpExp>(@2,AST::BinaryOperator::Less,std::move($1),std::move($3)); }
+| expression ">=" expression   { $$ =std::make_unique<AST::BinaryOpExp>(@2,AST::BinaryOperator::GreaterEq,std::move($1),std::move($3)); }
+| expression "<=" expression   { $$ =std::make_unique<AST::BinaryOpExp>(@2,AST::BinaryOperator::LessEq,std::move($1),std::move($3)); }
+| expression "||" expression   { $$ =std::make_unique<AST::BinaryOpExp>(@2,AST::BinaryOperator::Or,std::move($1),std::move($3)); }
+| expression "&&" expression   { $$ =std::make_unique<AST::BinaryOpExp>(@2,AST::BinaryOperator::And,std::move($1),std::move($3)); }
+| "-" expression %prec "!"    { $$= std::make_unique<AST::UnaryOpExp>(@1,AST::UnaryOperator::Minus,std::move($2)); }
+| "!" expression              { $$= std::make_unique<AST::UnaryOpExp>(@1,AST::UnaryOperator::Not,std::move($2)); }
 | "(" expression ")"          { $$ = std::move($2); }
-| IDENTIFIER "=" expression   { $$=std::make_unique<AST::AssignmentExp>(std::move($1),std::move($3));}
-| IDENTIFIER                  { $$=std::make_unique<AST::VariableExp>(std::move($1));}
+| IDENTIFIER "=" expression   { $$=std::make_unique<AST::AssignmentExp>(@2,std::move($1),std::move($3));}
+| IDENTIFIER                  { $$=std::make_unique<AST::VariableExp>(@1,std::move($1));}
 | function_call               { $$=std::move($1);}
 ;
 
@@ -139,8 +139,8 @@ parameter_identifier_list:%empty {$$=std::vector<AST::Symbol>();}
 |identifier_list                 {$$=std::move($1);}
 ;
 
-function_call: IDENTIFIER "(" expression_list ")" {$$=std::make_unique<AST::FuncCallExp>(std::move($1),std::move($3));}
-|IDENTIFIER "(" ")"                               {$$=std::make_unique<AST::FuncCallExp>(std::move($1),std::vector<std::unique_ptr<AST::ExpNode>>());}
+function_call: IDENTIFIER "(" expression_list ")" {$$=std::make_unique<AST::FuncCallExp>(@1,std::move($1),std::move($3));}
+|IDENTIFIER "(" ")"                               {$$=std::make_unique<AST::FuncCallExp>(@1,std::move($1),std::vector<std::unique_ptr<AST::ExpNode>>());}
 ;
 
 function_declaration: "func" IDENTIFIER "(" parameter_identifier_list ")" "{" block "}" {$$=std::make_unique<AST::FuncDeclarationStmt>(@1,std::move($2),std::move($4),std::move($7));}

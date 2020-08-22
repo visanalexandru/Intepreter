@@ -6,7 +6,7 @@
 
 namespace AST {
 
-    LiteralExp::LiteralExp(AST::Value val) : value(std::move(val)) {
+    LiteralExp::LiteralExp(yy::location loc,AST::Value val) : ExpNode(loc),value(std::move(val)) {
 
     }
 
