@@ -7,6 +7,7 @@
 
 #include<unordered_map>
 #include<string>
+#include "AST/Symbol.h"
 
 namespace AST {
 /*This class is responsible for creating unique indexes for identifiers in the interpreted program.*/
@@ -22,13 +23,13 @@ namespace AST {
     public:
         /*Adds a new symbol and returns its index. If the symbol was already in the map,
          * return its index.*/
-        unsigned long addSymbol(const std::string &symbol);
+        Symbol addSymbol(const std::string &symbol);
 
         /*Check if a given symbol has already been added to the map*/
         bool symbolExists(const std::string &symbol) const;
 
         /*Returns the index of the given symbol. If the symbol was not added, return 0.*/
-        unsigned long getSymbolIndex(const std::string &symbol);
+        Symbol getSymbol(const std::string &symbol);
 
         SymbolTable();
     };

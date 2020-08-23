@@ -15,13 +15,13 @@ namespace AST {
     }
 
     Value FuncCallExp::evaluate() const {
-        if(!globalContext.isFuncDeclared(symbol.symbol_id))
+        if(!globalContext.isFuncDeclared(symbol))
             throw std::runtime_error(Error("runtime error, function has not been declared: " + symbol.symbol_name,location).toString());
         std::vector<Value> values;
         for (const auto &expression:parameters) {
             values.push_back(expression->evaluate());
         }
-        return globalContext.getFunc(symbol.symbol_id)->run(values);
+        return globalContext.getFunc(symbol)->run(values);
     }
 
 }

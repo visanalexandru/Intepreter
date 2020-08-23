@@ -104,8 +104,7 @@ yy::parser::symbol_type make_STRING(const std::string &s, const yy::parser::loca
 
 yy::parser::symbol_type make_SYMBOL(const std::string &s, const yy::parser::location_type& loc)
 {
-    unsigned long id=AST::globalSymtable.addSymbol(s);
-    return yy::parser::make_IDENTIFIER({s,id},loc);
+    return yy::parser::make_IDENTIFIER(AST::globalSymtable.addSymbol(s),loc);
 }
 
 

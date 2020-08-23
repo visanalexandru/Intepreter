@@ -10,21 +10,21 @@ namespace AST {
         push_scope();
     }
 
-    void DeclarationStack::addFunction(unsigned long index) {
-        function_declarations.insert(index);
+    void DeclarationStack::addFunction(const Symbol&func_symbol) {
+        function_declarations.insert(func_symbol.symbol_id);
     }
 
-    bool DeclarationStack::functionExists(unsigned long index) const {
-        return function_declarations.find(index) != function_declarations.end();
+    bool DeclarationStack::functionExists(const Symbol&func_symbol) const {
+        return function_declarations.find(func_symbol.symbol_id) != function_declarations.end();
     }
 
 
-    bool DeclarationStack::variableInCurrentScope(unsigned long index) const {
-        return variable_declarations.back().find(index)!=variable_declarations.back().end();
+    bool DeclarationStack::variableInCurrentScope(const Symbol&var_symbol ) const {
+        return variable_declarations.back().find(var_symbol.symbol_id)!=variable_declarations.back().end();
     }
 
-    void DeclarationStack::addVariable(unsigned long index) {
-        variable_declarations.back().insert(index);
+    void DeclarationStack::addVariable(const Symbol&var_symbol) {
+        variable_declarations.back().insert(var_symbol.symbol_id);
     }
 
     void DeclarationStack::push_scope() {

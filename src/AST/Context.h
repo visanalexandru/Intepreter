@@ -12,6 +12,7 @@
 #include<cassert>
 #include "AST/Value/Value.h"
 #include "AST/Function/CoreFunction/PrintFunc.h"
+#include "AST/Symbol.h"
 
 namespace AST {
     /*This class manages scopes and function definitions*/
@@ -24,32 +25,32 @@ namespace AST {
         /*Returns a pointer to the scope of a variable referenced by name
          * The search is made "upwards", from the current scope to the base scope
          * If no scope was found that contains the variable, return nullptr .*/
-        std::unordered_map<unsigned long, Value> *findScopeOf(unsigned long varsymbol);
+        std::unordered_map<unsigned long, Value> *findScopeOf(const Symbol&varsymbol);
 
     public:
         Context();
 
         /*Declare a variable in this scope and assign its value*/
-        void declareVar(unsigned long varsymbol, const Value &value);
+        void declareVar(const Symbol&varsymbol, const Value &value);
 
         /*Declared a function */
-        void declareFunc(unsigned long funcsymbol, std::unique_ptr<Function> function);
+        void declareFunc(const Symbol&funcsymbol, std::unique_ptr<Function> function);
 
         /*Check if a variable is declared (search for its scope)*/
-        bool isVarDeclared(unsigned long varsymbol);
+        bool isVarDeclared(const Symbol&varsymbol);
 
         /*Check if a function is declared*/
-        bool isFuncDeclared(unsigned long funcsymbol);
+        bool isFuncDeclared(const Symbol&funcsymbol);
 
         /*Get the value of the variable. Will call findScopeOf() function
          * Throw an exception if the variable has not been found*/
-        Value getVar(unsigned long varsymbol);
+        Value getVar(const Symbol&varsymbol);
 
         /*Get a reference to a function with that name. Throw an exception if the function has not been found*/
-        const std::unique_ptr<Function> &getFunc(unsigned long funcsymbol);
+        const std::unique_ptr<Function> &getFunc(const Symbol&funcsymbol);
 
         /*Assign the value of the variable. Will call findScopeOf() function*/
-        void setVar(unsigned long varsymbol, const Value &value);
+        void setVar(const Symbol&varsymbol, const Value &value);
 
         /*Creates a new scope and pushes it to the scope list*/
         void pushScope();

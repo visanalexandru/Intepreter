@@ -9,7 +9,7 @@
 #include<unordered_set>
 #include<deque>
 #include "AST/Function/Function.h"
-
+#include "AST/Symbol.h"
 
 namespace AST {
     /*Useful for finding duplicate variable/function declarations and resolving variables.*/
@@ -24,17 +24,17 @@ namespace AST {
     public:
         /*Check if a function was added to the function declaration list. Useful for finding duplicate
          * function declarations.*/
-        bool functionExists(unsigned long index) const;
+        bool functionExists(const Symbol&func_symbol) const;
 
         /*Add a new function declaration(its symbol) to the func declaration list*/
-        void addFunction(unsigned long index);
+        void addFunction(const Symbol&func_symbol);
 
         /*Add a new variable declaration to the var declaratoin list*/
-        void addVariable(unsigned long index);
+        void addVariable(const Symbol&var_symbol);
 
         /*Check if a variable was declared in the current scope. Useful for finding duplicate variable
          * declarations*/
-        bool variableInCurrentScope(unsigned long index) const;
+        bool variableInCurrentScope(const Symbol& var_symbol) const;
 
         /*Create new scope for the variable declarations*/
         void push_scope();

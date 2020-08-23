@@ -10,46 +10,46 @@ namespace AST {
         pushScope();
     }
 
-    std::unordered_map<unsigned long, Value> *Context::findScopeOf(unsigned long varsymbol) {
+    std::unordered_map<unsigned long, Value> *Context::findScopeOf(const Symbol&varsymbol) {
         for (auto it = scopes.rbegin(); it != scopes.rend(); it++) {
             std::unordered_map<unsigned long, Value>&scope = *it;
-            if (scope.find(varsymbol) != scope.end())
+            if (scope.find(varsymbol.symbol_id) != scope.end())
                 return &scope;
         }
         return nullptr;
     }
 
-    void Context::declareVar(unsigned long varsymbol, const Value &value) {
-        assert(scopes.back().insert(std::make_pair(varsymbol, value)).second);
+    void Context::declareVar(const Symbol&varsymbol, const Value &value) {
+        assert(scopes.back().insert(std::make_pair(varsymbol.symbol_id, value)).second);
     }
 
-    bool Context::isVarDeclared(unsigned long varsymbol) {
+    bool Context::isVarDeclared(const Symbol&varsymbol) {
         return findScopeOf(varsymbol)!= nullptr;
     }
 
-    bool Context::isFuncDeclared(unsigned long funcsymbol) {
-        return functions.find(funcsymbol)!=functions.end();
+    bool Context::isFuncDeclared(const Symbol&funcsymbol) {
+        return functions.find(funcsymbol.symbol_id)!=functions.end();
     }
 
-    void Context::declareFunc(unsigned long funcsymbol, std::unique_ptr<Function> function) {
-        assert(functions.insert(std::make_pair(funcsymbol, std::move(function))).second);
+    void Context::declareFunc(const Symbol& funcsymbol, std::unique_ptr<Function> function) {
+        assert(functions.insert(std::make_pair(funcsymbol.symbol_id, std::move(function))).second);
     }
 
-    void Context::setVar(unsigned long varsymbol, const AST::Value &value) {
+    void Context::setVar(const Symbol& varsymbol, const AST::Value &value) {
         std::unordered_map<unsigned long , Value> *scope = findScopeOf(varsymbol);
         assert(scope!= nullptr);
-        (*scope)[varsymbol] = value;
+        (*scope)[varsymbol.symbol_id] = value;
     }
 
-    Value Context::getVar(unsigned long varsymbol) {
+    Value Context::getVar(const Symbol& varsymbol) {
         std::unordered_map<unsigned long , Value> *scope = findScopeOf(varsymbol);
         assert(scope!= nullptr);
-        return (*scope)[varsymbol];
+        return (*scope)[varsymbol.symbol_id];
     }
 
-    const std::unique_ptr<Function>&Context::getFunc(unsigned long funcsymbol) {
+    const std::unique_ptr<Function>&Context::getFunc(const Symbol& funcsymbol) {
         assert(isFuncDeclared(funcsymbol));
-        return functions[funcsymbol];
+        return functions[funcsymbol.symbol_id];
     }
 
     void Context::pushScope() {

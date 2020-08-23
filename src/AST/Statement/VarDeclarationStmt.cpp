@@ -22,15 +22,15 @@ namespace AST {
 
     void VarDeclarationStmt::execute() {
         if (value != nullptr) {
-            globalContext.declareVar(symbol.symbol_id, value->evaluate());
+            globalContext.declareVar(symbol, value->evaluate());
         } else {
-            globalContext.declareVar(symbol.symbol_id, Value());
+            globalContext.declareVar(symbol, Value());
         }
     }
 
     void VarDeclarationStmt::checkDeclarations(AST::DeclarationStack &stack, std::vector<Error> &errors) const {
-        if(stack.variableInCurrentScope(symbol.symbol_id))
+        if(stack.variableInCurrentScope(symbol))
             errors.emplace_back("semantic error, duplicate declaration of variable "+symbol.symbol_name,location);
-        else stack.addVariable(symbol.symbol_id);
+        else stack.addVariable(symbol);
     }
 }

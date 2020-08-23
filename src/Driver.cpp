@@ -38,7 +38,7 @@ void Driver::start() {
 void Driver::semanticAnalysis() {
     AST::FlowState state;
     AST::DeclarationStack stack;
-    stack.addFunction(AST::globalSymtable.getSymbolIndex("print"));
+    stack.addFunction(AST::globalSymtable.getSymbol("print"));
     for (const auto &stmt:result)
         stmt->checkControlFlow(state, errors);
 
