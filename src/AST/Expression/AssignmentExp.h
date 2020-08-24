@@ -22,11 +22,15 @@ namespace AST {
         /*The expression on the right of the assignment*/
         std::unique_ptr<ExpNode> exp;
 
+        VariableLocation var_location;
+
     public:
         AssignmentExp(yy::location loc,Symbol sym, std::unique_ptr<ExpNode> value);
 
         /*Throw runtime error if the variable could was not declared*/
         Value evaluate() const override;
+
+        void solveVarReferences(AST::DeclarationStack &stack, std::vector<Error> &errors)override;
     };
 }
 

@@ -25,7 +25,7 @@ namespace AST {
         /*Throw runtime error if the function was not declared*/
         Value evaluate() const override;
 
-
+        void solveVarReferences(AST::DeclarationStack &stack, std::vector<Error> &errors) override;
     };
 
 }

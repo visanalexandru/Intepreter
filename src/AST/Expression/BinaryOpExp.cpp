@@ -40,4 +40,9 @@ namespace AST {
                 return left->evaluate()!=right->evaluate();
         }
     }
+
+    void BinaryOpExp::solveVarReferences(AST::DeclarationStack &stack, std::vector<Error> &errors) {
+        left->solveVarReferences(stack,errors);
+        right->solveVarReferences(stack,errors);
+    }
 }

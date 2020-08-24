@@ -21,4 +21,8 @@ namespace AST {
         }
     }
 
+    void UnaryOpExp::solveVarReferences(AST::DeclarationStack &stack, std::vector<Error> &errors) {
+        exp->solveVarReferences(stack,errors);
+    }
+
 }

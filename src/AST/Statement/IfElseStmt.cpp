@@ -56,14 +56,15 @@ namespace AST {
     }
 
     void IfElseStmt::checkDeclarations(AST::DeclarationStack &stack, std::vector<Error> &errors) const {
-        stack.push_scope();
+        condition->solveVarReferences(stack,errors);
+        stack.pushScope();
         for(const auto&stmt:ifblock)
             stmt->checkDeclarations(stack,errors);
-        stack.pop_scope();
-        stack.push_scope();
+        stack.popScope();
+        stack.pushScope();
         for(const auto&stmt:elseblock)
             stmt->checkDeclarations(stack,errors);
-        stack.pop_scope();
+        stack.popScope();
     }
 
 

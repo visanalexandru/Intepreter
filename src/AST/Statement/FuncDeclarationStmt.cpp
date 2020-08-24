@@ -31,13 +31,12 @@ namespace AST {
         if(stack.functionExists(symbol))
             errors.emplace_back("semantic error, duplicate declaration of function "+symbol.symbol_name,location);
         stack.addFunction(symbol);
-
-        stack.push_scope();
+        stack.pushScope();
         for(const Symbol&sym:parameter_symbols)
             stack.addVariable(sym);
         for(const auto&stmt:statements)
             stmt->checkDeclarations(stack,errors);
-        stack.pop_scope();
+        stack.popScope();
     }
 
 

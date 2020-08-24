@@ -25,6 +25,8 @@ namespace AST {
         BinaryOpExp(yy::location loc, BinaryOperator t, std::unique_ptr<ExpNode> l, std::unique_ptr<ExpNode> r);
 
         Value evaluate() const override;
+
+        void solveVarReferences(AST::DeclarationStack &stack, std::vector<Error> &errors) override;
     };
 }
 

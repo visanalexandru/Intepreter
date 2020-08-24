@@ -18,6 +18,8 @@ namespace AST {
 
         /*Just returns the value*/
         Value evaluate() const override;
+
+        void solveVarReferences(AST::DeclarationStack &stack, std::vector<Error> &errors) override {};
     };
 
 }

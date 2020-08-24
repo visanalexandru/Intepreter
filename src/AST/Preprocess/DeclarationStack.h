@@ -8,17 +8,30 @@
 #include<memory>
 #include<unordered_set>
 #include<deque>
+#include<algorithm>
 #include "AST/Function/Function.h"
 #include "AST/Symbol.h"
+#include "VariableLocation.h"
 
 namespace AST {
     /*Useful for finding duplicate variable/function declarations and resolving variables.*/
     class DeclarationStack {
     private:
+
+        struct VariableDeclaration{
+            Symbol variable_symbol;
+
+            bool is_local;
+
+            VariableDeclaration(Symbol symbol,bool local):variable_symbol(std::move(symbol)),is_local(local){
+
+            }
+        };
+
         /*Use an unordered set for constant lookup on find()*/
         std::unordered_set<unsigned long> function_declarations;
 
-        std::deque<std::unordered_set<unsigned long>> variable_declarations;
+        std::deque<std::deque<VariableDeclaration>> variable_declarations_scopes;
 
 
     public:
@@ -36,11 +49,13 @@ namespace AST {
          * declarations*/
         bool variableInCurrentScope(const Symbol& var_symbol) const;
 
+        bool getVariableLocation(const Symbol&var_symbol,VariableLocation&location) const;
+
         /*Create new scope for the variable declarations*/
-        void push_scope();
+        void pushScope();
 
         /*Pop the current variable declaration scope*/
-        void pop_scope();
+        void popScope();
 
         /*Push a variable declaration scope by default*/
         DeclarationStack();

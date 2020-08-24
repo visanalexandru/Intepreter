@@ -13,44 +13,34 @@
 #include "AST/Value/Value.h"
 #include "AST/Function/CoreFunction/PrintFunc.h"
 #include "AST/Symbol.h"
-
+#include "AST/Preprocess/VariableLocation.h"
 namespace AST {
     /*This class manages scopes and function definitions*/
     class Context {
     private:
-        std::deque<std::unordered_map<unsigned long, Value>> scopes;
+
 
         std::unordered_map<unsigned long, std::unique_ptr<Function>> functions;
 
-        /*Returns a pointer to the scope of a variable referenced by name
-         * The search is made "upwards", from the current scope to the base scope
-         * If no scope was found that contains the variable, return nullptr .*/
-        std::unordered_map<unsigned long, Value> *findScopeOf(const Symbol&varsymbol);
-
+        std::deque<std::deque<Value>> scopes;
     public:
+
         Context();
 
-        /*Declare a variable in this scope and assign its value*/
-        void declareVar(const Symbol&varsymbol, const Value &value);
+        /*Push a variable into the current scope*/
+        void pushVar(const Value &value);
 
-        /*Declared a function */
-        void declareFunc(const Symbol&funcsymbol, std::unique_ptr<Function> function);
-
-        /*Check if a variable is declared (search for its scope)*/
-        bool isVarDeclared(const Symbol&varsymbol);
+        /*Declare a function */
+        void declareFunc(const Symbol &funcsymbol, std::unique_ptr<Function> function);
 
         /*Check if a function is declared*/
-        bool isFuncDeclared(const Symbol&funcsymbol);
+        bool isFuncDeclared(const Symbol &funcsymbol);
 
-        /*Get the value of the variable. Will call findScopeOf() function
-         * Throw an exception if the variable has not been found*/
-        Value getVar(const Symbol&varsymbol);
+        /*Get a reference to a function with that name.*/
+        const std::unique_ptr<Function> &getFunc(const Symbol &funcsymbol);
 
-        /*Get a reference to a function with that name. Throw an exception if the function has not been found*/
-        const std::unique_ptr<Function> &getFunc(const Symbol&funcsymbol);
-
-        /*Assign the value of the variable. Will call findScopeOf() function*/
-        void setVar(const Symbol&varsymbol, const Value &value);
+        /*Get a reference to the variable at the location.*/
+        Value&getVar(const VariableLocation&location);
 
         /*Creates a new scope and pushes it to the scope list*/
         void pushScope();

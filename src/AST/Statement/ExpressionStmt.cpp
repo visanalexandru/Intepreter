@@ -16,4 +16,8 @@ namespace AST {
     void ExpressionStmt::execute() {
         exp->evaluate();
     }
+
+    void ExpressionStmt::checkDeclarations(AST::DeclarationStack &stack, std::vector<Error> &errors) const {
+        exp->solveVarReferences(stack,errors);
+    }
 }

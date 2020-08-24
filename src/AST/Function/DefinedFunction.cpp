@@ -16,8 +16,8 @@ namespace AST {
 
     Value DefinedFunction::execute(const std::vector<Value> &parameters) const {
         globalContext.pushScope();
-        for (unsigned long i = 0; i < parameters.size(); i++) {
-            globalContext.declareVar(parameter_symbols[i], parameters[i]);
+        for(const Value&param:parameters){
+            globalContext.pushVar(param);
         }
         Value to_return;//if no return statements, return None
 

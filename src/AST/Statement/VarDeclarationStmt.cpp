@@ -22,9 +22,9 @@ namespace AST {
 
     void VarDeclarationStmt::execute() {
         if (value != nullptr) {
-            globalContext.declareVar(symbol, value->evaluate());
+            globalContext.pushVar(value->evaluate());
         } else {
-            globalContext.declareVar(symbol, Value());
+            globalContext.pushVar(Value());
         }
     }
 

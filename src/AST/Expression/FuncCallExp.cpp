@@ -24,4 +24,9 @@ namespace AST {
         return globalContext.getFunc(symbol)->run(values);
     }
 
+    void FuncCallExp::solveVarReferences(AST::DeclarationStack &stack, std::vector<Error> &errors) {
+        for(const auto&exp:parameters)
+            exp->solveVarReferences(stack,errors);
+    }
+
 }

@@ -10,23 +10,6 @@ namespace AST {
         pushScope();
     }
 
-    std::unordered_map<unsigned long, Value> *Context::findScopeOf(const Symbol&varsymbol) {
-        for (auto it = scopes.rbegin(); it != scopes.rend(); it++) {
-            std::unordered_map<unsigned long, Value>&scope = *it;
-            if (scope.find(varsymbol.symbol_id) != scope.end())
-                return &scope;
-        }
-        return nullptr;
-    }
-
-    void Context::declareVar(const Symbol&varsymbol, const Value &value) {
-        assert(scopes.back().insert(std::make_pair(varsymbol.symbol_id, value)).second);
-    }
-
-    bool Context::isVarDeclared(const Symbol&varsymbol) {
-        return findScopeOf(varsymbol)!= nullptr;
-    }
-
     bool Context::isFuncDeclared(const Symbol&funcsymbol) {
         return functions.find(funcsymbol.symbol_id)!=functions.end();
     }
@@ -35,21 +18,22 @@ namespace AST {
         assert(functions.insert(std::make_pair(funcsymbol.symbol_id, std::move(function))).second);
     }
 
-    void Context::setVar(const Symbol& varsymbol, const AST::Value &value) {
-        std::unordered_map<unsigned long , Value> *scope = findScopeOf(varsymbol);
-        assert(scope!= nullptr);
-        (*scope)[varsymbol.symbol_id] = value;
-    }
-
-    Value Context::getVar(const Symbol& varsymbol) {
-        std::unordered_map<unsigned long , Value> *scope = findScopeOf(varsymbol);
-        assert(scope!= nullptr);
-        return (*scope)[varsymbol.symbol_id];
-    }
-
     const std::unique_ptr<Function>&Context::getFunc(const Symbol& funcsymbol) {
         assert(isFuncDeclared(funcsymbol));
         return functions[funcsymbol.symbol_id];
+    }
+
+    void Context::pushVar(const AST::Value &value) {
+        scopes.back().push_back(value);
+    }
+
+    Value& Context::getVar(const AST::VariableLocation &location) {
+        if(location.is_local){
+            return scopes[scopes.size()-location.stack_offset-1][location.location_in_stack];
+        }
+        else{
+            return scopes[0][location.location_in_stack];
+        }
     }
 
     void Context::pushScope() {

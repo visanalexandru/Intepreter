@@ -22,6 +22,8 @@ namespace AST {
         UnaryOpExp(yy::location loc,UnaryOperator t, std::unique_ptr<ExpNode> op);
 
         Value evaluate() const override;
+
+        void solveVarReferences(AST::DeclarationStack &stack, std::vector<Error> &errors) override;
     };
 }
 

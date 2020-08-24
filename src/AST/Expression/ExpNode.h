@@ -9,7 +9,8 @@
 #include<memory>
 #include <location.hh>
 #include"AST/Value/Value.h"
-
+#include"AST/Preprocess/DeclarationStack.h"
+#include "Error.h"
 namespace AST {
     /*This class represents an expression node in the AST. Binary, unary, assigment operators etc. derive from this class.*/
     /*The classes that derive from this class must implement the evaluate() function.*/
@@ -25,6 +26,8 @@ namespace AST {
 
         /*Default virtual constructor*/
         virtual ~ExpNode() = default;
+
+        virtual void solveVarReferences(DeclarationStack&stack,std::vector<Error>&errors)=0 ;
     };
 }
 

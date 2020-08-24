@@ -16,11 +16,15 @@ namespace AST {
     private:
         /*The symbol of the variable that needs to be read*/
         const Symbol symbol;
+
+        VariableLocation var_location;
     public:
         VariableExp(yy::location loc,Symbol sym);
 
         /*Returns the value of the variable that has that name*/
         Value evaluate() const override;
+
+        void solveVarReferences(AST::DeclarationStack &stack, std::vector<Error> &errors) override;
     };
 }
 

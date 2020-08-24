@@ -15,10 +15,12 @@ namespace AST {
 
     Value AssignmentExp::evaluate() const {
         Value result = exp->evaluate();
-        if(!globalContext.isVarDeclared(symbol)){
-            throw std::runtime_error(Error("runtime error, variable has not been declared: " + symbol.symbol_name,location).toString());
-        }
-        globalContext.setVar(symbol, result);
+        globalContext.getVar(var_location) = result;
         return result;
+    }
+
+    void AssignmentExp::solveVarReferences(AST::DeclarationStack &stack, std::vector<Error> &errors) {
+        if (!stack.getVariableLocation(symbol, var_location))
+            errors.emplace_back("semantic error, variable is not declared: " + symbol.symbol_name, location);
     }
 }
