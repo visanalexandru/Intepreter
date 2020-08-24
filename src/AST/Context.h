@@ -22,7 +22,7 @@ namespace AST {
 
         std::unordered_map<unsigned long, std::unique_ptr<Function>> functions;
 
-        std::deque<std::deque<Value>> scopes;
+        std::vector<std::vector<Value>> scopes;
     public:
 
         Context();

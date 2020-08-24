@@ -32,7 +32,7 @@ namespace AST {
     bool DeclarationStack::getVariableLocation(const Symbol &var_symbol, VariableLocation &location) const {
         unsigned long scope_offset=0;
         for (auto iter = variable_declarations_scopes.rbegin(); iter != variable_declarations_scopes.rend(); iter++) {
-            const std::deque<VariableDeclaration> &scope = *iter;
+            const std::vector<VariableDeclaration> &scope = *iter;
 
             for (auto decl = scope.begin(); decl != scope.end(); decl++) {
                 if (decl->variable_symbol.symbol_id == var_symbol.symbol_id) {
@@ -47,7 +47,7 @@ namespace AST {
     }
 
     void DeclarationStack::addVariable(const Symbol &var_symbol) {
-        auto &current_scope = variable_declarations_scopes.back();
+        std::vector<VariableDeclaration>&current_scope = variable_declarations_scopes.back();
         VariableDeclaration declaration{var_symbol, variable_declarations_scopes.size() > 1};
         current_scope.push_back(declaration);
     }

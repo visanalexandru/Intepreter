@@ -30,7 +30,9 @@ namespace AST {
     void FuncDeclarationStmt::checkDeclarations(AST::DeclarationStack &stack, std::vector<Error> &errors) const {
         if(stack.functionExists(symbol))
             errors.emplace_back("semantic error, duplicate declaration of function "+symbol.symbol_name,location);
-        stack.addFunction(symbol);
+        else stack.addFunction(symbol);
+
+        /*Solve variable references in the function*/
         stack.pushScope();
         for(const Symbol&sym:parameter_symbols)
             stack.addVariable(sym);

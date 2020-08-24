@@ -15,7 +15,8 @@ namespace AST {
     }
 
     void Context::declareFunc(const Symbol& funcsymbol, std::unique_ptr<Function> function) {
-        assert(functions.insert(std::make_pair(funcsymbol.symbol_id, std::move(function))).second);
+        bool result=functions.insert(std::make_pair(funcsymbol.symbol_id, std::move(function))).second;
+        assert(result);
     }
 
     const std::unique_ptr<Function>&Context::getFunc(const Symbol& funcsymbol) {

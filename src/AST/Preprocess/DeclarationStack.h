@@ -7,7 +7,7 @@
 
 #include<memory>
 #include<unordered_set>
-#include<deque>
+#include<vector>
 #include<algorithm>
 #include "AST/Function/Function.h"
 #include "AST/Symbol.h"
@@ -31,7 +31,7 @@ namespace AST {
         /*Use an unordered set for constant lookup on find()*/
         std::unordered_set<unsigned long> function_declarations;
 
-        std::deque<std::deque<VariableDeclaration>> variable_declarations_scopes;
+        std::vector<std::vector<VariableDeclaration>> variable_declarations_scopes;
 
 
     public:
@@ -49,6 +49,7 @@ namespace AST {
          * declarations*/
         bool variableInCurrentScope(const Symbol& var_symbol) const;
 
+        /*Set the location parameter to the variable location. If the variable was not found, return false*/
         bool getVariableLocation(const Symbol&var_symbol,VariableLocation&location) const;
 
         /*Create new scope for the variable declarations*/
