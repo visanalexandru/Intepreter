@@ -19,7 +19,7 @@
     yy::parser::symbol_type make_FLOAT(const std::string&s,const yy::parser::location_type& loc);
     yy::parser::symbol_type make_SYMBOL(const std::string&s,const yy::parser::location_type& loc);
 %}
-string \"[a-zA-Z0-9 ]*\"
+string \"(\\.|[^"\\])*\"
 id    [a-zA-Z][a-zA-Z0-9_]*
 int   [0-9]+
 float [0-9]*\.[0-9]+
@@ -100,7 +100,33 @@ yy::parser::symbol_type make_FLOAT(const std::string &s, const yy::parser::locat
 
 yy::parser::symbol_type make_STRING(const std::string &s, const yy::parser::location_type& loc)
 {
-  return yy::parser::make_LITERAL (AST::Value(s.substr(1,s.size()-2)), loc);
+  std::string str=s.substr(1,s.size()-2);
+  std::string buff;
+  unsigned cursor=0;
+
+  while(cursor<str.length()){
+        if(str[cursor]=='\\'){//Solve escape sequences
+            cursor++;
+            char to_add;
+            switch(str[cursor]){
+                case('n'):
+                    buff+='\n';
+                    break;
+                case('t'):
+                    buff+='\t';
+                    break;
+                case('\\'):
+                    buff+='\\';
+                    break;
+                case('\"'):
+                    buff+='\"';
+            }
+        }
+        else buff+=str[cursor];
+        cursor++;
+  }
+
+  return yy::parser::make_LITERAL (AST::Value(buff), loc);
 }
 
 yy::parser::symbol_type make_SYMBOL(const std::string &s, const yy::parser::location_type& loc)
