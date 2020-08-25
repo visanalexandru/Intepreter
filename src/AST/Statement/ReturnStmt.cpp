@@ -32,7 +32,8 @@ namespace AST {
     }
 
     void ReturnStmt::checkDeclarations(AST::DeclarationStack &stack, std::vector<Error> &errors) const {
-        expression->solveVarReferences(stack,errors);
+        if(expression!= nullptr)
+            expression->solveVarReferences(stack,errors);
     }
 
 
