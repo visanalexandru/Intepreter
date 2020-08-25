@@ -43,6 +43,9 @@ private:
     /*the file that is currently being scanned */
     std::string current_file;
 
+    /*The declaration stack*/
+    AST::DeclarationStack declaration_stack;
+
     /*begin the scanning phase,implemented in the flex scanner file*/
     void scan_begin();
 

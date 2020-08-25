@@ -16,7 +16,10 @@ void Driver::preprocess() {
 }
 
 void Driver::init() {
-    AST::globalContext.declareFunc(AST::globalSymtable.addSymbol("print"), std::make_unique<AST::PrintFunc>());
+    AST::Symbol print_sym=AST::globalSymtable.addSymbol("print");
+
+    AST::globalContext.declareFunc(print_sym,std::make_unique<AST::PrintFunc>());
+    declaration_stack.addFunction(print_sym);
 }
 
 void Driver::start() {
@@ -37,13 +40,11 @@ void Driver::start() {
 
 void Driver::semanticAnalysis() {
     AST::FlowState state;
-    AST::DeclarationStack stack;
-    stack.addFunction(AST::globalSymtable.getSymbol("print"));
     for (const auto &stmt:result)
         stmt->checkControlFlow(state, errors);
 
     for(const auto&stmt:result)
-        stmt->checkDeclarations(stack,errors);
+        stmt->checkDeclarations(declaration_stack,errors);
 }
 
 
