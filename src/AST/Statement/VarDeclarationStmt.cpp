@@ -32,5 +32,7 @@ namespace AST {
         if(stack.variableInCurrentScope(symbol))
             errors.emplace_back("semantic error, duplicate declaration of variable "+symbol.symbol_name,location);
         else stack.addVariable(symbol);
+        if(value!= nullptr)
+            value->solveVarReferences(stack,errors);
     }
 }
