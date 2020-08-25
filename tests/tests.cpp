@@ -4,7 +4,7 @@
 #define CATCH_CONFIG_MAIN
 #include"catch.hpp"
 #include "AST/Value/Value.h"
-#include "AST/Context.h"
+#include "AST/SymbolTable.h"
 
 TEST_CASE("Integer arithmetic","[arithmetic]"){
 
@@ -153,43 +153,35 @@ REQUIRE_THROWS_WITH(AST::Value(std::string("stack"))/AST::Value(std::string("ove
 
 
 
-TEST_CASE("Variables","[context]"){
-    AST::Context context;
+TEST_CASE("Symtable","symbols"){
+    AST::SymbolTable table;
+    REQUIRE(table.getNumSymbols()==0);
 
-    SECTION("Variable declaration"){
-        context.declareVar("data",AST::Value(200));
-        REQUIRE(context.getVar("data").toString()=="200");
-        SECTION("Variable already defined in current scope"){
-            REQUIRE_THROWS_WITH(context.declareVar("data",AST::Value(23.f)),"Variable has already been declared in this scope: data");
-        }
-        SECTION("Variable not defined"){
-            REQUIRE_THROWS_WITH(context.getVar("stack"),"Variable has not been declared: stack");
-        }
-        SECTION("Multiple scopes"){
-            context.pushScope();
-            REQUIRE_NOTHROW(context.declareVar("data",AST::Value("test")));
-            context.declareVar("test",AST::Value(23));
-            context.popScope();
-            REQUIRE_THROWS_WITH(context.getVar("test"),"Variable has not been declared: test");
-        }
+    SECTION("ADDITION"){
+        AST::Symbol a=table.addSymbol("test");
+        AST::Symbol b=table.addSymbol("if");
+        AST::Symbol c=table.addSymbol("else");
+        REQUIRE((a.symbol_id==1 && a.symbol_name=="test"));
+        REQUIRE((b.symbol_id==2 && b.symbol_name=="if"));
+        REQUIRE((c.symbol_id==3 && c.symbol_name=="else"));
+        REQUIRE(table.getNumSymbols()==3);
 
+        REQUIRE(table.symbolExists("test"));
+        REQUIRE(table.symbolExists("if"));
+        REQUIRE(table.symbolExists("else"));
+
+        a=table.getSymbol("test");
+        b=table.getSymbol("if");
+        c=table.getSymbol("else");
+        REQUIRE((a.symbol_id==1 && a.symbol_name=="test"));
+        REQUIRE((b.symbol_id==2 && b.symbol_name=="if"));
+        REQUIRE((c.symbol_id==3 && c.symbol_name=="else"));
     }
-    SECTION("Variable assignment"){
-        context.declareVar("astest",AST::Value(2.f));
-        SECTION("Simple assignment"){
-            REQUIRE_NOTHROW(context.setVar("astest",AST::Value(20)));
-            REQUIRE(context.getVar("astest").toString()=="20");
-        }
-        SECTION("Variable not defined"){
-            REQUIRE_THROWS_WITH(context.setVar("unknown",AST::Value(2333)),"Variable has not been declared: unknown");
-        }
-        SECTION("Multiple scopes"){
-            context.pushScope();
-            REQUIRE_NOTHROW(context.setVar("astest",AST::Value(2323)));
-            context.declareVar("hhh",AST::Value("not"));
-            context.popScope();
-            REQUIRE_THROWS_WITH(context.setVar("hhh",AST::Value("ok")),"Variable has not been declared: hhh");
-        }
-}
+    SECTION("DUPLICATES"){
+        table.addSymbol("symbol");
+        AST::Symbol sym=table.addSymbol("symbol");
+        REQUIRE(table.getNumSymbols()==1);
+        REQUIRE((sym.symbol_id==1 && sym.symbol_name=="symbol"));
+    }
 
 }

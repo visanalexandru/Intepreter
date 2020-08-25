@@ -31,6 +31,9 @@ namespace AST {
         /*Returns the index of the given symbol. If the symbol was not added, return 0.*/
         Symbol getSymbol(const std::string &symbol);
 
+        /*Returns the number of distinct symbols in the table*/
+        int getNumSymbols() const;
+
         SymbolTable();
     };
 

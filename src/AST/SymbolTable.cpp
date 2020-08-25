@@ -27,4 +27,8 @@ namespace AST {
             return {symbol,map[symbol]};
         return {symbol,0};
     }
+
+    int SymbolTable::getNumSymbols() const {
+        return num_symbols;
+    }
 }
