@@ -20,7 +20,7 @@
     yy::parser::symbol_type make_SYMBOL(const std::string&s,const yy::parser::location_type& loc);
 %}
 string \"[a-zA-Z0-9 ]*\"
-id    [a-zA-Z][a-zA-Z0-9]*
+id    [a-zA-Z][a-zA-Z0-9_]*
 int   [0-9]+
 float [0-9]*\.[0-9]+
 blank [ \t\r]
@@ -58,7 +58,8 @@ blank [ \t\r]
 "="        return yy::parser::make_ASSIGNMENT(loc);
 "var"      return yy::parser::make_VAR(loc);
 "if"       return yy::parser::make_IF(loc);
-"else"       return yy::parser::make_ELSE(loc);
+"else"     return yy::parser::make_ELSE(loc);
+"while"    return yy::parser::make_WHILE(loc);
 ";"        return yy::parser::make_SEMICOLON(loc);
 ","        return yy::parser::make_COMMA(loc);
 "func"     return yy::parser::make_FUNC(loc);
