@@ -23,7 +23,6 @@
   #include "AST/Expression/UnaryOpExp.h"
   #include "AST/Expression/BinaryOpExp.h"
   #include "AST/Expression/LiteralExp.h"
-  #include "AST/Expression/AssignmentExp.h"
   #include "AST/Expression/VariableExp.h"
   #include "AST/Expression/FuncCallExp.h"
   #include "AST/Statement/VarDeclarationStmt.h"
@@ -127,7 +126,7 @@ expression: LITERAL {$$=std::make_unique<AST::LiteralExp>(@1,$1);}
 | "-" expression %prec "!"    { $$= std::make_unique<AST::UnaryOpExp>(@1,AST::UnaryOperator::Minus,std::move($2)); }
 | "!" expression              { $$= std::make_unique<AST::UnaryOpExp>(@1,AST::UnaryOperator::Not,std::move($2)); }
 | "(" expression ")"          { $$ = std::move($2); }
-| IDENTIFIER "=" expression   { $$=std::make_unique<AST::AssignmentExp>(@2,std::move($1),std::move($3));}
+| IDENTIFIER "=" expression   { $$=std::make_unique<AST::VariableExp>(@2,std::move($1),std::move($3));}
 | IDENTIFIER                  { $$=std::make_unique<AST::VariableExp>(@1,std::move($1));}
 | function_call               { $$=std::move($1);}
 ;

@@ -11,15 +11,20 @@
 #include "Error.h"
 
 namespace AST {
-    /*This class represents a variable read in the interpreted program*/
+    /*This class represents a variable dereference in the interpreted program.
+     * It could be an assignment or a read*/
     class VariableExp : public ExpNode {
     private:
         /*The symbol of the variable that needs to be read*/
         const Symbol symbol;
 
         VariableLocation var_location;
+
+        std::unique_ptr<ExpNode> assign;
     public:
         VariableExp(yy::location loc,Symbol sym);
+
+        VariableExp(yy::location loc,Symbol sym,std::unique_ptr<ExpNode> to_assign);
 
         /*Returns the value of the variable that has that name*/
         Value evaluate() const override;
