@@ -29,10 +29,11 @@ namespace AST {
     }
 
     void VarDeclarationStmt::checkDeclarations(AST::DeclarationStack &stack, std::vector<Error> &errors) const {
+        if(value!= nullptr)
+            value->solveVarReferences(stack,errors);
+
         if(stack.variableInCurrentScope(symbol))
             errors.emplace_back("semantic error, duplicate declaration of variable "+symbol.symbol_name,location);
         else stack.addVariable(symbol);
-        if(value!= nullptr)
-            value->solveVarReferences(stack,errors);
     }
 }
