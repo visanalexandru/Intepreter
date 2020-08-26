@@ -46,6 +46,7 @@
   SUBTRACTION "-"
   ADDITION "+"
   MULTIPLICATION "*"
+  MODULUS "%"
   DIVISION "/"
   LPAREN  "("
   RPAREN  ")"
@@ -99,7 +100,7 @@
 %left "==" "!="
 %left ">" "<" ">=" "<="
 %left "+" "-";
-%left "*" "/";
+%left "*" "/" "%";
 %right "!"
 
 
@@ -114,6 +115,7 @@ expression: LITERAL {$$=std::make_unique<AST::LiteralExp>(@1,$1);}
 | expression "-" expression   { $$ =std::make_unique<AST::BinaryOpExp>(@2,AST::BinaryOperator::Subtract,std::move($1),std::move($3));}
 | expression "*" expression   { $$ =std::make_unique<AST::BinaryOpExp>(@2,AST::BinaryOperator::Multiply,std::move($1),std::move($3)); }
 | expression "/" expression   { $$ =std::make_unique<AST::BinaryOpExp>(@2,AST::BinaryOperator::Divide,std::move($1),std::move($3)); }
+| expression "%" expression   { $$ =std::make_unique<AST::BinaryOpExp>(@2,AST::BinaryOperator::Modulus,std::move($1),std::move($3)); }
 | expression "==" expression   { $$ =std::make_unique<AST::BinaryOpExp>(@2,AST::BinaryOperator::Equal,std::move($1),std::move($3)); }
 | expression "!=" expression   { $$ =std::make_unique<AST::BinaryOpExp>(@2,AST::BinaryOperator::NEqual,std::move($1),std::move($3)); }
 | expression ">" expression   { $$ =std::make_unique<AST::BinaryOpExp>(@2,AST::BinaryOperator::Greater,std::move($1),std::move($3)); }

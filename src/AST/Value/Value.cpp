@@ -274,6 +274,12 @@ namespace AST {
                 "Unsupported operand types for >=: " + typeToString(type) + " and " + typeToString(other.type));
     }
 
+    Value Value::operator%(const Value&other) const{
+        if(type==Type::Int && other.type==Type::Int)
+            return Value(asInt()%other.asInt());
+        throw std::runtime_error("Unsupported operand types for %: " + typeToString(type) + " and " + typeToString(other.type));
+    }
+
     Type Value::getType() const {
         return type;
     }

@@ -13,6 +13,7 @@ namespace AST {
         Subtract,
         Multiply,
         Divide,
+        Modulus,
         Equal,
         NEqual,
         Greater,

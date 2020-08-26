@@ -43,6 +43,7 @@ blank [ \t\r]
 "-"        return yy::parser::make_SUBTRACTION(loc);
 "+"        return yy::parser::make_ADDITION(loc);
 "*"        return yy::parser::make_MULTIPLICATION(loc);
+"%"        return yy::parser::make_MODULUS(loc);
 "=="       return yy::parser::make_EQUAL(loc);
 "!="       return yy::parser::make_NEQUAL(loc);
 ">"        return yy::parser::make_GREATER(loc);
