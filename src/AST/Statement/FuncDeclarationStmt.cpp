@@ -41,5 +41,9 @@ namespace AST {
         stack.popScope();
     }
 
+    void FuncDeclarationStmt::emitBytecode(VM::VirtualMachine &vm) const {
+
+    }
+
 
 }

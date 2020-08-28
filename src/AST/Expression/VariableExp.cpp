@@ -30,4 +30,8 @@ namespace AST {
         if(assign!=nullptr)
             assign->solveVarReferences(stack,errors);
     }
+
+    void VariableExp::emitBytecode(VM::VirtualMachine &vm) const {
+
+    }
 }

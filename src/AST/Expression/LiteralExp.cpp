@@ -13,4 +13,11 @@ namespace AST {
     Value LiteralExp::evaluate() const {
         return value;
     }
+
+    void LiteralExp::emitBytecode(VM::VirtualMachine &vm) const {
+        unsigned index=vm.getLiteralCount();
+        vm.pushLiteral(value);
+        vm.pushOpcode(VM::Opcode::LOAD_LITERAL);
+        vm.pushUInt(index);
+    }
 }

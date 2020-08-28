@@ -5,7 +5,8 @@
 #include "BinaryOpExp.h"
 
 namespace AST {
-    BinaryOpExp::BinaryOpExp(yy::location loc,AST::BinaryOperator t, std::unique_ptr<ExpNode> l, std::unique_ptr<ExpNode> r) :
+    BinaryOpExp::BinaryOpExp(yy::location loc, AST::BinaryOperator t, std::unique_ptr<ExpNode> l,
+                             std::unique_ptr<ExpNode> r) :
             ExpNode(loc),
             type(t),
             left(std::move(l)),
@@ -44,7 +45,100 @@ namespace AST {
     }
 
     void BinaryOpExp::solveVarReferences(AST::DeclarationStack &stack, std::vector<Error> &errors) {
-        left->solveVarReferences(stack,errors);
-        right->solveVarReferences(stack,errors);
+        left->solveVarReferences(stack, errors);
+        right->solveVarReferences(stack, errors);
+    }
+
+    void BinaryOpExp::emitBytecode(VM::VirtualMachine &vm) const {
+
+
+        switch (type) {
+            case BinaryOperator::Add:
+                left->emitBytecode(vm);
+                right->emitBytecode(vm);
+                vm.pushOpcode(VM::Opcode::BINARY_ADD);
+                break;
+            case BinaryOperator::Subtract:
+                left->emitBytecode(vm);
+                right->emitBytecode(vm);
+                vm.pushOpcode(VM::Opcode::BINARY_SUBTRACT);
+                break;
+            case BinaryOperator::Multiply:
+                left->emitBytecode(vm);
+                right->emitBytecode(vm);
+                vm.pushOpcode(VM::Opcode::BINARY_MULTIPLY);
+                break;
+            case BinaryOperator::Divide:
+                left->emitBytecode(vm);
+                right->emitBytecode(vm);
+                vm.pushOpcode(VM::Opcode::BINARY_DIVIDE);
+                break;
+            case BinaryOperator::Equal:
+                left->emitBytecode(vm);
+                right->emitBytecode(vm);
+                vm.pushOpcode(VM::Opcode::BINARY_EQUAL);
+                break;
+            case BinaryOperator::NEqual:
+                left->emitBytecode(vm);
+                right->emitBytecode(vm);
+                vm.pushOpcode(VM::Opcode::BINARY_NEQUAL);
+                break;
+            case BinaryOperator::Greater:
+                left->emitBytecode(vm);
+                right->emitBytecode(vm);
+                vm.pushOpcode(VM::Opcode::BINARY_GREATER);
+                break;
+            case BinaryOperator::GreaterEq:
+                left->emitBytecode(vm);
+                right->emitBytecode(vm);
+                vm.pushOpcode(VM::Opcode::BINARY_GREATEREQ);
+                break;
+            case BinaryOperator::Less:
+                left->emitBytecode(vm);
+                right->emitBytecode(vm);
+                vm.pushOpcode(VM::Opcode::BINARY_LESS);
+                break;
+            case BinaryOperator::LessEq:
+                left->emitBytecode(vm);
+                right->emitBytecode(vm);
+                vm.pushOpcode(VM::Opcode::BINARY_LESSEQ);
+                break;
+
+
+            case BinaryOperator::And: {
+                left->emitBytecode(vm);
+
+                vm.pushOpcode(VM::Opcode::JUMP_IF_FALSE);
+                unsigned location = vm.getBytecodeSize();//location to patch
+                vm.pushUInt(0);//to be patched
+                vm.pushOpcode(VM::Opcode::POP);
+
+                right->emitBytecode(vm);
+
+                vm.patchUInt(vm.getBytecodeSize(), location);
+                break;
+            }
+
+            case BinaryOperator::Or: {
+                left->emitBytecode(vm);
+                vm.pushOpcode(VM::Opcode::JUMP_IF_TRUE);
+                unsigned location = vm.getBytecodeSize();//location to patch
+                vm.pushUInt(0);//to be patched
+                vm.pushOpcode(VM::Opcode::POP);
+
+                right->emitBytecode(vm);
+
+                vm.patchUInt(vm.getBytecodeSize(), location);
+                break;
+            }
+
+
+            case BinaryOperator::Modulus:
+                left->emitBytecode(vm);
+                right->emitBytecode(vm);
+                vm.pushOpcode(VM::Opcode::BINARY_MODULUS);
+                break;
+        }
+
     }
 }

@@ -27,10 +27,11 @@ void Driver::start() {
     preprocess();
     if (errors.empty()) {
         std::cout << "Parsing successful" << std::endl;
-        float a = clock();
+        VM::VirtualMachine vm;
         for (const auto &stmt :result)
-            stmt->execute();
-        std::cout << "Took " << (clock() - a) / CLOCKS_PER_SEC << std::endl;
+            stmt->emitBytecode(vm);
+        vm.disassemble();
+        vm.run();
     } else {
         std::cerr << "Errors:" << std::endl;
         for (const Error &error:errors)

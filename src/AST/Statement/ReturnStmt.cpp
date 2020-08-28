@@ -36,5 +36,9 @@ namespace AST {
             expression->solveVarReferences(stack,errors);
     }
 
+    void ReturnStmt::emitBytecode(VM::VirtualMachine &vm) const {
+
+
+    }
 
 }

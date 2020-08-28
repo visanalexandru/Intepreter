@@ -8,6 +8,7 @@
 #include "AST/Value/Value.h"
 #include "AST/Preprocess/FlowState.h"
 #include "AST/Preprocess/DeclarationStack.h"
+#include "VirtualMachine/VirtualMachine.h"
 #include "location.hh"
 #include<vector>
 #include"Error.h"
@@ -50,6 +51,8 @@ namespace AST {
 
         /*Report duplicate declarations of functions/variables etc.*/
         virtual void checkDeclarations(DeclarationStack&stack,std::vector<Error>&error) const=0;
+
+        virtual void emitBytecode(VM::VirtualMachine&vm) const=0;
 
         explicit StmtNode(yy::location loc);
 

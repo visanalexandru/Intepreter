@@ -67,5 +67,9 @@ namespace AST {
         stack.popScope();
     }
 
+    void IfElseStmt::emitBytecode(VM::VirtualMachine &vm) const {
+
+    }
+
 
 }

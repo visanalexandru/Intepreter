@@ -20,4 +20,9 @@ namespace AST {
     void ExpressionStmt::checkDeclarations(AST::DeclarationStack &stack, std::vector<Error> &errors) const {
         exp->solveVarReferences(stack,errors);
     }
+
+    void ExpressionStmt::emitBytecode(VM::VirtualMachine &vm) const {
+        exp->emitBytecode(vm);
+        vm.pushOpcode(VM::Opcode::POP);
+    }
 }

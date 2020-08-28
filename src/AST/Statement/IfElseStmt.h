@@ -31,6 +31,8 @@ namespace AST {
         void checkControlFlow(FlowState&state,std::vector<Error>&errors) const override;
 
         void checkDeclarations(DeclarationStack&stack,std::vector<Error>&errors) const override ;
+
+        void emitBytecode(VM::VirtualMachine&vm) const override;
     };
 }
 

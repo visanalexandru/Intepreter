@@ -50,4 +50,8 @@ namespace AST {
         stack.popScope();
     }
 
+    void WhileStmt::emitBytecode(VM::VirtualMachine &vm) const {
+
+    }
+
 }

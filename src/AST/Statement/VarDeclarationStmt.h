@@ -32,6 +32,8 @@ namespace AST {
                               std::vector<Error> &errors) const override {};//no control flow errors can happen here
 
         void checkDeclarations(DeclarationStack&stack,std::vector<Error>&errors) const override ;
+
+        void emitBytecode(VM::VirtualMachine&vm) const override;
     };
 }
 

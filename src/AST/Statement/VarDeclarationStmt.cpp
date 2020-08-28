@@ -36,4 +36,8 @@ namespace AST {
             errors.emplace_back("semantic error, duplicate declaration of variable "+symbol.symbol_name,location);
         else stack.addVariable(symbol);
     }
+
+    void VarDeclarationStmt::emitBytecode(VM::VirtualMachine &vm) const {
+
+    }
 }
