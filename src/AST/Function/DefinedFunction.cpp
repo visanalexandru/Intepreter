@@ -5,13 +5,10 @@
 #include "DefinedFunction.h"
 
 namespace AST {
-    DefinedFunction::DefinedFunction(std::string identifier, std::vector<Symbol> p_symbols,
+    DefinedFunction::DefinedFunction(std::string identifier, unsigned long arity,
                                      std::vector<std::unique_ptr<StmtNode>> to_execute) :
-            Function(std::move(identifier), p_symbols.size()),
-            parameter_symbols(std::move(p_symbols)),
+            Function(std::move(identifier), arity),
             statements(std::move(to_execute)) {
-
-
     }
 
     Value DefinedFunction::execute(const std::vector<Value> &parameters) const {
@@ -31,6 +28,11 @@ namespace AST {
         globalContext.popScope();
 
         return to_return;
+    }
+
+
+    const std::vector<std::unique_ptr<StmtNode>> & DefinedFunction::getStatements() const {
+        return statements;
     }
 
 

@@ -13,13 +13,12 @@ namespace AST {
      *to the global context*/
     class FuncDeclarationStmt : public StmtNode {
     private:
-        /*These lists will be invalidated after the execute() call because they will be passed as rvalues to the function obj*/
         std::vector<Symbol> parameter_symbols;
-
-        std::vector<std::unique_ptr<StmtNode>> statements;
 
         /*The symbol of the function*/
         const Symbol symbol;
+
+        std::unique_ptr<DefinedFunction> function;
     public:
         FuncDeclarationStmt(yy::location loc,Symbol sym, std::vector<Symbol> p_syms,
                             std::vector<std::unique_ptr<StmtNode>> stmts);

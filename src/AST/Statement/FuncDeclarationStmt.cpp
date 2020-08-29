@@ -9,20 +9,18 @@ namespace AST {
                                              std::vector<std::unique_ptr<StmtNode>> stmts) :
             StmtNode(loc),
             symbol(std::move(sym)),
-            parameter_symbols(std::move(p_syms)),
-            statements(std::move(stmts)) {
+            parameter_symbols(std::move(p_syms)){
 
-
+        function=std::make_unique<AST::DefinedFunction>(symbol.symbol_name, parameter_symbols.size(),std::move(stmts));
     }
 
     void FuncDeclarationStmt::execute() {
-        globalContext.declareFunc(symbol, std::make_unique<AST::DefinedFunction>(symbol.symbol_name, std::move(parameter_symbols),
-                                                                              std::move(statements)));
+        globalContext.declareFunc(symbol, std::move(function));
     }
 
     void FuncDeclarationStmt::checkControlFlow(FlowState &state,std::vector<Error>&errors) const {
         state.enterFunction();
-        for (const auto &stmt:statements)
+        for (const auto &stmt:function->getStatements())
             stmt->checkControlFlow(state,errors);
         state.exitFunction();
     }
@@ -40,7 +38,7 @@ namespace AST {
             stack.addVariable(sym);
         }
 
-        for(const auto&stmt:statements)
+        for(const auto&stmt:function->getStatements())
             stmt->checkDeclarations(stack,errors);
         stack.popScope();
     }
