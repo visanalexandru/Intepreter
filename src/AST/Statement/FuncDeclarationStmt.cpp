@@ -34,8 +34,12 @@ namespace AST {
 
         /*Solve variable references in the function*/
         stack.pushScope();
-        for(const Symbol&sym:parameter_symbols)
+        for(const Symbol&sym:parameter_symbols){
+            if(stack.variableInCurrentScope(sym))
+                errors.emplace_back("semantic error, duplicate declaration of the parameter "+sym.symbol_name,location);
             stack.addVariable(sym);
+        }
+
         for(const auto&stmt:statements)
             stmt->checkDeclarations(stack,errors);
         stack.popScope();

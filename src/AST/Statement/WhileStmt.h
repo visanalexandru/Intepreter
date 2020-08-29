@@ -8,17 +8,18 @@
 #include "StmtNode.h"
 #include "AST/Expression/ExpNode.h"
 #include "AST/Context.h"
+#include "CompoundStmt.h"
 
 namespace AST {
     /*This class represents a while-loop in the interpreted program.
      *Execute the statements until the condition evaluates to false*/
     class WhileStmt:public StmtNode {
     private:
-        std::vector<std::unique_ptr<StmtNode>> block;
+        std::unique_ptr<CompoundStmt> body;
         std::unique_ptr<ExpNode> condition;
 
     public:
-        WhileStmt(yy::location loc,std::unique_ptr<ExpNode>cond,std::vector<std::unique_ptr<StmtNode>> statements);
+        WhileStmt(yy::location loc,std::unique_ptr<ExpNode>cond,std::unique_ptr<CompoundStmt> stmts);
 
         void execute() override;
 

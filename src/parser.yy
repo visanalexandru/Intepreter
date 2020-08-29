@@ -32,6 +32,7 @@
   #include "AST/Statement/IfElseStmt.h"
   #include "AST/Statement/WhileStmt.h"
   #include "AST/Symbol.h"
+  #include "AST/Statement/CompoundStmt.h"
   class Driver;
 }
 
@@ -81,6 +82,7 @@
 %nterm <std::unique_ptr<AST::IfElseStmt>> ifelse_stmt
 %nterm <std::unique_ptr<AST::WhileStmt>> while_stmt
 %nterm <std::unique_ptr<AST::StmtNode>> statement;
+%nterm <std::unique_ptr<AST::CompoundStmt>> compound_statement;
 
 %nterm <std::vector<std::unique_ptr<AST::StmtNode>>> block //a list of statements
 
@@ -143,6 +145,14 @@ parameter_identifier_list:%empty {$$=std::vector<AST::Symbol>();}
 |identifier_list                 {$$=std::move($1);}
 ;
 
+block:
+%empty                    {$$=std::vector<std::unique_ptr<AST::StmtNode>>();}
+|block statement{ $1.push_back(std::move($2));$$=std::move($1);}
+;
+
+compound_statement: "{" block "}" {$$=std::make_unique<AST::CompoundStmt>(@1,std::move($2));}
+
+
 function_call: IDENTIFIER "(" expression_list ")" {$$=std::make_unique<AST::FuncCallExp>(@1,std::move($1),std::move($3));}
 |IDENTIFIER "(" ")"                               {$$=std::make_unique<AST::FuncCallExp>(@1,std::move($1),std::vector<std::unique_ptr<AST::ExpNode>>());}
 ;
@@ -150,10 +160,6 @@ function_call: IDENTIFIER "(" expression_list ")" {$$=std::make_unique<AST::Func
 function_declaration: "func" IDENTIFIER "(" parameter_identifier_list ")" "{" block "}" {$$=std::make_unique<AST::FuncDeclarationStmt>(@1,std::move($2),std::move($4),std::move($7));}
 ;
 
-block:
-%empty                    {$$=std::vector<std::unique_ptr<AST::StmtNode>>();}
-|block statement{ $1.push_back(std::move($2));$$=std::move($1);}
-;
 
 instruction_list:
 %empty                    {$$=std::vector<std::unique_ptr<AST::StmtNode>>();}
@@ -178,10 +184,10 @@ return_stmt: "return" expression ";" {$$=std::make_unique<AST::ReturnStmt>(@1,st
 |"return" ";" {$$=std::make_unique<AST::ReturnStmt>(@1);}
 ;
 
-ifelse_stmt: "if" "(" expression ")" "{" block"}" {$$=std::make_unique<AST::IfElseStmt>(@1,std::move($3),std::move($6));}
-|"if" "(" expression ")" "{" block "}" "else" "{" block "}" {$$=std::make_unique<AST::IfElseStmt>(@1,std::move($3),std::move($6),std::move($10));}
+ifelse_stmt: "if" "(" expression ")" compound_statement {$$=std::make_unique<AST::IfElseStmt>(@1,std::move($3),std::move($5));}
+|"if" "(" expression ")" compound_statement "else" compound_statement {$$=std::make_unique<AST::IfElseStmt>(@1,std::move($3),std::move($5),std::move($7));}
 
-while_stmt: "while" "(" expression ")" "{" block "}" {$$=std::make_unique<AST::WhileStmt>(@1,std::move($3),std::move($6));}
+while_stmt: "while" "(" expression ")" compound_statement {$$=std::make_unique<AST::WhileStmt>(@1,std::move($3),std::move($5));}
 
 %%
 

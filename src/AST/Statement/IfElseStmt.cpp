@@ -6,65 +6,43 @@
 
 namespace AST {
 
-    IfElseStmt::IfElseStmt(yy::location loc, std::unique_ptr<ExpNode> cond,
-                           std::vector<std::unique_ptr<StmtNode>> ifstmts,
-                           std::vector<std::unique_ptr<StmtNode>> elsestmts) :
+    IfElseStmt::IfElseStmt(yy::location loc, std::unique_ptr<ExpNode> cond, std::unique_ptr<CompoundStmt> ifb,
+                           std::unique_ptr<CompoundStmt> elseb) :
             StmtNode(loc),
             condition(std::move(cond)),
-            ifblock(std::move(ifstmts)),
-            elseblock(std::move(elsestmts)) {
+            ifbranch(std::move(ifb)),
+            elsebranch(std::move(elseb)) {
 
-
-    }
-
-    IfElseStmt::IfElseStmt(yy::location loc, std::unique_ptr<ExpNode> cond,
-                           std::vector<std::unique_ptr<StmtNode>> ifstmts) :
-            StmtNode(loc),
-            condition(std::move(cond)),
-            ifblock(std::move(ifstmts)),
-            elseblock() {
 
     }
 
     void IfElseStmt::execute() {
         resetReturnValue();
 
-        std::vector<std::unique_ptr<StmtNode>>* to_execute;
-        if(condition->evaluate().toBoolObj().asBool()){
-            to_execute=&ifblock;
-        }
-        else {
-            to_execute=&elseblock;
-        }
-
-        globalContext.pushScope();
-        for(const auto& stmt:*to_execute){
-            stmt->execute();
-            if(stmt->hasReturned()){
-                setReturnValue(stmt->getReturnValue());
-                break;
+        if (condition->evaluate().toBoolObj().asBool()) {
+            ifbranch->execute();
+            if (ifbranch->hasReturned()) {
+                setReturnValue(ifbranch->getReturnValue());
+            }
+        } else if (elsebranch != nullptr) {
+            elsebranch->execute();
+            if (elsebranch->hasReturned()) {
+                setReturnValue(elsebranch->getReturnValue());
             }
         }
-        globalContext.popScope();
     }
 
     void IfElseStmt::checkControlFlow(AST::FlowState &state, std::vector<Error> &errors) const {
-        for(const auto&stmt:ifblock)
-            stmt->checkControlFlow(state,errors);
-        for(const auto&stmt:elseblock)
-            stmt->checkControlFlow(state,errors);
+        ifbranch->checkControlFlow(state, errors);
+        if (elsebranch != nullptr)
+            elsebranch->checkControlFlow(state, errors);
     }
 
     void IfElseStmt::checkDeclarations(AST::DeclarationStack &stack, std::vector<Error> &errors) const {
-        condition->solveVarReferences(stack,errors);
-        stack.pushScope();
-        for(const auto&stmt:ifblock)
-            stmt->checkDeclarations(stack,errors);
-        stack.popScope();
-        stack.pushScope();
-        for(const auto&stmt:elseblock)
-            stmt->checkDeclarations(stack,errors);
-        stack.popScope();
+        condition->solveVarReferences(stack, errors);
+        ifbranch->checkDeclarations(stack, errors);
+        if (elsebranch != nullptr)
+            elsebranch->checkDeclarations(stack, errors);
     }
 
 

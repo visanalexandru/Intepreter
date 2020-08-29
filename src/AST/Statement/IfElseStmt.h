@@ -8,6 +8,7 @@
 #include <memory>
 #include"StmtNode.h"
 #include "AST/Expression/ExpNode.h"
+#include"CompoundStmt.h"
 #include "AST/Context.h"
 
 namespace AST {
@@ -17,14 +18,11 @@ namespace AST {
     class IfElseStmt : public StmtNode {
     private:
         std::unique_ptr<ExpNode> condition;
-        std::vector<std::unique_ptr<StmtNode>> ifblock;
-        std::vector<std::unique_ptr<StmtNode>> elseblock;
+        std::unique_ptr<CompoundStmt> ifbranch;
+        std::unique_ptr<CompoundStmt> elsebranch;
 
     public:
-        IfElseStmt(yy::location loc, std::unique_ptr<ExpNode> cond, std::vector<std::unique_ptr<StmtNode>> ifstmts);
-
-        IfElseStmt(yy::location loc, std::unique_ptr<ExpNode> cond, std::vector<std::unique_ptr<StmtNode>> ifstmts,
-                   std::vector<std::unique_ptr<StmtNode>> elsestmts);
+        IfElseStmt(yy::location loc, std::unique_ptr<ExpNode> cond, std::unique_ptr<CompoundStmt> ifb,std::unique_ptr<CompoundStmt>elseb= nullptr);
 
         void execute() override;
 
