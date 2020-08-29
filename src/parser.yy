@@ -82,7 +82,7 @@
 %nterm <std::unique_ptr<AST::IfElseStmt>> ifelse_stmt
 %nterm <std::unique_ptr<AST::WhileStmt>> while_stmt
 %nterm <std::unique_ptr<AST::StmtNode>> statement;
-%nterm <std::unique_ptr<AST::CompoundStmt>> compound_statement;
+%nterm <std::unique_ptr<AST::CompoundStmt>> compound_stmt;
 
 %nterm <std::vector<std::unique_ptr<AST::StmtNode>>> block //a list of statements
 
@@ -150,7 +150,7 @@ block:
 |block statement{ $1.push_back(std::move($2));$$=std::move($1);}
 ;
 
-compound_statement: "{" block "}" {$$=std::make_unique<AST::CompoundStmt>(@1,std::move($2));}
+compound_stmt: "{" block "}" {$$=std::make_unique<AST::CompoundStmt>(@1,std::move($2));}
 
 
 function_call: IDENTIFIER "(" expression_list ")" {$$=std::make_unique<AST::FuncCallExp>(@1,std::move($1),std::move($3));}
@@ -172,6 +172,7 @@ statement: var_declaration_stmt {$$=std::move($1);}
 |return_stmt     {$$=std::move($1);}
 |ifelse_stmt     {$$=std::move($1);}
 |while_stmt      {$$=std::move($1);}
+|compound_stmt   {$$=std::move($1);}
 
 var_declaration_stmt: "var" IDENTIFIER "=" expression ";" {$$=std::make_unique<AST::VarDeclarationStmt>(@1,std::move($2),std::move($4));}
 | "var" IDENTIFIER ";"                                    {$$=std::make_unique<AST::VarDeclarationStmt>(@1,std::move($2));}
@@ -184,10 +185,10 @@ return_stmt: "return" expression ";" {$$=std::make_unique<AST::ReturnStmt>(@1,st
 |"return" ";" {$$=std::make_unique<AST::ReturnStmt>(@1);}
 ;
 
-ifelse_stmt: "if" "(" expression ")" compound_statement {$$=std::make_unique<AST::IfElseStmt>(@1,std::move($3),std::move($5));}
-|"if" "(" expression ")" compound_statement "else" compound_statement {$$=std::make_unique<AST::IfElseStmt>(@1,std::move($3),std::move($5),std::move($7));}
+ifelse_stmt: "if" "(" expression ")" compound_stmt{$$=std::make_unique<AST::IfElseStmt>(@1,std::move($3),std::move($5));}
+|"if" "(" expression ")" compound_stmt "else" compound_stmt {$$=std::make_unique<AST::IfElseStmt>(@1,std::move($3),std::move($5),std::move($7));}
 
-while_stmt: "while" "(" expression ")" compound_statement {$$=std::make_unique<AST::WhileStmt>(@1,std::move($3),std::move($5));}
+while_stmt: "while" "(" expression ")" compound_stmt{$$=std::make_unique<AST::WhileStmt>(@1,std::move($3),std::move($5));}
 
 %%
 
