@@ -31,7 +31,7 @@ namespace AST {
             errors.emplace_back("semantic error, return statement outside function",location);
     }
 
-    void ReturnStmt::checkDeclarations(AST::DeclarationStack &stack, std::vector<Error> &errors) const {
+    void ReturnStmt::solveDeclarations(AST::DeclarationStack &stack, std::vector<Error> &errors) {
         if(expression!= nullptr)
             expression->solveVarReferences(stack,errors);
     }

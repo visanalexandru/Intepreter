@@ -30,9 +30,9 @@ namespace AST {
         state.exitLoop();
     }
 
-    void WhileStmt::checkDeclarations(DeclarationStack &stack, std::vector<Error> &errors) const {
+    void WhileStmt::solveDeclarations(DeclarationStack &stack, std::vector<Error> &errors){
         condition->solveVarReferences(stack, errors);
-        body->checkDeclarations(stack,errors);
+        body->solveDeclarations(stack,errors);
     }
 
 }

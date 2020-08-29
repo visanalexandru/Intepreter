@@ -22,13 +22,15 @@ namespace AST {
 
         std::unordered_map<unsigned long, std::unique_ptr<Function>> functions;
 
-        std::vector<std::vector<Value>> scopes;
+        std::vector<std::vector<Value>> stack_frames;
     public:
 
         Context();
 
-        /*Push a variable into the current scope*/
+        /*Push a variable into the current stack frame*/
         void pushVar(const Value &value);
+
+        void popVar();
 
         /*Declare a function */
         void declareFunc(const Symbol &funcsymbol, std::unique_ptr<Function> function);
@@ -42,12 +44,11 @@ namespace AST {
         /*Get a reference to the variable at the location.*/
         Value&getVar(const VariableLocation&location);
 
-        /*Creates a new scope and pushes it to the scope list*/
-        void pushScope();
+        /*Creates a new stack frame and pushes it to the stack frame list*/
+        void pushStackFrame();
 
-        /*Deletes the current scope and removes it from the scope list
-         *Calling this function when there is no scope in the list is undefined*/
-        void popScope();
+        /*Pops the current stack frame*/
+        void popStackFrame();
     };
 
     /*The global context of the interpreted program

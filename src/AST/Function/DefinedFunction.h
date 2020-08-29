@@ -12,9 +12,7 @@
 #include "AST/Symbol.h"
 namespace AST {
     /*This class represents a user-defined function. We should create this class when we reach a function declaration
-     * in the interpreted program.
-     * Whenever this function is called by run(), we create a new scope in the global context, declare each parameter
-     * in the current scope by its parameter id (given by its order) with the values provided.*/
+     * in the interpreted program.*/
     class DefinedFunction : public Function {
     private:
         /*Statements to execute in order. If one statement has returned a value, stop executing and return its return value.*/

@@ -8,7 +8,7 @@
 namespace AST {
 
     DeclarationStack::DeclarationStack() {
-        pushScope();
+        pushStackFrame();
     }
 
     void DeclarationStack::addFunction(const Symbol &func_symbol) {
@@ -21,43 +21,72 @@ namespace AST {
 
 
     bool DeclarationStack::variableInCurrentScope(const Symbol &var_symbol) const {
-        const auto &current_scope = variable_declarations_scopes.back();
+        const auto &current_stack_frame = stack_frames.back();
 
-        for (const VariableDeclaration &declaration :current_scope)
-            if (declaration.variable_symbol.symbol_id == var_symbol.symbol_id)
+        for (const VariableDeclaration &declaration :current_stack_frame.declarations)
+            if (declaration.variable_symbol.symbol_id == var_symbol.symbol_id &&
+                declaration.scope_depth == current_stack_frame.scope_depth)
                 return true;
         return false;
     }
 
     bool DeclarationStack::getVariableLocation(const Symbol &var_symbol, VariableLocation &location) const {
-        unsigned long scope_offset=0;
-        for (auto iter = variable_declarations_scopes.rbegin(); iter != variable_declarations_scopes.rend(); iter++) {
-            const std::vector<VariableDeclaration> &scope = *iter;
+        const auto &current_stack_frame = stack_frames.back().declarations;
 
-            for (auto decl = scope.begin(); decl != scope.end(); decl++) {
-                if (decl->variable_symbol.symbol_id == var_symbol.symbol_id) {
-                    unsigned long index = decl - scope.begin();
-                    location = {index,scope_offset,decl->is_local};
+        for (auto iter = current_stack_frame.rbegin(); iter != current_stack_frame.rend(); iter++) {
+            if (iter->variable_symbol.symbol_id == var_symbol.symbol_id) {
+                unsigned long index = current_stack_frame.rend() - iter-1;
+                location = {index, true};
+                return true;
+            }
+        }
+        if (stack_frames.size() > 1) {//This is not the global stack frame
+            /*We didn't find the declaration in the current stack frame, search for globals;*/
+            const auto &global_stack_frame = stack_frames[0].declarations;
+            for (auto iter = global_stack_frame.rbegin(); iter != global_stack_frame.rend(); iter++) {
+                if (iter->variable_symbol.symbol_id == var_symbol.symbol_id) {
+                    unsigned long index = global_stack_frame.rend() - iter-1;
+                    location = {index, false};
                     return true;
                 }
             }
-            scope_offset++;
         }
         return false;
     }
 
     void DeclarationStack::addVariable(const Symbol &var_symbol) {
-        std::vector<VariableDeclaration>&current_scope = variable_declarations_scopes.back();
-        VariableDeclaration declaration{var_symbol, variable_declarations_scopes.size() > 1};
-        current_scope.push_back(declaration);
+        stack_frames.back().declarations.emplace_back(var_symbol, stack_frames.back().scope_depth);
     }
 
     void DeclarationStack::pushScope() {
-        variable_declarations_scopes.emplace_back();
+        stack_frames.back().scope_depth++;
     }
 
     void DeclarationStack::popScope() {
-        variable_declarations_scopes.pop_back();
+        unsigned long depth = stack_frames.back().scope_depth;
+        auto&current_stack_frame=stack_frames.back().declarations;
+        while (!current_stack_frame.empty()&&current_stack_frame.back().scope_depth==depth){
+            current_stack_frame.pop_back();
+        }
+        stack_frames.back().scope_depth--;
     }
 
+    unsigned long DeclarationStack::variablesInScope() const {
+        unsigned long result=0;
+        unsigned long depth = stack_frames.back().scope_depth;
+        auto&current_stack_frame=stack_frames.back().declarations;
+        for(const VariableDeclaration&declaration:current_stack_frame){
+            if(declaration.scope_depth==depth)
+                result++;
+        }
+        return result;
+    }
+
+    void DeclarationStack::pushStackFrame() {
+        stack_frames.emplace_back();
+    }
+
+    void DeclarationStack::popStackFrame() {
+        stack_frames.pop_back();
+    }
 }

@@ -14,6 +14,8 @@ namespace AST{
     private:
         std::vector<std::unique_ptr<StmtNode>> statements;
 
+        unsigned long to_pop;/*The number of declarations in the block scope*/
+
     public:
         CompoundStmt(yy::location loc, std::vector<std::unique_ptr<StmtNode>> stmts);
 
@@ -21,7 +23,7 @@ namespace AST{
 
         void checkControlFlow(FlowState&state,std::vector<Error>&errors) const override;
 
-        void checkDeclarations(DeclarationStack&stack,std::vector<Error>&errors) const override;
+        void solveDeclarations(DeclarationStack&stack,std::vector<Error>&errors) override;
 
         /*Used to inject statements, like variable declarations in functions.*/
         std::vector<std::unique_ptr<StmtNode>>& getStatements();

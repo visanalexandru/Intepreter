@@ -30,7 +30,7 @@ namespace AST {
         /*Throws exception if the return statement is out of a function declaration*/
         void checkControlFlow(FlowState&state,std::vector<Error>&errors) const override;
 
-        void checkDeclarations(DeclarationStack&stack,std::vector<Error>&errors) const override;
+        void solveDeclarations(DeclarationStack&stack,std::vector<Error>&errors) override;
     };
 
 }

@@ -12,7 +12,7 @@ namespace AST {
     }
 
     Value DefinedFunction::execute(const std::vector<Value> &parameters) const {
-        globalContext.pushScope();
+        globalContext.pushStackFrame();
         for(const Value&param:parameters){
             globalContext.pushVar(param);
         }
@@ -25,7 +25,7 @@ namespace AST {
                 break;
             }
         }
-        globalContext.popScope();
+        globalContext.popStackFrame();
 
         return to_return;
     }

@@ -25,13 +25,13 @@ namespace AST {
         state.exitFunction();
     }
 
-    void FuncDeclarationStmt::checkDeclarations(AST::DeclarationStack &stack, std::vector<Error> &errors) const {
+    void FuncDeclarationStmt::solveDeclarations(AST::DeclarationStack &stack, std::vector<Error> &errors) {
         if(stack.functionExists(symbol))
             errors.emplace_back("semantic error, duplicate declaration of function "+symbol.symbol_name,location);
         else stack.addFunction(symbol);
 
         /*Solve variable references in the function*/
-        stack.pushScope();
+        stack.pushStackFrame();
         for(const Symbol&sym:parameter_symbols){
             if(stack.variableInCurrentScope(sym))
                 errors.emplace_back("semantic error, duplicate declaration of the parameter "+sym.symbol_name,location);
@@ -39,8 +39,8 @@ namespace AST {
         }
 
         for(const auto&stmt:function->getStatements())
-            stmt->checkDeclarations(stack,errors);
-        stack.popScope();
+            stmt->solveDeclarations(stack,errors);
+        stack.popStackFrame();
     }
 
 

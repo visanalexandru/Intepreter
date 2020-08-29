@@ -38,11 +38,11 @@ namespace AST {
             elsebranch->checkControlFlow(state, errors);
     }
 
-    void IfElseStmt::checkDeclarations(AST::DeclarationStack &stack, std::vector<Error> &errors) const {
+    void IfElseStmt::solveDeclarations(AST::DeclarationStack &stack, std::vector<Error> &errors) {
         condition->solveVarReferences(stack, errors);
-        ifbranch->checkDeclarations(stack, errors);
+        ifbranch->solveDeclarations(stack, errors);
         if (elsebranch != nullptr)
-            elsebranch->checkDeclarations(stack, errors);
+            elsebranch->solveDeclarations(stack, errors);
     }
 
 

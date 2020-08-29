@@ -7,14 +7,13 @@
 namespace AST {
 
     CompoundStmt::CompoundStmt(yy::location loc, std::vector<std::unique_ptr<StmtNode>> stmts) :
-            StmtNode(loc), statements(std::move(stmts)) {
+            StmtNode(loc), statements(std::move(stmts)),to_pop(0) {
 
 
     }
 
     void CompoundStmt::execute() {
         resetReturnValue();
-        globalContext.pushScope();
         for(const auto&stmt:statements){
             stmt->execute();
             if(stmt->hasReturned()){
@@ -22,7 +21,8 @@ namespace AST {
                 break;
             }
         }
-        globalContext.popScope();
+        for(unsigned i=0;i<to_pop;i++)
+            globalContext.popVar();
     }
 
     void CompoundStmt::checkControlFlow(FlowState &state, std::vector<Error> &errors) const {
@@ -31,11 +31,12 @@ namespace AST {
         }
     }
 
-    void CompoundStmt::checkDeclarations(DeclarationStack &stack, std::vector<Error> &errors) const {
+    void CompoundStmt::solveDeclarations(DeclarationStack &stack, std::vector<Error> &errors) {
         stack.pushScope();
         for(const auto&stmt:statements){
-            stmt->checkDeclarations(stack,errors);
+            stmt->solveDeclarations(stack,errors);
         }
+        to_pop=stack.variablesInScope();
         stack.popScope();
     }
 
