@@ -45,7 +45,7 @@ void Driver::semanticAnalysis() {
         stmt->checkControlFlow(state, errors);
 
     for(const auto&stmt:result)
-        stmt->checkDeclarations(declaration_stack,errors);
+        stmt->solveDeclarations(declaration_stack,errors);
 }
 
 

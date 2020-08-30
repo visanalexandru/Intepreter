@@ -28,7 +28,7 @@ namespace AST {
         }
     }
 
-    void VarDeclarationStmt::checkDeclarations(AST::DeclarationStack &stack, std::vector<Error> &errors) const {
+    void VarDeclarationStmt::solveDeclarations(AST::DeclarationStack &stack, std::vector<Error> &errors) {
         if(value!= nullptr)
             value->solveVarReferences(stack,errors);
 

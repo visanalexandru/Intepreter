@@ -6,48 +6,33 @@
 
 namespace AST {
 
-    WhileStmt::WhileStmt(yy::location loc, std::unique_ptr<ExpNode> cond,
-                         std::vector<std::unique_ptr<StmtNode>> statements) :
-            StmtNode(loc), block(std::move(statements)), condition(std::move(cond)) {
-
+    WhileStmt::WhileStmt(yy::location loc, std::unique_ptr<ExpNode> cond, std::unique_ptr<CompoundStmt> stmts)
+            : StmtNode(loc),
+              condition(std::move(cond)),
+              body(std::move(stmts)) {
 
     }
 
-
     void WhileStmt::execute() {
         resetReturnValue();
-        bool should_stop;
         while (condition->evaluate().asBool()) {
-            should_stop=false;
-            globalContext.pushScope();
-            for (const auto &stmt:block) {
-                stmt->execute();
-                if (stmt->hasReturned()) {
-                    setReturnValue(stmt->getReturnValue());
-                    should_stop= true;
-                    break;
-                }
-            }
-
-            globalContext.popScope();
-            if(should_stop)
+            body->execute();
+            if(body->hasReturned()){
+                setReturnValue(body->getReturnValue());
                 break;
-        }
+            }
+       }
     }
 
     void WhileStmt::checkControlFlow(FlowState &state, std::vector<Error> &errors) const {
         state.enterLoop();
-        for(const auto&stmt:block)
-            stmt->checkControlFlow(state,errors);
+        body->checkControlFlow(state,errors);
         state.exitLoop();
     }
 
-    void WhileStmt::checkDeclarations(DeclarationStack &stack, std::vector<Error> &errors) const {
-        condition->solveVarReferences(stack,errors);
-        stack.pushScope();
-        for(const auto&stmt:block)
-            stmt->checkDeclarations(stack,errors);
-        stack.popScope();
+    void WhileStmt::solveDeclarations(DeclarationStack &stack, std::vector<Error> &errors){
+        condition->solveVarReferences(stack, errors);
+        body->solveDeclarations(stack,errors);
     }
 
     void WhileStmt::emitBytecode(VM::VirtualMachine &vm) const {

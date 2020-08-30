@@ -49,8 +49,8 @@ namespace AST {
         virtual void checkControlFlow(FlowState&state,std::vector<Error>&errors) const =0;
 
 
-        /*Report duplicate declarations of functions/variables etc.*/
-        virtual void checkDeclarations(DeclarationStack&stack,std::vector<Error>&error) const=0;
+        /*Report duplicate declarations of functions/variables , solve variable references.*/
+        virtual void solveDeclarations(DeclarationStack&stack,std::vector<Error>&error)=0;
 
         virtual void emitBytecode(VM::VirtualMachine&vm) const=0;
 

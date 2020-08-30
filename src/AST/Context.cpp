@@ -7,7 +7,7 @@
 namespace AST {
     Context globalContext;
     Context::Context() {
-        pushScope();
+        pushStackFrame();
     }
 
     bool Context::isFuncDeclared(const Symbol&funcsymbol) {
@@ -25,23 +25,27 @@ namespace AST {
     }
 
     void Context::pushVar(const AST::Value &value) {
-        scopes.back().push_back(value);
+        stack_frames.back().push_back(value);
+    }
+
+    void Context::popVar() {
+        stack_frames.back().pop_back();
     }
 
     Value& Context::getVar(const AST::VariableLocation &location) {
         if(location.is_local){
-            return scopes[scopes.size()-location.stack_offset-1][location.location_in_stack];
+            return stack_frames.back()[location.location_in_stack];
         }
         else{
-            return scopes[0][location.location_in_stack];
+            return stack_frames.front()[location.location_in_stack];
         }
     }
 
-    void Context::pushScope() {
-        scopes.emplace_back();
+    void Context::pushStackFrame() {
+        stack_frames.emplace_back();
     }
 
-    void Context::popScope() {
-        scopes.pop_back();
+    void Context::popStackFrame() {
+        stack_frames.pop_back();
     }
 }
