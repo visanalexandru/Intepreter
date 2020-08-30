@@ -14,6 +14,15 @@ namespace VM {
 
     class VirtualMachine {
     private:
+
+        struct CallFrame{
+            std::vector<uint8_t> bytecode;
+
+            unsigned bytecode_location;
+
+            std::vector<AST::Value> locals;
+        };
+
         /*The bytecode of the program*/
         std::vector<uint8_t> bytecode;
 
@@ -38,7 +47,14 @@ namespace VM {
         /*Returns a reference to the value int the global stack frame*/
         AST::Value& getGlobalValue(unsigned index);
 
+        /*Push a value on the current stack frame*/
         void pushValue(const AST::Value&value);
+
+        /*Creates a new stack frame,used when calling functions*/
+        void pushStackFrame();
+
+        /*Removes the current stack frame, used when returning from functions*/
+        void popStackFrame();
 
     public:
         VirtualMachine();

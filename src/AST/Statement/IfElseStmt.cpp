@@ -46,7 +46,21 @@ namespace AST {
     }
 
     void IfElseStmt::emitBytecode(VM::VirtualMachine &vm) const {
+        condition->emitBytecode(vm);
+        vm.pushOpcode(VM::Opcode::JUMP_IF_FALSE);//jump to the else statement if the condition is false
+        unsigned jump_to_else_branch=vm.getBytecodeSize();
+        vm.pushUInt(0);
 
+        ifbranch->emitBytecode(vm);
+        vm.pushOpcode(VM::Opcode::JUMP);//jump to the end
+        unsigned jump_to_end=vm.getBytecodeSize();
+        vm.pushUInt(0);
+
+
+        vm.patchUInt(vm.getBytecodeSize(),jump_to_else_branch);
+        if(elsebranch!= nullptr)
+            elsebranch->emitBytecode(vm);
+        vm.patchUInt(vm.getBytecodeSize(),jump_to_end);
     }
 
 

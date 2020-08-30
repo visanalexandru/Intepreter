@@ -26,6 +26,7 @@ namespace VM {
         FUNCTION_CALL,
         JUMP_IF_FALSE,
         JUMP_IF_TRUE,
+        JUMP,
         POP,
         LOAD_LOCAL,
         LOAD_GLOBAL,

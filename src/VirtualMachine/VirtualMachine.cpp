@@ -8,7 +8,15 @@
 namespace VM {
 
     VirtualMachine::VirtualMachine() : bytecode_location(0) {
+        pushStackFrame();
+    }
+
+    void VirtualMachine::pushStackFrame() {
         stack_frames.emplace_back();
+    }
+
+    void VirtualMachine::popStackFrame() {
+        stack_frames.pop_back();
     }
 
     AST::Value VirtualMachine::popValue() {
@@ -90,6 +98,9 @@ namespace VM {
                 }
                 break;
             }
+            case Opcode::JUMP:
+                bytecode_location=readUInt();
+                break;
             case Opcode::POP:
                 popValue();
                 break;
@@ -203,6 +214,9 @@ namespace VM {
                     break;
                 case Opcode::JUMP_IF_TRUE:
                     std::cout << "JUMP_IF_TRUE " << readUInt() << std::endl;
+                    break;
+                case Opcode::JUMP:
+                    std::cout<<"JUMP "<<readUInt()<<std::endl;
                     break;
                 case Opcode::POP:
                     std::cout << "POP" << std::endl;
