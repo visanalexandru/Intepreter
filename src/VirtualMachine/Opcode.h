@@ -27,6 +27,10 @@ namespace VM {
         JUMP_IF_FALSE,
         JUMP_IF_TRUE,
         POP,
+        LOAD_LOCAL,
+        LOAD_GLOBAL,
+        ASSIGN_LOCAL,
+        ASSIGN_GLOBAL
     };
 
 }

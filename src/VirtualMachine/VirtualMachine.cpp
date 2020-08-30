@@ -8,76 +8,110 @@
 namespace VM {
 
     VirtualMachine::VirtualMachine() : bytecode_location(0) {
-
-
+        stack_frames.emplace_back();
     }
 
     AST::Value VirtualMachine::popValue() {
-        AST::Value to_return = value_stack.top();
-        value_stack.pop();
+        AST::Value to_return = stack_frames.back().back();
+        stack_frames.back().pop_back();
         return to_return;
+    }
+
+    void VirtualMachine::pushValue(const AST::Value&value) {
+        stack_frames.back().push_back(value);
+    }
+
+    AST::Value VirtualMachine::topOfStack() const {
+        return stack_frames.back().back();
+    }
+
+    AST::Value& VirtualMachine::getLocalValue(unsigned int index){
+        return stack_frames.back()[index];
+    }
+
+    AST::Value& VirtualMachine::getGlobalValue(unsigned int index){
+        return stack_frames.front()[index];
     }
 
     void VirtualMachine::executeOpcode(Opcode opcode) {
         switch (opcode) {
             case Opcode::LOAD_LITERAL:
-                value_stack.push(literals[readUInt()]);
+                pushValue(literals[readUInt()]);
                 break;
             case Opcode::BINARY_ADD:
-                value_stack.push(popValue() + popValue());
+                pushValue(popValue()+popValue());
                 break;
             case Opcode::BINARY_SUBTRACT:
-                value_stack.push(popValue() - popValue());
+                pushValue(popValue()-popValue());
                 break;
             case Opcode::BINARY_MULTIPLY:
-                value_stack.push(popValue() * popValue());
+                pushValue(popValue() * popValue());
                 break;
             case Opcode::BINARY_DIVIDE:
-                value_stack.push(popValue() / popValue());
+                pushValue(popValue() / popValue());
                 break;
             case Opcode::BINARY_EQUAL:
-                value_stack.push(popValue() == popValue());
+                pushValue(popValue() == popValue());
                 break;
             case Opcode::BINARY_NEQUAL:
-                value_stack.push(popValue() != popValue());
+                pushValue(popValue() != popValue());
                 break;
             case Opcode::BINARY_LESS:
-                value_stack.push(popValue() < popValue());
+                pushValue(popValue() < popValue());
                 break;
             case Opcode::BINARY_LESSEQ:
-                value_stack.push(popValue() <= popValue());
+                pushValue(popValue() <= popValue());
                 break;
             case Opcode::BINARY_GREATER:
-                value_stack.push(popValue() > popValue());
+                pushValue(popValue() > popValue());
                 break;
             case Opcode::BINARY_GREATEREQ:
-                value_stack.push(popValue() >= popValue());
+                pushValue(popValue() >= popValue());
                 break;
             case Opcode::BINARY_MODULUS:
-                value_stack.push(popValue() % popValue());
+                pushValue(popValue() % popValue());
                 break;
             case Opcode::UNARY_MINUS:
-                value_stack.push(-popValue());
+                pushValue(-popValue());
                 break;
             case Opcode::UNARY_NOT:
-                value_stack.push(AST::Value(!popValue().toBoolObj().asBool()));
+                pushValue(AST::Value(!popValue().toBoolObj().asBool()));
                 break;
             case Opcode::JUMP_IF_TRUE: {
                 unsigned to_jump = readUInt();
-                if (value_stack.top().asBool())
+                if (topOfStack().asBool())
                     bytecode_location = to_jump;
                 break;
             }
             case Opcode::JUMP_IF_FALSE: {
                 unsigned to_jump = readUInt();
-                if (!value_stack.top().asBool()) {
+                if (!topOfStack().asBool()) {
                     bytecode_location = to_jump;
                 }
                 break;
             }
             case Opcode::POP:
-                value_stack.pop();
+                popValue();
                 break;
+            case Opcode::LOAD_LOCAL:
+                pushValue(getLocalValue(readUInt()));
+                break;
+            case Opcode::LOAD_GLOBAL:
+                pushValue(getGlobalValue(readUInt()));
+                break;
+            case Opcode::ASSIGN_LOCAL:{
+                AST::Value to_assign=popValue();
+                AST::Value&ref=getLocalValue(readUInt());
+                pushValue(ref=to_assign);
+                break;
+            }
+
+            case Opcode::ASSIGN_GLOBAL:{
+                AST::Value to_assign=popValue();
+                AST::Value&ref=getGlobalValue(readUInt());
+                pushValue(ref=to_assign);
+                break;
+            }
         }
     }
 
@@ -182,6 +216,17 @@ namespace VM {
                 case Opcode::UNARY_MINUS:
                     std::cout<<"UNARY_MINUS"<<std::endl;
                     break;
+                case Opcode::LOAD_LOCAL:
+                    std::cout<<"LOAD_LOCAL "<<readUInt()<<std::endl;
+                    break;
+                case Opcode::LOAD_GLOBAL:
+                    std::cout<<"LOAD_GLOBAL "<<readUInt()<<std::endl;
+                    break;
+                case Opcode::ASSIGN_LOCAL:
+                    std::cout<<"ASSIGN_LOCAL "<<readUInt()<<std::endl;
+                    break;
+                case Opcode::ASSIGN_GLOBAL:
+                    std::cout<<"ASSIGN_GLOBAL "<<readUInt()<<std::endl;
                 default:
                     std::cout << "UNKNOWN" << std::endl;
                     break;
@@ -193,9 +238,11 @@ namespace VM {
         bytecode_location = 0;
         while (bytecode_location < bytecode.size()) {
             executeOpcode((Opcode) bytecode[bytecode_location++]);
+            std::cout<<"stack: {";
+            for(const AST::Value&value:stack_frames.back())
+                std::cout<<value.toString()<<",";
+            std::cout<<"}"<<std::endl;
         }
-        std::cout<<value_stack.size()<<std::endl;
-        std::cout << "TOP OF STACK " << value_stack.top().toString() << std::endl;
     }
 
 }

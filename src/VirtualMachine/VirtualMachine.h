@@ -6,7 +6,6 @@
 #define INTERPRETER_VIRTUALMACHINE_H
 
 #include<vector>
-#include<stack>
 #include "AST/Value/Value.h"
 #include "Opcode.h"
 #include<iostream>
@@ -21,13 +20,25 @@ namespace VM {
         /*Constants.*/
         std::vector<AST::Value> literals;
 
-        /*The value stack.*/
-        std::stack<AST::Value> value_stack;
+        /*The list of stack frames*/
+        std::vector<std::vector<AST::Value>> stack_frames;
 
         /*The location of the execution*/
         unsigned bytecode_location;
 
+        /*Pops the top of stack value of the current stack frame*/
         AST::Value popValue();
+
+        /*Returns the top of stack value for the current stack frame*/
+        AST::Value topOfStack() const;
+
+        /*Returns a reference to the value in the current stack frame*/
+        AST::Value& getLocalValue(unsigned index);
+
+        /*Returns a reference to the value int the global stack frame*/
+        AST::Value& getGlobalValue(unsigned index);
+
+        void pushValue(const AST::Value&value);
 
     public:
         VirtualMachine();

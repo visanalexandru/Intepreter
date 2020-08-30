@@ -25,6 +25,8 @@ namespace AST{
 
         void solveDeclarations(DeclarationStack&stack,std::vector<Error>&errors) override;
 
+        void emitBytecode(VM::VirtualMachine&vm) const override;
+
         /*Used to inject statements, like variable declarations in functions.*/
         std::vector<std::unique_ptr<StmtNode>>& getStatements();
 

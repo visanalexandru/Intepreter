@@ -43,4 +43,13 @@ namespace AST {
     std::vector<std::unique_ptr<StmtNode>> & CompoundStmt::getStatements() {
         return statements;
     }
+
+    void CompoundStmt::emitBytecode(VM::VirtualMachine &vm) const {
+        for(const auto&stmt:statements){
+            stmt->emitBytecode(vm);
+        }
+        for(int i=0;i<to_pop;i++){
+            vm.pushOpcode(VM::Opcode::POP);
+        }
+    }
 }

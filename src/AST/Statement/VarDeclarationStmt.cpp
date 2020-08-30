@@ -38,6 +38,14 @@ namespace AST {
     }
 
     void VarDeclarationStmt::emitBytecode(VM::VirtualMachine &vm) const {
-
+        if(value!= nullptr){
+            value->emitBytecode(vm);
+        }
+        else{
+            unsigned literal_count=vm.getLiteralCount();
+            vm.pushLiteral(Value());
+            vm.pushOpcode(VM::Opcode::LOAD_LITERAL);
+            vm.pushUInt(literal_count);
+        }
     }
 }
