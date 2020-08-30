@@ -36,6 +36,20 @@ namespace AST {
     }
 
     void WhileStmt::emitBytecode(VM::VirtualMachine &vm) const {
+        unsigned begin=vm.getBytecodeSize();
+        condition->emitBytecode(vm);
+        vm.pushOpcode(VM::Opcode::JUMP_IF_FALSE);
+        unsigned body_begin=vm.getBytecodeSize();
+        vm.pushUInt(0);
+
+        vm.pushOpcode(VM::Opcode::POP);
+
+        body->emitBytecode(vm);
+        vm.pushOpcode(VM::Opcode::JUMP);
+        vm.pushUInt(begin);
+
+        vm.patchUInt(vm.getBytecodeSize(),body_begin);
+        vm.pushOpcode(VM::Opcode::POP);
 
     }
 
