@@ -51,6 +51,7 @@ namespace AST {
         unsigned jump_to_else_branch=vm.getBytecodeSize();
         vm.pushUInt(0);
 
+        vm.pushOpcode(VM::Opcode::POP);
         ifbranch->emitBytecode(vm);
         vm.pushOpcode(VM::Opcode::JUMP);//jump to the end
         unsigned jump_to_end=vm.getBytecodeSize();
@@ -58,6 +59,7 @@ namespace AST {
 
 
         vm.patchUInt(vm.getBytecodeSize(),jump_to_else_branch);
+        vm.pushOpcode(VM::Opcode::POP);
         if(elsebranch!= nullptr)
             elsebranch->emitBytecode(vm);
         vm.patchUInt(vm.getBytecodeSize(),jump_to_end);
