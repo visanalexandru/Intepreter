@@ -31,18 +31,18 @@ namespace AST {
             assign->solveVarReferences(stack,errors);
     }
 
-    void VariableExp::emitBytecode(VM::VirtualMachine &vm) const {
+    void VariableExp::emitBytecode(VM::VirtualMachine &vm,VM::BytecodeChunk&chunk) const {
         if (assign != nullptr) {
-            assign->emitBytecode(vm);
+            assign->emitBytecode(vm,chunk);
             if (var_location.is_local)
-                vm.pushOpcode(VM::Opcode::ASSIGN_LOCAL);
-            else vm.pushOpcode(VM::Opcode::ASSIGN_GLOBAL);
+                chunk.pushOpcode(VM::Opcode::ASSIGN_LOCAL);
+            else chunk.pushOpcode(VM::Opcode::ASSIGN_GLOBAL);
 
         } else {
             if (var_location.is_local)
-                vm.pushOpcode(VM::Opcode::LOAD_LOCAL);
-            else vm.pushOpcode(VM::Opcode::LOAD_GLOBAL);
+                chunk.pushOpcode(VM::Opcode::LOAD_LOCAL);
+            else chunk.pushOpcode(VM::Opcode::LOAD_GLOBAL);
         }
-        vm.pushUInt(var_location.location_in_stack);
+        chunk.pushUInt(var_location.location_in_stack);
     }
 }

@@ -31,7 +31,7 @@ namespace AST {
 
         void solveVarReferences(AST::DeclarationStack &stack, std::vector<Error> &errors) override;
 
-        void emitBytecode(VM::VirtualMachine&vm) const override;
+        void emitBytecode(VM::VirtualMachine&vm,VM::BytecodeChunk&chunk) const override;
     };
 }
 

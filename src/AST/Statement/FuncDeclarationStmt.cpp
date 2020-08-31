@@ -43,7 +43,7 @@ namespace AST {
         stack.popStackFrame();
     }
 
-    void FuncDeclarationStmt::emitBytecode(VM::VirtualMachine &vm) const {
+    void FuncDeclarationStmt::emitBytecode(VM::VirtualMachine &vm,VM::BytecodeChunk&chunk) const {
 
     }
 

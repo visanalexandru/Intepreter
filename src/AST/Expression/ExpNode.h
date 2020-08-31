@@ -30,7 +30,7 @@ namespace AST {
 
         virtual void solveVarReferences(DeclarationStack&stack,std::vector<Error>&errors)=0 ;
 
-        virtual void emitBytecode(VM::VirtualMachine&vm) const =0;
+        virtual void emitBytecode(VM::VirtualMachine&vm,VM::BytecodeChunk&chunk) const =0;
     };
 }
 

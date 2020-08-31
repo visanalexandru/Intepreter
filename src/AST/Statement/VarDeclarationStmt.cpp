@@ -37,15 +37,15 @@ namespace AST {
         else stack.addVariable(symbol);
     }
 
-    void VarDeclarationStmt::emitBytecode(VM::VirtualMachine &vm) const {
+    void VarDeclarationStmt::emitBytecode(VM::VirtualMachine &vm,VM::BytecodeChunk&chunk) const {
         if(value!= nullptr){
-            value->emitBytecode(vm);
+            value->emitBytecode(vm,chunk);
         }
         else{
             unsigned literal_count=vm.getLiteralCount();
             vm.pushLiteral(Value());
-            vm.pushOpcode(VM::Opcode::LOAD_LITERAL);
-            vm.pushUInt(literal_count);
+            chunk.pushOpcode(VM::Opcode::LOAD_LITERAL);
+            chunk.pushUInt(literal_count);
         }
     }
 }

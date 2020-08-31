@@ -25,14 +25,14 @@ namespace AST {
         exp->solveVarReferences(stack,errors);
     }
 
-    void UnaryOpExp::emitBytecode(VM::VirtualMachine &vm) const {
-        exp->emitBytecode(vm);
+    void UnaryOpExp::emitBytecode(VM::VirtualMachine &vm,VM::BytecodeChunk&chunk) const {
+        exp->emitBytecode(vm,chunk);
         switch (type) {
             case UnaryOperator::Minus:
-                vm.pushOpcode(VM::Opcode::UNARY_MINUS);
+                chunk.pushOpcode(VM::Opcode::UNARY_MINUS);
                 break;
             case UnaryOperator::Not:
-                vm.pushOpcode(VM::Opcode::UNARY_NOT);
+                chunk.pushOpcode(VM::Opcode::UNARY_NOT);
                 break;
         }
     }

@@ -14,10 +14,10 @@ namespace AST {
         return value;
     }
 
-    void LiteralExp::emitBytecode(VM::VirtualMachine &vm) const {
+    void LiteralExp::emitBytecode(VM::VirtualMachine &vm,VM::BytecodeChunk&chunk) const {
         unsigned index=vm.getLiteralCount();
         vm.pushLiteral(value);
-        vm.pushOpcode(VM::Opcode::LOAD_LITERAL);
-        vm.pushUInt(index);
+        chunk.pushOpcode(VM::Opcode::LOAD_LITERAL);
+        chunk.pushUInt(index);
     }
 }

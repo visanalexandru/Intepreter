@@ -35,21 +35,21 @@ namespace AST {
         body->solveDeclarations(stack,errors);
     }
 
-    void WhileStmt::emitBytecode(VM::VirtualMachine &vm) const {
-        unsigned begin=vm.getBytecodeSize();
-        condition->emitBytecode(vm);
-        vm.pushOpcode(VM::Opcode::JUMP_IF_FALSE);
-        unsigned body_begin=vm.getBytecodeSize();
-        vm.pushUInt(0);
+    void WhileStmt::emitBytecode(VM::VirtualMachine &vm,VM::BytecodeChunk&chunk) const {
+        unsigned begin=chunk.getBytecodeSize();
+        condition->emitBytecode(vm,chunk);
+        chunk.pushOpcode(VM::Opcode::JUMP_IF_FALSE);
+        unsigned body_begin=chunk.getBytecodeSize();
+        chunk.pushUInt(0);
 
-        vm.pushOpcode(VM::Opcode::POP);
+        chunk.pushOpcode(VM::Opcode::POP);
 
-        body->emitBytecode(vm);
-        vm.pushOpcode(VM::Opcode::JUMP);
-        vm.pushUInt(begin);
+        body->emitBytecode(vm,chunk);
+        chunk.pushOpcode(VM::Opcode::JUMP);
+        chunk.pushUInt(begin);
 
-        vm.patchUInt(vm.getBytecodeSize(),body_begin);
-        vm.pushOpcode(VM::Opcode::POP);
+        chunk.patchUInt(chunk.getBytecodeSize(),body_begin);
+        chunk.pushOpcode(VM::Opcode::POP);
 
     }
 

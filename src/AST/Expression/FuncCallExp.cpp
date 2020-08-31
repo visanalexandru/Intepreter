@@ -29,12 +29,12 @@ namespace AST {
             exp->solveVarReferences(stack,errors);
     }
 
-    void FuncCallExp::emitBytecode(VM::VirtualMachine &vm) const {
+    void FuncCallExp::emitBytecode(VM::VirtualMachine &vm,VM::BytecodeChunk&chunk) const {
         for(const auto&exp:parameters)
-            exp->emitBytecode(vm);
+            exp->emitBytecode(vm,chunk);
 
-        vm.pushOpcode(VM::Opcode::FUNCTION_CALL);
-        vm.pushUInt(parameters.size());
+        chunk.pushOpcode(VM::Opcode::FUNCTION_CALL);
+        chunk.pushUInt(parameters.size());
 
     }
 

@@ -8,6 +8,7 @@
 #include<vector>
 #include "AST/Value/Value.h"
 #include "Opcode.h"
+#include "BytecodeChunk.h"
 #include<iostream>
 
 namespace VM {
@@ -23,8 +24,7 @@ namespace VM {
             std::vector<AST::Value> locals;
         };
 
-        /*The bytecode of the program*/
-        std::vector<uint8_t> bytecode;
+        BytecodeChunk bytecode;
 
         /*Constants.*/
         std::vector<AST::Value> literals;
@@ -32,8 +32,6 @@ namespace VM {
         /*The list of stack frames*/
         std::vector<std::vector<AST::Value>> stack_frames;
 
-        /*The location of the execution*/
-        unsigned bytecode_location;
 
         /*Pops the top of stack value of the current stack frame*/
         AST::Value popValue();
@@ -59,23 +57,15 @@ namespace VM {
     public:
         VirtualMachine();
 
-        unsigned getBytecodeSize() const;
-
-        void pushOpcode(Opcode opcode);
-
         void pushLiteral(const AST::Value&literal);
 
         unsigned getLiteralCount() const;
 
-        void pushUInt(uint32_t to_push);
-
-        void patchUInt(uint32_t to_patch,unsigned index);
-
-        uint32_t readUInt();
-
         void executeOpcode(Opcode opcode);
 
         void disassemble();
+
+        BytecodeChunk&getChunk();
 
         void run();
 

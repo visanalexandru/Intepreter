@@ -21,8 +21,8 @@ namespace AST {
         exp->solveVarReferences(stack,errors);
     }
 
-    void ExpressionStmt::emitBytecode(VM::VirtualMachine &vm) const {
-        exp->emitBytecode(vm);
-        vm.pushOpcode(VM::Opcode::POP);
+    void ExpressionStmt::emitBytecode(VM::VirtualMachine &vm,VM::BytecodeChunk&chunk) const {
+        exp->emitBytecode(vm,chunk);
+        chunk.pushOpcode(VM::Opcode::POP);
     }
 }

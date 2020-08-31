@@ -49,94 +49,94 @@ namespace AST {
         right->solveVarReferences(stack, errors);
     }
 
-    void BinaryOpExp::emitBytecode(VM::VirtualMachine &vm) const {
+    void BinaryOpExp::emitBytecode(VM::VirtualMachine &vm,VM::BytecodeChunk&chunk) const {
 
 
         switch (type) {
             case BinaryOperator::Add:
-                left->emitBytecode(vm);
-                right->emitBytecode(vm);
-                vm.pushOpcode(VM::Opcode::BINARY_ADD);
+                left->emitBytecode(vm,chunk);
+                right->emitBytecode(vm,chunk);
+                chunk.pushOpcode(VM::Opcode::BINARY_ADD);
                 break;
             case BinaryOperator::Subtract:
-                left->emitBytecode(vm);
-                right->emitBytecode(vm);
-                vm.pushOpcode(VM::Opcode::BINARY_SUBTRACT);
+                left->emitBytecode(vm,chunk);
+                right->emitBytecode(vm,chunk);
+                chunk.pushOpcode(VM::Opcode::BINARY_SUBTRACT);
                 break;
             case BinaryOperator::Multiply:
-                left->emitBytecode(vm);
-                right->emitBytecode(vm);
-                vm.pushOpcode(VM::Opcode::BINARY_MULTIPLY);
+                left->emitBytecode(vm,chunk);
+                right->emitBytecode(vm,chunk);
+                chunk.pushOpcode(VM::Opcode::BINARY_MULTIPLY);
                 break;
             case BinaryOperator::Divide:
-                left->emitBytecode(vm);
-                right->emitBytecode(vm);
-                vm.pushOpcode(VM::Opcode::BINARY_DIVIDE);
+                left->emitBytecode(vm,chunk);
+                right->emitBytecode(vm,chunk);
+                chunk.pushOpcode(VM::Opcode::BINARY_DIVIDE);
                 break;
             case BinaryOperator::Equal:
-                left->emitBytecode(vm);
-                right->emitBytecode(vm);
-                vm.pushOpcode(VM::Opcode::BINARY_EQUAL);
+                left->emitBytecode(vm,chunk);
+                right->emitBytecode(vm,chunk);
+                chunk.pushOpcode(VM::Opcode::BINARY_EQUAL);
                 break;
             case BinaryOperator::NEqual:
-                left->emitBytecode(vm);
-                right->emitBytecode(vm);
-                vm.pushOpcode(VM::Opcode::BINARY_NEQUAL);
+                left->emitBytecode(vm,chunk);
+                right->emitBytecode(vm,chunk);
+                chunk.pushOpcode(VM::Opcode::BINARY_NEQUAL);
                 break;
             case BinaryOperator::Greater:
-                left->emitBytecode(vm);
-                right->emitBytecode(vm);
-                vm.pushOpcode(VM::Opcode::BINARY_GREATER);
+                left->emitBytecode(vm,chunk);
+                right->emitBytecode(vm,chunk);
+                chunk.pushOpcode(VM::Opcode::BINARY_GREATER);
                 break;
             case BinaryOperator::GreaterEq:
-                left->emitBytecode(vm);
-                right->emitBytecode(vm);
-                vm.pushOpcode(VM::Opcode::BINARY_GREATEREQ);
+                left->emitBytecode(vm,chunk);
+                right->emitBytecode(vm,chunk);
+                chunk.pushOpcode(VM::Opcode::BINARY_GREATEREQ);
                 break;
             case BinaryOperator::Less:
-                left->emitBytecode(vm);
-                right->emitBytecode(vm);
-                vm.pushOpcode(VM::Opcode::BINARY_LESS);
+                left->emitBytecode(vm,chunk);
+                right->emitBytecode(vm,chunk);
+                chunk.pushOpcode(VM::Opcode::BINARY_LESS);
                 break;
             case BinaryOperator::LessEq:
-                left->emitBytecode(vm);
-                right->emitBytecode(vm);
-                vm.pushOpcode(VM::Opcode::BINARY_LESSEQ);
+                left->emitBytecode(vm,chunk);
+                right->emitBytecode(vm,chunk);
+                chunk.pushOpcode(VM::Opcode::BINARY_LESSEQ);
                 break;
 
 
             case BinaryOperator::And: {
-                left->emitBytecode(vm);
+                left->emitBytecode(vm,chunk);
 
-                vm.pushOpcode(VM::Opcode::JUMP_IF_FALSE);
-                unsigned location = vm.getBytecodeSize();//location to patch
-                vm.pushUInt(0);//to be patched
-                vm.pushOpcode(VM::Opcode::POP);
+                chunk.pushOpcode(VM::Opcode::JUMP_IF_FALSE);
+                unsigned location = chunk.getBytecodeSize();//location to patch
+                chunk.pushUInt(0);//to be patched
+                chunk.pushOpcode(VM::Opcode::POP);
 
-                right->emitBytecode(vm);
+                right->emitBytecode(vm,chunk);
 
-                vm.patchUInt(vm.getBytecodeSize(), location);
+                chunk.patchUInt(chunk.getBytecodeSize(), location);
                 break;
             }
 
             case BinaryOperator::Or: {
-                left->emitBytecode(vm);
-                vm.pushOpcode(VM::Opcode::JUMP_IF_TRUE);
-                unsigned location = vm.getBytecodeSize();//location to patch
-                vm.pushUInt(0);//to be patched
-                vm.pushOpcode(VM::Opcode::POP);
+                left->emitBytecode(vm,chunk);
+                chunk.pushOpcode(VM::Opcode::JUMP_IF_TRUE);
+                unsigned location = chunk.getBytecodeSize();//location to patch
+                chunk.pushUInt(0);//to be patched
+                chunk.pushOpcode(VM::Opcode::POP);
 
-                right->emitBytecode(vm);
+                right->emitBytecode(vm,chunk);
 
-                vm.patchUInt(vm.getBytecodeSize(), location);
+                chunk.patchUInt(chunk.getBytecodeSize(), location);
                 break;
             }
 
 
             case BinaryOperator::Modulus:
-                left->emitBytecode(vm);
-                right->emitBytecode(vm);
-                vm.pushOpcode(VM::Opcode::BINARY_MODULUS);
+                left->emitBytecode(vm,chunk);
+                right->emitBytecode(vm,chunk);
+                chunk.pushOpcode(VM::Opcode::BINARY_MODULUS);
                 break;
         }
 

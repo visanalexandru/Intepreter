@@ -45,24 +45,24 @@ namespace AST {
             elsebranch->solveDeclarations(stack, errors);
     }
 
-    void IfElseStmt::emitBytecode(VM::VirtualMachine &vm) const {
-        condition->emitBytecode(vm);
-        vm.pushOpcode(VM::Opcode::JUMP_IF_FALSE);//jump to the else statement if the condition is false
-        unsigned jump_to_else_branch=vm.getBytecodeSize();
-        vm.pushUInt(0);
+    void IfElseStmt::emitBytecode(VM::VirtualMachine &vm,VM::BytecodeChunk&chunk) const {
+        condition->emitBytecode(vm,chunk);
+        chunk.pushOpcode(VM::Opcode::JUMP_IF_FALSE);//jump to the else statement if the condition is false
+        unsigned jump_to_else_branch=chunk.getBytecodeSize();
+        chunk.pushUInt(0);
 
-        vm.pushOpcode(VM::Opcode::POP);
-        ifbranch->emitBytecode(vm);
-        vm.pushOpcode(VM::Opcode::JUMP);//jump to the end
-        unsigned jump_to_end=vm.getBytecodeSize();
-        vm.pushUInt(0);
+        chunk.pushOpcode(VM::Opcode::POP);
+        ifbranch->emitBytecode(vm,chunk);
+        chunk.pushOpcode(VM::Opcode::JUMP);//jump to the end
+        unsigned jump_to_end=chunk.getBytecodeSize();
+        chunk.pushUInt(0);
 
 
-        vm.patchUInt(vm.getBytecodeSize(),jump_to_else_branch);
-        vm.pushOpcode(VM::Opcode::POP);
+        chunk.patchUInt(chunk.getBytecodeSize(),jump_to_else_branch);
+        chunk.pushOpcode(VM::Opcode::POP);
         if(elsebranch!= nullptr)
-            elsebranch->emitBytecode(vm);
-        vm.patchUInt(vm.getBytecodeSize(),jump_to_end);
+            elsebranch->emitBytecode(vm,chunk);
+        chunk.patchUInt(chunk.getBytecodeSize(),jump_to_end);
     }
 
 

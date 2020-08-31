@@ -44,12 +44,12 @@ namespace AST {
         return statements;
     }
 
-    void CompoundStmt::emitBytecode(VM::VirtualMachine &vm) const {
+    void CompoundStmt::emitBytecode(VM::VirtualMachine &vm,VM::BytecodeChunk&chunk) const {
         for(const auto&stmt:statements){
-            stmt->emitBytecode(vm);
+            stmt->emitBytecode(vm,chunk);
         }
         for(int i=0;i<to_pop;i++){
-            vm.pushOpcode(VM::Opcode::POP);
+            chunk.pushOpcode(VM::Opcode::POP);
         }
     }
 }
