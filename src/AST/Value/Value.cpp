@@ -271,7 +271,7 @@ namespace AST {
         }
 
         throw std::runtime_error(
-                "Unsupported operand types for >=: " + typeToString(type) + " and " + typeToString(other.type));
+                "Unsupported operand types for <=: " + typeToString(type) + " and " + typeToString(other.type));
     }
 
     Value Value::operator%(const Value&other) const{
