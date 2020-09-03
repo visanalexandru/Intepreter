@@ -6,7 +6,8 @@
 #define INTERPRETER_VIRTUALMACHINE_H
 
 #include<vector>
-#include "AST/Value/Value.h"
+#include "Value/Value.h"
+#include "Value/Arithmetic.h"
 #include "Opcode.h"
 #include "BytecodeChunk.h"
 #include<iostream>
@@ -21,32 +22,32 @@ namespace VM {
 
             unsigned bytecode_location;
 
-            std::vector<AST::Value> locals;
+            std::vector<VM::Value> locals;
         };
 
         BytecodeChunk bytecode;
 
         /*Constants.*/
-        std::vector<AST::Value> literals;
+        std::vector<VM::Value> literals;
 
         /*The list of stack frames*/
-        std::vector<std::vector<AST::Value>> stack_frames;
+        std::vector<std::vector<VM::Value>> stack_frames;
 
 
         /*Pops the top of stack value of the current stack frame*/
-        AST::Value popValue();
+        VM::Value popValue();
 
         /*Returns the top of stack value for the current stack frame*/
-        AST::Value topOfStack() const;
+        VM::Value topOfStack() const;
 
         /*Returns a reference to the value in the current stack frame*/
-        AST::Value& getLocalValue(unsigned index);
+        VM::Value& getLocalValue(unsigned index);
 
         /*Returns a reference to the value int the global stack frame*/
-        AST::Value& getGlobalValue(unsigned index);
+        VM::Value& getGlobalValue(unsigned index);
 
         /*Push a value on the current stack frame*/
-        void pushValue(const AST::Value&value);
+        void pushValue(const VM::Value&value);
 
         /*Creates a new stack frame,used when calling functions*/
         void pushStackFrame();
@@ -57,7 +58,7 @@ namespace VM {
     public:
         VirtualMachine();
 
-        void pushLiteral(const AST::Value&literal);
+        void pushLiteral(const VM::Value&literal);
 
         unsigned getLiteralCount() const;
 

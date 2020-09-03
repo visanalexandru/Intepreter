@@ -16,22 +16,6 @@ namespace AST {
 
     }
 
-    void IfElseStmt::execute() {
-        resetReturnValue();
-
-        if (condition->evaluate().toBoolObj().asBool()) {
-            ifbranch->execute();
-            if (ifbranch->hasReturned()) {
-                setReturnValue(ifbranch->getReturnValue());
-            }
-        } else if (elsebranch != nullptr) {
-            elsebranch->execute();
-            if (elsebranch->hasReturned()) {
-                setReturnValue(elsebranch->getReturnValue());
-            }
-        }
-    }
-
     void IfElseStmt::checkControlFlow(AST::FlowState &state, std::vector<Error> &errors) const {
         ifbranch->checkControlFlow(state, errors);
         if (elsebranch != nullptr)
@@ -45,24 +29,24 @@ namespace AST {
             elsebranch->solveDeclarations(stack, errors);
     }
 
-    void IfElseStmt::emitBytecode(VM::VirtualMachine &vm,VM::BytecodeChunk&chunk) const {
-        condition->emitBytecode(vm,chunk);
+    void IfElseStmt::emitBytecode(VM::VirtualMachine &vm, VM::BytecodeChunk &chunk) const {
+        condition->emitBytecode(vm, chunk);
         chunk.pushOpcode(VM::Opcode::JUMP_IF_FALSE);//jump to the else statement if the condition is false
-        unsigned jump_to_else_branch=chunk.getBytecodeSize();
+        unsigned jump_to_else_branch = chunk.getBytecodeSize();
         chunk.pushUInt(0);
 
         chunk.pushOpcode(VM::Opcode::POP);
-        ifbranch->emitBytecode(vm,chunk);
+        ifbranch->emitBytecode(vm, chunk);
         chunk.pushOpcode(VM::Opcode::JUMP);//jump to the end
-        unsigned jump_to_end=chunk.getBytecodeSize();
+        unsigned jump_to_end = chunk.getBytecodeSize();
         chunk.pushUInt(0);
 
 
-        chunk.patchUInt(chunk.getBytecodeSize(),jump_to_else_branch);
+        chunk.patchUInt(chunk.getBytecodeSize(), jump_to_else_branch);
         chunk.pushOpcode(VM::Opcode::POP);
-        if(elsebranch!= nullptr)
-            elsebranch->emitBytecode(vm,chunk);
-        chunk.patchUInt(chunk.getBytecodeSize(),jump_to_end);
+        if (elsebranch != nullptr)
+            elsebranch->emitBytecode(vm, chunk);
+        chunk.patchUInt(chunk.getBytecodeSize(), jump_to_end);
     }
 
 

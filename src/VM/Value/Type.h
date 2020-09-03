@@ -7,28 +7,26 @@
 
 #include<string>
 
-namespace AST {
+namespace VM{
 
-    enum class Type {
+    enum class ValueType {
         Float,
         Int,
-        String,
         Bool,
         None
     };
 
+
     /*Converts a type to a string for logging purposes*/
-    inline std::string typeToString(Type type) {
+    inline std::string typeToString(ValueType type) {
         switch (type) {
-            case Type::Int:
+            case ValueType::Int:
                 return "Int";
-            case Type::String:
-                return "String";
-            case Type::Float:
+            case ValueType::Float:
                 return "Float";
-            case Type::None:
+            case ValueType::None:
                 return "None";
-            case Type::Bool:
+            case ValueType::Bool:
                 return "Bool";
         }
     }

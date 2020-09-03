@@ -9,7 +9,6 @@
 #include"StmtNode.h"
 #include "AST/Expression/ExpNode.h"
 #include"CompoundStmt.h"
-#include "AST/Context.h"
 
 namespace AST {
     /*This class represents an if-else-statement in the interpreted language.*/
@@ -23,8 +22,6 @@ namespace AST {
 
     public:
         IfElseStmt(yy::location loc, std::unique_ptr<ExpNode> cond, std::unique_ptr<CompoundStmt> ifb,std::unique_ptr<CompoundStmt>elseb= nullptr);
-
-        void execute() override;
 
         void checkControlFlow(FlowState&state,std::vector<Error>&errors) const override;
 

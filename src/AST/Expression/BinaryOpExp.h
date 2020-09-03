@@ -7,9 +7,9 @@
 
 #include "Operator.h"
 #include "ExpNode.h"
-
+#include "VM/VirtualMachine.h"
 namespace AST {
-
+    /*This class represents a binary expression in the AST*/
     class BinaryOpExp : public ExpNode {
     private:
         /*The binary operator type*/
@@ -23,8 +23,6 @@ namespace AST {
 
     public:
         BinaryOpExp(yy::location loc, BinaryOperator t, std::unique_ptr<ExpNode> l, std::unique_ptr<ExpNode> r);
-
-        Value evaluate() const override;
 
         void solveVarReferences(AST::DeclarationStack &stack, std::vector<Error> &errors) override;
 

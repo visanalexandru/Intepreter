@@ -16,10 +16,7 @@ void Driver::preprocess() {
 }
 
 void Driver::init() {
-    AST::Symbol print_sym=AST::globalSymtable.addSymbol("print");
 
-    AST::globalContext.declareFunc(print_sym,std::make_unique<AST::PrintFunc>());
-    declaration_stack.addFunction(print_sym);
 }
 
 void Driver::start() {

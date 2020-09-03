@@ -12,19 +12,6 @@ namespace AST {
 
     }
 
-    void CompoundStmt::execute() {
-        resetReturnValue();
-        for(const auto&stmt:statements){
-            stmt->execute();
-            if(stmt->hasReturned()){
-                setReturnValue(stmt->getReturnValue());
-                break;
-            }
-        }
-        for(unsigned i=0;i<to_pop;i++)
-            globalContext.popVar();
-    }
-
     void CompoundStmt::checkControlFlow(FlowState &state, std::vector<Error> &errors) const {
         for(const auto&stmt:statements){
             stmt->checkControlFlow(state,errors);
@@ -38,10 +25,6 @@ namespace AST {
         }
         to_pop=stack.variablesInScope();
         stack.popScope();
-    }
-
-    std::vector<std::unique_ptr<StmtNode>> & CompoundStmt::getStatements() {
-        return statements;
     }
 
     void CompoundStmt::emitBytecode(VM::VirtualMachine &vm,VM::BytecodeChunk&chunk) const {

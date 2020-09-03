@@ -19,29 +19,29 @@ namespace VM {
         stack_frames.pop_back();
     }
 
-    AST::Value VirtualMachine::popValue() {
-        AST::Value to_return = stack_frames.back().back();
+    Value VirtualMachine::popValue() {
+        Value to_return = stack_frames.back().back();
         stack_frames.back().pop_back();
         return to_return;
     }
 
-    BytecodeChunk & VirtualMachine::getChunk() {
+    BytecodeChunk &VirtualMachine::getChunk() {
         return bytecode;
     }
 
-    void VirtualMachine::pushValue(const AST::Value&value) {
+    void VirtualMachine::pushValue(const Value &value) {
         stack_frames.back().push_back(value);
     }
 
-    AST::Value VirtualMachine::topOfStack() const {
+    Value VirtualMachine::topOfStack() const {
         return stack_frames.back().back();
     }
 
-    AST::Value& VirtualMachine::getLocalValue(unsigned int index){
+    Value &VirtualMachine::getLocalValue(unsigned int index) {
         return stack_frames.back()[index];
     }
 
-    AST::Value& VirtualMachine::getGlobalValue(unsigned int index){
+    Value &VirtualMachine::getGlobalValue(unsigned int index) {
         return stack_frames.front()[index];
     }
 
@@ -51,53 +51,53 @@ namespace VM {
                 pushValue(literals[bytecode.readUInt()]);
                 break;
             case Opcode::BINARY_ADD:
-                pushValue(popValue()+popValue());
+                pushValue(add(popValue(), popValue()));
                 break;
             case Opcode::BINARY_SUBTRACT:
-                pushValue(popValue()-popValue());
+                pushValue(subtract(popValue(), popValue()));
                 break;
             case Opcode::BINARY_MULTIPLY:
-                pushValue(popValue() * popValue());
+                pushValue(multiply(popValue(), popValue()));
                 break;
             case Opcode::BINARY_DIVIDE:
-                pushValue(popValue() / popValue());
+                pushValue(divide(popValue(), popValue()));
                 break;
             case Opcode::BINARY_EQUAL:
-                pushValue(popValue() == popValue());
+                pushValue(equal(popValue(), popValue()));
                 break;
             case Opcode::BINARY_NEQUAL:
-                pushValue(popValue() != popValue());
+                pushValue(nequal(popValue(), popValue()));
                 break;
             case Opcode::BINARY_LESS:
-                pushValue(popValue() < popValue());
+                pushValue(less(popValue(), popValue()));
                 break;
             case Opcode::BINARY_LESSEQ:
-                pushValue(popValue() <= popValue());
+                pushValue(lesseq(popValue(), popValue()));
                 break;
             case Opcode::BINARY_GREATER:
-                pushValue(popValue() > popValue());
+                pushValue(greater(popValue(), popValue()));
                 break;
             case Opcode::BINARY_GREATEREQ:
-                pushValue(popValue() >= popValue());
+                pushValue(greatereq(popValue(), popValue()));
                 break;
             case Opcode::BINARY_MODULUS:
-                pushValue(popValue() % popValue());
+                pushValue(modulo(popValue(), popValue()));
                 break;
             case Opcode::UNARY_MINUS:
-                pushValue(-popValue());
+                pushValue(uminus(popValue()));
                 break;
             case Opcode::UNARY_NOT:
-                pushValue(AST::Value(!popValue().toBoolObj().asBool()));
+                pushValue(makeBoolValue(!asBool(castToBool(popValue()))));
                 break;
             case Opcode::JUMP_IF_TRUE: {
                 unsigned to_jump = bytecode.readUInt();
-                if (topOfStack().asBool())
+                if (asBool(topOfStack()))
                     bytecode.jump(to_jump);
                 break;
             }
             case Opcode::JUMP_IF_FALSE: {
                 unsigned to_jump = bytecode.readUInt();
-                if (!topOfStack().asBool()) {
+                if (!asBool(topOfStack())) {
                     bytecode.jump(to_jump);
                 }
                 break;
@@ -115,24 +115,24 @@ namespace VM {
             case Opcode::LOAD_GLOBAL:
                 pushValue(getGlobalValue(bytecode.readUInt()));
                 break;
-            case Opcode::ASSIGN_LOCAL:{
-                AST::Value to_assign=popValue();
-                AST::Value&ref=getLocalValue(bytecode.readUInt());
-                pushValue(ref=to_assign);
+            case Opcode::ASSIGN_LOCAL: {
+                Value to_assign = popValue();
+                Value &ref = getLocalValue(bytecode.readUInt());
+                pushValue(ref = to_assign);
                 break;
             }
 
-            case Opcode::ASSIGN_GLOBAL:{
-                AST::Value to_assign=popValue();
-                AST::Value&ref=getGlobalValue(bytecode.readUInt());
-                pushValue(ref=to_assign);
+            case Opcode::ASSIGN_GLOBAL: {
+                Value to_assign = popValue();
+                Value &ref = getGlobalValue(bytecode.readUInt());
+                pushValue(ref = to_assign);
                 break;
             }
         }
     }
 
 
-    void VirtualMachine::pushLiteral(const AST::Value &literal) {
+    void VirtualMachine::pushLiteral(const Value &literal) {
         literals.push_back(literal);
     }
 
@@ -142,14 +142,14 @@ namespace VM {
 
     void VirtualMachine::disassemble() {
         bytecode.jump(0);
-        std::cout << "Bytecode chunk size "<<bytecode.getBytecodeSize()<< std::endl;
+        std::cout << "Bytecode chunk size " << bytecode.getBytecodeSize() << std::endl;
         while (!bytecode.reachedEnd()) {
-            std::cout << bytecode.getCursor()<< " ";
-            auto op =bytecode.readOpcode();
+            std::cout << bytecode.getCursor() << " ";
+            auto op = bytecode.readOpcode();
             switch (op) {
 
                 case Opcode::LOAD_LITERAL:
-                    std::cout << "LOAD_LITERAL " << literals[bytecode.readUInt()].toString() << std::endl;
+                    std::cout << "LOAD_LITERAL " << toString(literals[bytecode.readUInt()]) << std::endl;
                     break;
                 case Opcode::BINARY_ADD:
                     std::cout << "BINARY_ADD " << std::endl;
@@ -182,13 +182,13 @@ namespace VM {
                     std::cout << "BINARY_GREATEREQ" << std::endl;
                     break;
                 case Opcode::JUMP_IF_FALSE:
-                    std::cout << "JUMP_IF_FALSE " <<bytecode.readUInt() << std::endl;
+                    std::cout << "JUMP_IF_FALSE " << bytecode.readUInt() << std::endl;
                     break;
                 case Opcode::JUMP_IF_TRUE:
-                    std::cout << "JUMP_IF_TRUE " <<bytecode.readUInt() << std::endl;
+                    std::cout << "JUMP_IF_TRUE " << bytecode.readUInt() << std::endl;
                     break;
                 case Opcode::JUMP:
-                    std::cout<<"JUMP "<<bytecode.readUInt()<<std::endl;
+                    std::cout << "JUMP " << bytecode.readUInt() << std::endl;
                     break;
                 case Opcode::POP:
                     std::cout << "POP" << std::endl;
@@ -197,22 +197,22 @@ namespace VM {
                     std::cout << "BINARY_MODULUS" << std::endl;
                     break;
                 case Opcode::UNARY_NOT:
-                    std::cout<<"UNARY_NOT"<<std::endl;
+                    std::cout << "UNARY_NOT" << std::endl;
                     break;
                 case Opcode::UNARY_MINUS:
-                    std::cout<<"UNARY_MINUS"<<std::endl;
+                    std::cout << "UNARY_MINUS" << std::endl;
                     break;
                 case Opcode::LOAD_LOCAL:
-                    std::cout<<"LOAD_LOCAL "<<bytecode.readUInt()<<std::endl;
+                    std::cout << "LOAD_LOCAL " << bytecode.readUInt() << std::endl;
                     break;
                 case Opcode::LOAD_GLOBAL:
-                    std::cout<<"LOAD_GLOBAL "<<bytecode.readUInt()<<std::endl;
+                    std::cout << "LOAD_GLOBAL " << bytecode.readUInt() << std::endl;
                     break;
                 case Opcode::ASSIGN_LOCAL:
-                    std::cout<<"ASSIGN_LOCAL "<<bytecode.readUInt()<<std::endl;
+                    std::cout << "ASSIGN_LOCAL " << bytecode.readUInt() << std::endl;
                     break;
                 case Opcode::ASSIGN_GLOBAL:
-                    std::cout<<"ASSIGN_GLOBAL "<<bytecode.readUInt()<<std::endl;
+                    std::cout << "ASSIGN_GLOBAL " << bytecode.readUInt() << std::endl;
                 default:
                     std::cout << "UNKNOWN" << std::endl;
                     break;
@@ -226,8 +226,8 @@ namespace VM {
             std::cout<<bytecode.getCursor()<<std::endl;
             executeOpcode(bytecode.readOpcode());
             std::cout<<"stack: {";
-            for(const AST::Value&value:stack_frames.back())
-                std::cout<<value.toString()<<",";
+            for(const VM::Value&value:stack_frames.back())
+                std::cout<<toString(value)<<",";
             std::cout<<"}"<<std::endl;
         }
     }

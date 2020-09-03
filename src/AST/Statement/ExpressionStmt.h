@@ -16,9 +16,6 @@ namespace AST {
     public:
         ExpressionStmt(yy::location loc,std::shared_ptr<ExpNode> expression);
 
-        /*Just evaluate the expression*/
-        void execute() override;
-
         void checkControlFlow(FlowState&state,std::vector<Error>&errors) const override{};//no control flow errors can happen here
 
         void emitBytecode(VM::VirtualMachine&vm,VM::BytecodeChunk&chunk) const override;

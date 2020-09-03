@@ -6,7 +6,6 @@
 #define INTERPRETER_VARIABLEEXP_H
 
 #include "ExpNode.h"
-#include "AST/Context.h"
 #include "AST/Symbol.h"
 #include "Error.h"
 
@@ -25,9 +24,6 @@ namespace AST {
         VariableExp(yy::location loc,Symbol sym);
 
         VariableExp(yy::location loc,Symbol sym,std::unique_ptr<ExpNode> to_assign);
-
-        /*Returns the value of the variable that has that name*/
-        Value evaluate() const override;
 
         void solveVarReferences(AST::DeclarationStack &stack, std::vector<Error> &errors) override;
 

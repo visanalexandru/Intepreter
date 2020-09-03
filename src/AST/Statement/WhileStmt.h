@@ -7,7 +7,6 @@
 
 #include "StmtNode.h"
 #include "AST/Expression/ExpNode.h"
-#include "AST/Context.h"
 #include "CompoundStmt.h"
 
 namespace AST {
@@ -20,8 +19,6 @@ namespace AST {
 
     public:
         WhileStmt(yy::location loc,std::unique_ptr<ExpNode>cond,std::unique_ptr<CompoundStmt> stmts);
-
-        void execute() override;
 
         void checkControlFlow(FlowState &state, std::vector<Error> &errors) const override;
 

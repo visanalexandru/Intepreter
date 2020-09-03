@@ -17,13 +17,6 @@ namespace AST {
 
     }
 
-    Value VariableExp::evaluate() const {
-        Value&value=globalContext.getVar(var_location);
-        if(assign!= nullptr)
-            value=assign->evaluate();
-        return value;
-    }
-
     void VariableExp::solveVarReferences(AST::DeclarationStack &stack, std::vector<Error> &errors) {
         if (!stack.getVariableLocation(symbol, var_location))
             errors.emplace_back("semantic error, variable is not declared: " + symbol.symbol_name, location);

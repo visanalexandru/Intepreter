@@ -6,6 +6,7 @@
 # include <string>
 # include "Driver.h"
 #include "AST/SymbolTable.h"
+#include "VM/Value/Arithmetic.h"
 # include "parser.hpp"
 %}
 
@@ -67,8 +68,8 @@ blank [ \t\r]
 "{"        return yy::parser::make_LBLOCK(loc);
 "}"        return yy::parser::make_RBLOCK(loc);
 "return"   return yy::parser::make_RETURN(loc);
-"false"    return yy::parser::make_LITERAL(AST::Value(false),loc);
-"true"    return yy::parser::make_LITERAL(AST::Value(true),loc);
+"false"    return yy::parser::make_LITERAL(VM::makeBoolValue(false),loc);
+"true"    return yy::parser::make_LITERAL(VM::makeBoolValue(true),loc);
 {int}      return make_INT(std::string(yytext),loc);
 {string}   return make_STRING(std::string(yytext),loc);
 {float}    return make_FLOAT(std::string(yytext),loc);
@@ -81,7 +82,7 @@ yy::parser::symbol_type make_INT (const std::string &s, const yy::parser::locati
 {
    try{
         int i=std::stoi(s);
-        return yy::parser::make_LITERAL(AST::Value(i),loc);
+        return yy::parser::make_LITERAL(VM::makeIntValue(i),loc);
    }
    catch(const std::out_of_range&e){
         throw yy::parser::syntax_error (loc, "integer is out of range: " + s);
@@ -92,7 +93,7 @@ yy::parser::symbol_type make_FLOAT(const std::string &s, const yy::parser::locat
 {
    try{
         double i=std::stod(s);
-        return yy::parser::make_LITERAL(AST::Value(i),loc);
+        return yy::parser::make_LITERAL(VM::makeFloatValue(i),loc);
    }
    catch(const std::out_of_range&e){
         throw yy::parser::syntax_error (loc, "float is out of range: " + s);
@@ -127,7 +128,7 @@ yy::parser::symbol_type make_STRING(const std::string &s, const yy::parser::loca
         cursor++;
   }
 
-  return yy::parser::make_LITERAL (AST::Value(buff), loc);
+  return yy::parser::make_LITERAL (VM::makeIntValue(0), loc);
 }
 
 yy::parser::symbol_type make_SYMBOL(const std::string &s, const yy::parser::location_type& loc)

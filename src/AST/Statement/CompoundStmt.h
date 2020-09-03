@@ -5,7 +5,6 @@
 #ifndef INTERPRETER_COMPOUNDSTMT_H
 #define INTERPRETER_COMPOUNDSTMT_H
 #include"StmtNode.h"
-#include"AST/Context.h"
 
 namespace AST{
 
@@ -19,16 +18,11 @@ namespace AST{
     public:
         CompoundStmt(yy::location loc, std::vector<std::unique_ptr<StmtNode>> stmts);
 
-        void execute() override;
-
         void checkControlFlow(FlowState&state,std::vector<Error>&errors) const override;
 
         void solveDeclarations(DeclarationStack&stack,std::vector<Error>&errors) override;
 
         void emitBytecode(VM::VirtualMachine&vm,VM::BytecodeChunk&chunk) const override;
-
-        /*Used to inject statements, like variable declarations in functions.*/
-        std::vector<std::unique_ptr<StmtNode>>& getStatements();
 
     };
 

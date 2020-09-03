@@ -6,10 +6,9 @@
 #define INTERPRETER_VARDECLARATIONSTMT_H
 
 #include "StmtNode.h"
-#include "AST/Context.h"
 #include "AST/Expression/ExpNode.h"
 #include "AST/Symbol.h"
-
+#include "VM/Value/Arithmetic.h"
 namespace AST {
     /*This class is responsible for the declaration of a variable at runtime*/
     class VarDeclarationStmt : public StmtNode {
@@ -19,9 +18,6 @@ namespace AST {
         /*The expression on the right side of the declaration*/
         std::shared_ptr<ExpNode> value;
     public:
-        /*Declares the variable, using the global context object*/
-        void execute() override;
-
         /*Declares the variable with value None*/
         VarDeclarationStmt(yy::location loc, Symbol sym);
 

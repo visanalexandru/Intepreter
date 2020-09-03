@@ -6,18 +6,15 @@
 #define INTERPRETER_LITERALEXP_H
 
 #include "ExpNode.h"
-#include "AST/Value/Value.h"
-
+#include "VM/Value/Value.h"
+#include "VM/VirtualMachine.h"
 namespace AST {
     /*This class represents a literal value, a terminal node in the AST*/
     class LiteralExp : public ExpNode {
     private:
-        Value value;
+        VM::Value value;
     public:
-        LiteralExp(yy::location loc,Value val);
-
-        /*Just returns the value*/
-        Value evaluate() const override;
+        LiteralExp(yy::location loc,VM::Value val);
 
         void solveVarReferences(AST::DeclarationStack &stack, std::vector<Error> &errors) override {};
 

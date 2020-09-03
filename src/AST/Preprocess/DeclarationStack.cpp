@@ -11,15 +11,6 @@ namespace AST {
         pushStackFrame();
     }
 
-    void DeclarationStack::addFunction(const Symbol &func_symbol) {
-        function_declarations.insert(func_symbol.symbol_id);
-    }
-
-    bool DeclarationStack::functionExists(const Symbol &func_symbol) const {
-        return function_declarations.find(func_symbol.symbol_id) != function_declarations.end();
-    }
-
-
     bool DeclarationStack::variableInCurrentScope(const Symbol &var_symbol) const {
         const auto &current_stack_frame = stack_frames.back();
 

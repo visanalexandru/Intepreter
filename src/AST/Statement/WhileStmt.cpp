@@ -13,42 +13,31 @@ namespace AST {
 
     }
 
-    void WhileStmt::execute() {
-        resetReturnValue();
-        while (condition->evaluate().asBool()) {
-            body->execute();
-            if(body->hasReturned()){
-                setReturnValue(body->getReturnValue());
-                break;
-            }
-       }
-    }
-
     void WhileStmt::checkControlFlow(FlowState &state, std::vector<Error> &errors) const {
         state.enterLoop();
-        body->checkControlFlow(state,errors);
+        body->checkControlFlow(state, errors);
         state.exitLoop();
     }
 
-    void WhileStmt::solveDeclarations(DeclarationStack &stack, std::vector<Error> &errors){
+    void WhileStmt::solveDeclarations(DeclarationStack &stack, std::vector<Error> &errors) {
         condition->solveVarReferences(stack, errors);
-        body->solveDeclarations(stack,errors);
+        body->solveDeclarations(stack, errors);
     }
 
-    void WhileStmt::emitBytecode(VM::VirtualMachine &vm,VM::BytecodeChunk&chunk) const {
-        unsigned begin=chunk.getBytecodeSize();
-        condition->emitBytecode(vm,chunk);
+    void WhileStmt::emitBytecode(VM::VirtualMachine &vm, VM::BytecodeChunk &chunk) const {
+        unsigned begin = chunk.getBytecodeSize();
+        condition->emitBytecode(vm, chunk);
         chunk.pushOpcode(VM::Opcode::JUMP_IF_FALSE);
-        unsigned body_begin=chunk.getBytecodeSize();
+        unsigned body_begin = chunk.getBytecodeSize();
         chunk.pushUInt(0);
 
         chunk.pushOpcode(VM::Opcode::POP);
 
-        body->emitBytecode(vm,chunk);
+        body->emitBytecode(vm, chunk);
         chunk.pushOpcode(VM::Opcode::JUMP);
         chunk.pushUInt(begin);
 
-        chunk.patchUInt(chunk.getBytecodeSize(),body_begin);
+        chunk.patchUInt(chunk.getBytecodeSize(), body_begin);
         chunk.pushOpcode(VM::Opcode::POP);
 
     }

@@ -13,10 +13,6 @@ namespace AST {
 
     }
 
-    void ExpressionStmt::execute() {
-        exp->evaluate();
-    }
-
     void ExpressionStmt::solveDeclarations(AST::DeclarationStack &stack, std::vector<Error> &errors) {
         exp->solveVarReferences(stack,errors);
     }

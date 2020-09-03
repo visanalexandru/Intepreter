@@ -20,14 +20,6 @@ namespace AST {
 
     }
 
-    void VarDeclarationStmt::execute() {
-        if (value != nullptr) {
-            globalContext.pushVar(value->evaluate());
-        } else {
-            globalContext.pushVar(Value());
-        }
-    }
-
     void VarDeclarationStmt::solveDeclarations(AST::DeclarationStack &stack, std::vector<Error> &errors) {
         if(value!= nullptr)
             value->solveVarReferences(stack,errors);
@@ -43,7 +35,7 @@ namespace AST {
         }
         else{
             unsigned literal_count=vm.getLiteralCount();
-            vm.pushLiteral(Value());
+            vm.pushLiteral(VM::makeNullValue());
             chunk.pushOpcode(VM::Opcode::LOAD_LITERAL);
             chunk.pushUInt(literal_count);
         }

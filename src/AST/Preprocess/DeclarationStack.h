@@ -9,12 +9,11 @@
 #include<unordered_set>
 #include<vector>
 #include<algorithm>
-#include "AST/Function/Function.h"
 #include "AST/Symbol.h"
 #include "VariableLocation.h"
 
 namespace AST {
-    /*Useful for finding duplicate variable/function declarations and resolving variables.*/
+    /*Useful for resolving variables.*/
     class DeclarationStack {
     private:
 
@@ -25,7 +24,6 @@ namespace AST {
 
             VariableDeclaration(Symbol symbol, unsigned long depth) : variable_symbol(std::move(symbol)),
                                                                       scope_depth(depth) {
-
             }
         };
 
@@ -40,20 +38,10 @@ namespace AST {
 
         };
 
-        /*Use an unordered set for constant lookup on find()*/
-        std::unordered_set<unsigned long> function_declarations;
-
         std::vector<StackFrame> stack_frames;
 
 
     public:
-        /*Check if a function was added to the function declaration list. Useful for finding duplicate
-         * function declarations.*/
-        bool functionExists(const Symbol &func_symbol) const;
-
-        /*Add a new function declaration(its symbol) to the func declaration list*/
-        void addFunction(const Symbol &func_symbol);
-
         /*Add a new stack frame to the list*/
         void pushStackFrame();
 
