@@ -6,16 +6,16 @@
 
 namespace VM{
 
-    BytecodeChunk::BytecodeChunk():cursor(0) {
+    BytecodeChunk::BytecodeChunk():cursor(0),size(0) {
 
     }
 
     bool BytecodeChunk::reachedEnd() const {
-        return cursor==bytecode.size();
+        return cursor==size;
     }
 
     unsigned int BytecodeChunk::getBytecodeSize() const {
-        return bytecode.size();
+        return size;
     }
 
     void BytecodeChunk::pushUInt(uint32_t to_push){
@@ -23,28 +23,23 @@ namespace VM{
         bytecode.push_back((to_push >> 8u) & 0xffu);
         bytecode.push_back((to_push >> 16u) & 0xffu);
         bytecode.push_back((to_push >> 24u) & 0xffu);
+        size+=4;
     }
 
     uint32_t BytecodeChunk::readUInt() {
-        uint32_t a = bytecode[cursor];
-        uint32_t b = bytecode[cursor+ 1] << 8u;
-        uint32_t c = bytecode[cursor+ 2] << 16u;
-        uint32_t d = bytecode[cursor+ 3] << 24u;
-
+        uint32_t result;
+        memcpy(&result,&bytecode[cursor],4);
         cursor+= 4;
-
-        return a | b | c | d;
+        return result;
     }
 
     void BytecodeChunk::patchUInt(uint32_t to_patch, unsigned int index) {
-        bytecode[index] = to_patch & 0xffu;
-        bytecode[index + 1] = (to_patch >> 8u) & 0xffu;
-        bytecode[index + 2] = (to_patch >> 8u) & 0xffu;
-        bytecode[index + 3] = (to_patch >> 8u) & 0xffu;
+        memcpy(&bytecode[index],&to_patch,4);
     }
 
     void BytecodeChunk::pushOpcode(Opcode opcode) {
         bytecode.push_back((uint8_t)opcode);
+        size+=1;
     }
 
     Opcode BytecodeChunk::readOpcode() {

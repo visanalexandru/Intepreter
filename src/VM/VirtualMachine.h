@@ -16,49 +16,31 @@ namespace VM {
 
     class VirtualMachine {
     private:
-
-        struct CallFrame{
-            std::vector<uint8_t> bytecode;
-
-            unsigned bytecode_location;
-
-            std::vector<VM::Value> locals;
-        };
+        const unsigned stack_size;
 
         BytecodeChunk bytecode;
 
         /*Constants.*/
         std::vector<VM::Value> literals;
 
-        /*The list of stack frames*/
-        std::vector<std::vector<VM::Value>> stack_frames;
+        /*The value stack*/
+        VM::Value *stack;
 
+        /*The stack pointer*/
+        unsigned stack_ptr;
 
-        /*Pops the top of stack value of the current stack frame*/
-        VM::Value popValue();
+        VM::Value &popValue();
 
-        /*Returns the top of stack value for the current stack frame*/
-        VM::Value topOfStack() const;
+        void pushValue(const VM::Value &value);
 
-        /*Returns a reference to the value in the current stack frame*/
-        VM::Value& getLocalValue(unsigned index);
-
-        /*Returns a reference to the value int the global stack frame*/
-        VM::Value& getGlobalValue(unsigned index);
-
-        /*Push a value on the current stack frame*/
-        void pushValue(const VM::Value&value);
-
-        /*Creates a new stack frame,used when calling functions*/
-        void pushStackFrame();
-
-        /*Removes the current stack frame, used when returning from functions*/
-        void popStackFrame();
+        VM::Value&topOfStack();
 
     public:
         VirtualMachine();
 
-        void pushLiteral(const VM::Value&literal);
+        ~VirtualMachine();
+
+        void pushLiteral(const VM::Value &literal);
 
         unsigned getLiteralCount() const;
 
@@ -66,7 +48,7 @@ namespace VM {
 
         void disassemble();
 
-        BytecodeChunk&getChunk();
+        BytecodeChunk &getChunk();
 
         void run();
 

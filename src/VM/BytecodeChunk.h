@@ -7,6 +7,7 @@
 
 #include "Opcode.h"
 #include<vector>
+#include<cstring>
 
 namespace VM {
 
@@ -17,6 +18,8 @@ namespace VM {
         std::vector<uint8_t> bytecode;
 
         unsigned cursor;
+
+        unsigned size;
 
     public:
         BytecodeChunk();

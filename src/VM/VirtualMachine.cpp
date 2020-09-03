@@ -7,42 +7,30 @@
 
 namespace VM {
 
-    VirtualMachine::VirtualMachine() {
-        pushStackFrame();
+    VirtualMachine::VirtualMachine() : stack_size(1048576), stack_ptr(0) {
+        stack = new Value[stack_size];
     }
 
-    void VirtualMachine::pushStackFrame() {
-        stack_frames.emplace_back();
+    VirtualMachine::~VirtualMachine() {
+        delete stack;
     }
 
-    void VirtualMachine::popStackFrame() {
-        stack_frames.pop_back();
-    }
-
-    Value VirtualMachine::popValue() {
-        Value to_return = stack_frames.back().back();
-        stack_frames.back().pop_back();
+    Value &VirtualMachine::popValue() {
+        Value &to_return = stack[stack_ptr - 1];
+        stack_ptr--;
         return to_return;
+    }
+
+    void VirtualMachine::pushValue(const Value &value) {
+        stack[stack_ptr++] = value;
+    }
+
+    Value &VirtualMachine::topOfStack() {
+        return stack[stack_ptr - 1];
     }
 
     BytecodeChunk &VirtualMachine::getChunk() {
         return bytecode;
-    }
-
-    void VirtualMachine::pushValue(const Value &value) {
-        stack_frames.back().push_back(value);
-    }
-
-    Value VirtualMachine::topOfStack() const {
-        return stack_frames.back().back();
-    }
-
-    Value &VirtualMachine::getLocalValue(unsigned int index) {
-        return stack_frames.back()[index];
-    }
-
-    Value &VirtualMachine::getGlobalValue(unsigned int index) {
-        return stack_frames.front()[index];
     }
 
     void VirtualMachine::executeOpcode(Opcode opcode) {
@@ -110,22 +98,22 @@ namespace VM {
                 popValue();
                 break;
             case Opcode::LOAD_LOCAL:
-                pushValue(getLocalValue(bytecode.readUInt()));
+                pushValue(stack[bytecode.readUInt()]);
                 break;
             case Opcode::LOAD_GLOBAL:
-                pushValue(getGlobalValue(bytecode.readUInt()));
+                pushValue(stack[bytecode.readUInt()]);
                 break;
             case Opcode::ASSIGN_LOCAL: {
-                Value to_assign = popValue();
-                Value &ref = getLocalValue(bytecode.readUInt());
-                pushValue(ref = to_assign);
+                Value&to_assign = popValue();
+                stack[bytecode.readUInt()]=to_assign;
+                pushValue(to_assign);
                 break;
             }
 
             case Opcode::ASSIGN_GLOBAL: {
                 Value to_assign = popValue();
-                Value &ref = getGlobalValue(bytecode.readUInt());
-                pushValue(ref = to_assign);
+                stack[bytecode.readUInt()]=to_assign;
+                pushValue(to_assign);
                 break;
             }
         }
@@ -223,12 +211,7 @@ namespace VM {
     void VirtualMachine::run() {
         bytecode.jump(0);
         while (!bytecode.reachedEnd()) {
-            std::cout<<bytecode.getCursor()<<std::endl;
             executeOpcode(bytecode.readOpcode());
-            std::cout<<"stack: {";
-            for(const VM::Value&value:stack_frames.back())
-                std::cout<<toString(value)<<",";
-            std::cout<<"}"<<std::endl;
         }
     }
 
