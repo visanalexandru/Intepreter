@@ -6,11 +6,11 @@
 #define INTERPRETER_VIRTUALMACHINE_H
 
 #include<vector>
+#include<iostream>
 #include "Value/Value.h"
 #include "Value/Arithmetic.h"
 #include "Opcode.h"
 #include "BytecodeChunk.h"
-#include<iostream>
 
 namespace VM {
 
@@ -20,27 +20,27 @@ namespace VM {
 
         BytecodeChunk bytecode;
 
-        /*Constants.*/
-        std::vector<VM::Value> literals;
+        /*Literals.*/
+        std::vector<Value> literals;
 
         /*The value stack*/
-        VM::Value *stack;
+        Value *stack;
 
         /*The stack pointer*/
         unsigned stack_ptr;
 
-        VM::Value &popValue();
+        Value &popValue();
 
-        void pushValue(const VM::Value &value);
+        void pushValue(const Value &value);
 
-        VM::Value&topOfStack();
+        Value&topOfStack();
 
     public:
         VirtualMachine();
 
         ~VirtualMachine();
 
-        void pushLiteral(const VM::Value &literal);
+        void pushLiteral(const Value &literal);
 
         unsigned getLiteralCount() const;
 

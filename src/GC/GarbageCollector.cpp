@@ -10,18 +10,18 @@ namespace GC {
 
     }
 
-    void GarbageCollector::addObj(Object *obj) {
+    void GarbageCollector::addObj(VM::Object *obj) {
         obj->previous = head;
         if (head != nullptr)
             head->next = obj;
         head = obj;
     }
 
-    Object *GarbageCollector::makeStringObj(std::string data) {
-        StringObj *str = new StringObj;
-        str->header.type = ObjectType::String;
+    VM::Object *GarbageCollector::makeStringObj(std::string data) {
+        VM::StringObj *str = new VM::StringObj;
+        str->header.type = VM::ObjectType::String;
         str->data = std::move(data);
-        Object *obj = (Object *) str;
+        VM::Object *obj = (VM::Object *) str;
         addObj(obj);
         return (obj);
     }

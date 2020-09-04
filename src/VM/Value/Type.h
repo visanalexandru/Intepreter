@@ -13,7 +13,8 @@ namespace VM{
         Float,
         Int,
         Bool,
-        None
+        None,
+        Object
     };
 
 
@@ -28,6 +29,8 @@ namespace VM{
                 return "None";
             case ValueType::Bool:
                 return "Bool";
+            case ValueType::Object:
+                return "Object";
         }
     }
 }

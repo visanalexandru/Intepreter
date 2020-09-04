@@ -4,18 +4,18 @@
 
 #ifndef INTERPRETER_GARBAGECOLLECTOR_H
 #define INTERPRETER_GARBAGECOLLECTOR_H
-#include "Object.h"
+#include "VM/Value/Object.h"
 #include<deque>
 namespace GC{
     class GarbageCollector {
     private:
-        Object*head;
+        VM::Object*head;
 
-        void addObj(Object*obj);
+        void addObj(VM::Object*obj);
     public:
         GarbageCollector();
 
-        Object*makeStringObj(std::string data);
+        VM::Object*makeStringObj(std::string data);
     };
 
     extern GarbageCollector globalGc;

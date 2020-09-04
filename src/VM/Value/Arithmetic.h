@@ -5,6 +5,7 @@
 #ifndef INTERPRETER_ARITHMETIC_H
 #define INTERPRETER_ARITHMETIC_H
 
+#include <GC/GarbageCollector.h>
 #include "Value.h"
 
 namespace VM{
@@ -24,6 +25,9 @@ namespace VM{
         return Value{{.bval=data}, ValueType::Bool};
     }
 
+    inline Value makeObjValue(Object*data){
+        return Value{{.oval=data},ValueType::Object};
+    }
 
     inline double asFloat(const Value &value) {
         return value.data.fval;
@@ -37,6 +41,9 @@ namespace VM{
         return value.data.bval;
     }
 
+    inline Object*asObject(const Value&value){
+        return value.data.oval;
+    }
     inline std::string toString(const Value &value) {
         switch (value.type) {
             case ValueType::None:
@@ -49,6 +56,12 @@ namespace VM{
                 return std::to_string(asFloat(value));
             case ValueType::Int:
                 return std::to_string(asInt(value));
+            case ValueType::Object:
+                Object*obj=asObject(value);
+                if(obj->type==ObjectType::String){
+                    return ((StringObj*)obj)->data;
+                }
+                return "Object";
         }
     }
 
@@ -62,7 +75,7 @@ namespace VM{
             case ValueType::Int:
                 return makeFloatValue((double) asInt(value));
             case ValueType::Float:
-                return makeFloatValue(asFloat(value));
+                return value;
             default:
                 throw std::runtime_error("Cannot cast " + typeToString(value.type) + " to Float");
         }
@@ -75,7 +88,7 @@ namespace VM{
             case ValueType::Float:
                 return makeFloatValue((bool) asFloat(value));
             case ValueType::Bool:
-                return makeBoolValue(asBool(value));
+                return value;
             case ValueType::None:
                 return makeBoolValue(false);
             default:
@@ -86,7 +99,7 @@ namespace VM{
     inline Value castToInt(const Value &value) {
         switch (value.type) {
             case ValueType::Int:
-                return makeIntValue(asInt(value));
+                return value;
             case ValueType::Float:
                 return makeIntValue((int) asFloat(value));
             default:

@@ -8,6 +8,7 @@
 #include<string>
 #include<stdexcept>
 #include"Type.h"
+#include"Object.h"
 
 namespace VM{
     /*This class represents a value in the interpreted program.*/
@@ -16,6 +17,8 @@ namespace VM{
             int ival;
             double fval;
             bool bval;
+            Object*oval;
+
         } data;
         ValueType type;
     };
