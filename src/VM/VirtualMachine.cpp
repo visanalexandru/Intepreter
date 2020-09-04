@@ -12,7 +12,7 @@ namespace VM {
     }
 
     VirtualMachine::~VirtualMachine() {
-        delete stack;
+        delete []stack;
     }
 
     Value &VirtualMachine::popValue() {
@@ -212,6 +212,10 @@ namespace VM {
         bytecode.jump(0);
         while (!bytecode.reachedEnd()) {
             executeOpcode(bytecode.readOpcode());
+        }
+
+        for(unsigned i=0;i<stack_ptr;i++){
+            std::cout<<toString(stack[i])<<" ";
         }
     }
 
