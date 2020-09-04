@@ -4,7 +4,7 @@
 
 #include "FlowState.h"
 
-namespace AST{
+namespace VM{
 
    FlowState::FlowState():inLoop(false),inFunction(false) {
 

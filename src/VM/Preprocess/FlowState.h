@@ -7,7 +7,7 @@
 
 /*This class is useful for checking control flow analysis (break statements only allowed in loops,return statements
  * only allowed in functions etc.)*/
-namespace AST{
+namespace VM{
 
     class FlowState {
     private:

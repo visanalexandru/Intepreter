@@ -5,7 +5,7 @@
 #ifndef INTERPRETER_VARIABLELOCATION_H
 #define INTERPRETER_VARIABLELOCATION_H
 
-namespace AST {
+namespace VM{
     struct VariableLocation {
         /*The index in frame stack in which the variable exists*/
         unsigned long location_in_stack;

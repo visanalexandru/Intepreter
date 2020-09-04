@@ -5,8 +5,8 @@
 #ifndef INTERPRETER_STMTNODE_H
 #define INTERPRETER_STMTNODE_H
 
-#include "AST/Preprocess/FlowState.h"
-#include "AST/Preprocess/DeclarationStack.h"
+#include "VM/Preprocess/FlowState.h"
+#include "VM/Preprocess/DeclarationStack.h"
 #include "VM/VirtualMachine.h"
 #include "location.hh"
 #include<vector>
@@ -22,10 +22,10 @@ namespace AST {
         /*Check if syntax errors regarding control flow are present.
          * Example: return statement outside function, break statement outside loop etc.
          * Add a syntax error to the list if it has  found control flow errors */
-        virtual void checkControlFlow(FlowState &state, std::vector<Error> &errors) const = 0;
+        virtual void checkControlFlow(VM::FlowState &state, std::vector<Error> &errors) const = 0;
 
         /*Report duplicate declarations of functions/variables , solve variable references.*/
-        virtual void solveDeclarations(DeclarationStack &stack, std::vector<Error> &error) = 0;
+        virtual void solveDeclarations(VM::DeclarationStack &stack, std::vector<Error> &error) = 0;
 
         virtual void emitBytecode(VM::VirtualMachine &vm, VM::BytecodeChunk &chunk) const = 0;
 

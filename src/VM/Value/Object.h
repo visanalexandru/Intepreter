@@ -6,8 +6,10 @@
 #define INTERPRETER_OBJECT_H
 #include<string>
 namespace VM{
+    class Value;
     enum class ObjectType {
         String,
+        NativeFunction
     };
 
     struct Object {
@@ -19,6 +21,12 @@ namespace VM{
     struct StringObj {
         Object header;
         std::string data;
+    };
+
+    struct NativeFunctionObj{
+        Object header;
+        unsigned arity;
+        Value(*data)(Value*);
     };
 }
 

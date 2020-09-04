@@ -3,7 +3,7 @@
 //
 
 #include "SymbolTable.h"
-namespace AST {
+namespace VM{
     SymbolTable globalSymtable;
 
     SymbolTable::SymbolTable() : num_symbols(0) {

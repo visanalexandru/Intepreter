@@ -13,13 +13,13 @@ namespace AST {
 
     }
 
-    void WhileStmt::checkControlFlow(FlowState &state, std::vector<Error> &errors) const {
+    void WhileStmt::checkControlFlow(VM::FlowState &state, std::vector<Error> &errors) const {
         state.enterLoop();
         body->checkControlFlow(state, errors);
         state.exitLoop();
     }
 
-    void WhileStmt::solveDeclarations(DeclarationStack &stack, std::vector<Error> &errors) {
+    void WhileStmt::solveDeclarations(VM::DeclarationStack &stack, std::vector<Error> &errors) {
         condition->solveVarReferences(stack, errors);
         body->solveDeclarations(stack, errors);
     }

@@ -9,10 +9,10 @@
 #include<unordered_set>
 #include<vector>
 #include<algorithm>
-#include "AST/Symbol.h"
+#include "VM/SymbolTable/Symbol.h"
 #include "VariableLocation.h"
 
-namespace AST {
+namespace VM{
     /*Useful for resolving variables.*/
     class DeclarationStack {
     private:

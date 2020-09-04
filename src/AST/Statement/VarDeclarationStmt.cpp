@@ -6,21 +6,21 @@
 
 namespace AST {
 
-    VarDeclarationStmt::VarDeclarationStmt(yy::location loc, Symbol sym) :
+    VarDeclarationStmt::VarDeclarationStmt(yy::location loc, VM::Symbol sym) :
             StmtNode(loc),
             symbol(std::move(sym)), value(nullptr) {
 
 
     }
 
-    VarDeclarationStmt::VarDeclarationStmt(yy::location loc, Symbol sym, std::shared_ptr<ExpNode> exp) :
+    VarDeclarationStmt::VarDeclarationStmt(yy::location loc, VM::Symbol sym, std::shared_ptr<ExpNode> exp) :
             StmtNode(loc),
             symbol(std::move(sym)),
             value(std::move(exp)) {
 
     }
 
-    void VarDeclarationStmt::solveDeclarations(AST::DeclarationStack &stack, std::vector<Error> &errors) {
+    void VarDeclarationStmt::solveDeclarations(VM::DeclarationStack &stack, std::vector<Error> &errors) {
         if(value!= nullptr)
             value->solveVarReferences(stack,errors);
 

@@ -6,18 +6,18 @@
 
 namespace AST {
 
-    VariableExp::VariableExp(yy::location loc, Symbol sym) : ExpNode(loc), symbol(std::move(sym)), assign(nullptr) {
+    VariableExp::VariableExp(yy::location loc, VM::Symbol sym) : ExpNode(loc), symbol(std::move(sym)), assign(nullptr) {
 
 
     }
 
-    VariableExp::VariableExp(yy::location loc, Symbol sym, std::unique_ptr<ExpNode> to_assign) : ExpNode(loc),
+    VariableExp::VariableExp(yy::location loc, VM::Symbol sym, std::unique_ptr<ExpNode> to_assign) : ExpNode(loc),
                                                                                                  symbol(std::move(sym)),
                                                                                                  assign(std::move(to_assign)){
 
     }
 
-    void VariableExp::solveVarReferences(AST::DeclarationStack &stack, std::vector<Error> &errors) {
+    void VariableExp::solveVarReferences(VM::DeclarationStack &stack, std::vector<Error> &errors) {
         if (!stack.getVariableLocation(symbol, var_location))
             errors.emplace_back("semantic error, variable is not declared: " + symbol.symbol_name, location);
         if(assign!=nullptr)

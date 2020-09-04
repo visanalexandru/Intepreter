@@ -5,7 +5,7 @@
 #include "DeclarationStack.h"
 #include<iostream>
 
-namespace AST {
+namespace VM{
 
     DeclarationStack::DeclarationStack() {
         pushStackFrame();

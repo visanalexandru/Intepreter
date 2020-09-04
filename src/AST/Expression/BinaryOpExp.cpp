@@ -13,7 +13,7 @@ namespace AST {
             right(std::move(r)) {
     }
 
-    void BinaryOpExp::solveVarReferences(AST::DeclarationStack &stack, std::vector<Error> &errors) {
+    void BinaryOpExp::solveVarReferences(VM::DeclarationStack &stack, std::vector<Error> &errors) {
         left->solveVarReferences(stack, errors);
         right->solveVarReferences(stack, errors);
     }

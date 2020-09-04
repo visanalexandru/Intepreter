@@ -6,7 +6,7 @@
 #define INTERPRETER_VARIABLEEXP_H
 
 #include "ExpNode.h"
-#include "AST/Symbol.h"
+#include "VM/SymbolTable/Symbol.h"
 #include "Error.h"
 
 namespace AST {
@@ -15,17 +15,17 @@ namespace AST {
     class VariableExp : public ExpNode {
     private:
         /*The symbol of the variable that needs to be read*/
-        const Symbol symbol;
+        const VM::Symbol symbol;
 
-        VariableLocation var_location;
+        VM::VariableLocation var_location;
 
         std::unique_ptr<ExpNode> assign;
     public:
-        VariableExp(yy::location loc,Symbol sym);
+        VariableExp(yy::location loc,VM::Symbol sym);
 
-        VariableExp(yy::location loc,Symbol sym,std::unique_ptr<ExpNode> to_assign);
+        VariableExp(yy::location loc,VM::Symbol sym,std::unique_ptr<ExpNode> to_assign);
 
-        void solveVarReferences(AST::DeclarationStack &stack, std::vector<Error> &errors) override;
+        void solveVarReferences(VM::DeclarationStack &stack, std::vector<Error> &errors) override;
 
         void emitBytecode(VM::VirtualMachine&vm,VM::BytecodeChunk&chunk) const override;
     };

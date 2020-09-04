@@ -7,7 +7,7 @@
 
 #include<string>
 #include<iostream>
-namespace AST {
+namespace VM{
     /*This struct represents a identifier in the interpreted program. It contains the identifier name, and an
      * identifier index. If 2 identifiers have the same name, they have the same index. This is just for optimization,
      * so we can compare 2 symbols using their id rather than their name.*/

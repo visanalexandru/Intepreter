@@ -11,6 +11,10 @@ namespace VM {
         stack = new Value[stack_size];
     }
 
+    VM::DeclarationStack & VirtualMachine::getDeclarationStack() {
+        return declaration_stack;
+    }
+
     VirtualMachine::~VirtualMachine() {
         delete []stack;
     }
@@ -201,6 +205,10 @@ namespace VM {
                     break;
                 case Opcode::ASSIGN_GLOBAL:
                     std::cout << "ASSIGN_GLOBAL " << bytecode.readUInt() << std::endl;
+                    break;
+                case Opcode::FUNCTION_CALL:
+                    std::cout<<"FUNCTION_CALL "<<bytecode.readUInt()<<std::endl;
+                    break;
                 default:
                     std::cout << "UNKNOWN" << std::endl;
                     break;

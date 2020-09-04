@@ -18,9 +18,9 @@ namespace AST{
     public:
         CompoundStmt(yy::location loc, std::vector<std::unique_ptr<StmtNode>> stmts);
 
-        void checkControlFlow(FlowState&state,std::vector<Error>&errors) const override;
+        void checkControlFlow(VM::FlowState&state,std::vector<Error>&errors) const override;
 
-        void solveDeclarations(DeclarationStack&stack,std::vector<Error>&errors) override;
+        void solveDeclarations(VM::DeclarationStack&stack,std::vector<Error>&errors) override;
 
         void emitBytecode(VM::VirtualMachine&vm,VM::BytecodeChunk&chunk) const override;
 

@@ -28,8 +28,9 @@
   #include "AST/Statement/ExpressionStmt.h"
   #include "AST/Statement/IfElseStmt.h"
   #include "AST/Statement/WhileStmt.h"
-  #include "AST/Symbol.h"
+  #include "VM/SymbolTable/Symbol.h"
   #include "AST/Statement/CompoundStmt.h"
+  #include "AST/Expression/FunctionCallExp.h"
   class Driver;
 }
 
@@ -70,7 +71,7 @@
 ;
 
 %token <VM::Value> LITERAL
-%token <AST::Symbol> IDENTIFIER
+%token <VM::Symbol> IDENTIFIER
 %nterm <std::unique_ptr<AST::ExpNode>> expression
 
 %nterm <std::unique_ptr<AST::VarDeclarationStmt>> var_declaration_stmt
@@ -81,7 +82,8 @@
 %nterm <std::unique_ptr<AST::CompoundStmt>> compound_stmt;
 %nterm <std::vector<std::unique_ptr<AST::StmtNode>>> block //a list of statements
 
-
+%nterm <std::vector<std::unique_ptr<AST::ExpNode>>> expression_list;//1 or more comma separated expressions
+%nterm <std::vector<std::unique_ptr<AST::ExpNode>>> argument_list;//0 or more comma separated expresssions
 //Precedence
 %right "="
 %left "||"
@@ -89,8 +91,9 @@
 %left "==" "!="
 %left ">" "<" ">=" "<="
 %left "+" "-";
-%left "*" "/" "%";
+%left "*" "/" "%"
 %right "!"
+%left  "("
 
 
 
@@ -118,10 +121,21 @@ expression: LITERAL {$$=std::make_unique<AST::LiteralExp>(@1,$1);}
 | "(" expression ")"          { $$ = std::move($2); }
 | IDENTIFIER "=" expression   { $$=std::make_unique<AST::VariableExp>(@2,std::move($1),std::move($3));}
 | IDENTIFIER                  { $$=std::make_unique<AST::VariableExp>(@1,std::move($1));}
+| expression argument_list  {std::cout<<@1<<std::endl; $$=std::make_unique<AST::FunctionCallExp>(@1,std::move($1),std::move($2));}
+
 ;
 
+expression_list: expression {$$.push_back(std::move($1));}
+|expression_list "," expression {$1.push_back(std::move($3));$$=std::move($1);}
+;
+
+argument_list: "(" ")"      {}
+|"(" expression_list ")"    {$$=std::move($2);}
+;
+
+
 block:
-%empty                    {$$=std::vector<std::unique_ptr<AST::StmtNode>>();}
+%empty          {}
 |block statement{ $1.push_back(std::move($2));$$=std::move($1);}
 ;
 

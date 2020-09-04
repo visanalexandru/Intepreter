@@ -16,11 +16,11 @@ namespace AST {
     public:
         ExpressionStmt(yy::location loc,std::shared_ptr<ExpNode> expression);
 
-        void checkControlFlow(FlowState&state,std::vector<Error>&errors) const override{};//no control flow errors can happen here
+        void checkControlFlow(VM::FlowState&state,std::vector<Error>&errors) const override{};//no control flow errors can happen here
 
         void emitBytecode(VM::VirtualMachine&vm,VM::BytecodeChunk&chunk) const override;
 
-        void solveDeclarations(DeclarationStack&stack,std::vector<Error>&errors) override ;
+        void solveDeclarations(VM::DeclarationStack&stack,std::vector<Error>&errors) override ;
     };
 
 

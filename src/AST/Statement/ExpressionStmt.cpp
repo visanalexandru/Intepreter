@@ -13,7 +13,7 @@ namespace AST {
 
     }
 
-    void ExpressionStmt::solveDeclarations(AST::DeclarationStack &stack, std::vector<Error> &errors) {
+    void ExpressionStmt::solveDeclarations(VM::DeclarationStack &stack, std::vector<Error> &errors) {
         exp->solveVarReferences(stack,errors);
     }
 

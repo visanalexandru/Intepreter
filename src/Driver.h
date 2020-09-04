@@ -3,7 +3,7 @@
 
 #include"parser.hpp"
 #include "AST/Statement/StmtNode.h"
-#include "AST/SymbolTable.h"
+#include "VM/SymbolTable/SymbolTable.h"
 #include "Error.h"
 
 #define YY_DECL yy::parser::symbol_type yylex(Driver&drv)
@@ -30,7 +30,8 @@ public:
     void start();
 
 private:
-    /*Add core functions to the context*/
+    VM::VirtualMachine virtual_machine;
+
     void init();
 
     /*Solve function calls,variables, apply semantic analysis etc.*/
@@ -41,9 +42,6 @@ private:
 
     /*the file that is currently being scanned */
     std::string current_file;
-
-    /*The declaration stack*/
-    AST::DeclarationStack declaration_stack;
 
     /*begin the scanning phase,implemented in the flex scanner file*/
     void scan_begin();

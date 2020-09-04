@@ -4,7 +4,7 @@
 #define CATCH_CONFIG_MAIN
 #include"catch.hpp"
 #include "AST/Value/Value.h"
-#include "AST/SymbolTable.h"
+#include "VM/SymbolTable/SymbolTable.h"
 
 TEST_CASE("Integer arithmetic","[arithmetic]"){
 

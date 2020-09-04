@@ -12,13 +12,13 @@ namespace AST {
 
     }
 
-    void CompoundStmt::checkControlFlow(FlowState &state, std::vector<Error> &errors) const {
+    void CompoundStmt::checkControlFlow(VM::FlowState &state, std::vector<Error> &errors) const {
         for(const auto&stmt:statements){
             stmt->checkControlFlow(state,errors);
         }
     }
 
-    void CompoundStmt::solveDeclarations(DeclarationStack &stack, std::vector<Error> &errors) {
+    void CompoundStmt::solveDeclarations(VM::DeclarationStack &stack, std::vector<Error> &errors) {
         stack.pushScope();
         for(const auto&stmt:statements){
             stmt->solveDeclarations(stack,errors);

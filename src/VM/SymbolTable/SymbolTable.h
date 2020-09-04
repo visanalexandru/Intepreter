@@ -7,9 +7,9 @@
 
 #include<unordered_map>
 #include<string>
-#include "AST/Symbol.h"
+#include "Symbol.h"
 
-namespace AST {
+namespace VM{
 /*This class is responsible for creating unique indexes for identifiers in the interpreted program.*/
 /*So identifier strings are converted to integer indexes for speed*/
     class SymbolTable {

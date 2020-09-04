@@ -5,7 +5,7 @@
 # include <cstring> // strerror
 # include <string>
 # include "Driver.h"
-#include "AST/SymbolTable.h"
+#include "VM/SymbolTable/SymbolTable.h"
 #include "VM/Value/Arithmetic.h"
 #include "GC/GarbageCollector.h"
 # include "parser.hpp"
@@ -134,7 +134,7 @@ yy::parser::symbol_type make_STRING(const std::string &s, const yy::parser::loca
 
 yy::parser::symbol_type make_SYMBOL(const std::string &s, const yy::parser::location_type& loc)
 {
-    return yy::parser::make_IDENTIFIER(AST::globalSymtable.addSymbol(s),loc);
+    return yy::parser::make_IDENTIFIER(VM::globalSymtable.addSymbol(s),loc);
 }
 
 

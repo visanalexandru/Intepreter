@@ -20,7 +20,7 @@ namespace AST {
     public:
         UnaryOpExp(yy::location loc,UnaryOperator t, std::unique_ptr<ExpNode> op);
 
-        void solveVarReferences(AST::DeclarationStack &stack, std::vector<Error> &errors) override;
+        void solveVarReferences(VM::DeclarationStack &stack, std::vector<Error> &errors) override;
 
         void emitBytecode(VM::VirtualMachine&vm,VM::BytecodeChunk&chunk) const override;
     };

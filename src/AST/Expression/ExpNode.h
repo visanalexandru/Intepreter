@@ -8,7 +8,7 @@
 #include<vector>
 #include<memory>
 #include <location.hh>
-#include"AST/Preprocess/DeclarationStack.h"
+#include"VM/Preprocess/DeclarationStack.h"
 #include "VM/VirtualMachine.h"
 #include "Error.h"
 namespace AST {
@@ -22,7 +22,7 @@ namespace AST {
 
         virtual ~ExpNode() = default;
 
-        virtual void solveVarReferences(DeclarationStack&stack,std::vector<Error>&errors)=0 ;
+        virtual void solveVarReferences(VM::DeclarationStack&stack,std::vector<Error>&errors)=0 ;
 
         /*Converts the expression syntax tree into bytecode*/
         virtual void emitBytecode(VM::VirtualMachine&vm,VM::BytecodeChunk&chunk) const =0;

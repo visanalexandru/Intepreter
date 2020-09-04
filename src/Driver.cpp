@@ -39,12 +39,12 @@ void Driver::start() {
 }
 
 void Driver::semanticAnalysis() {
-    AST::FlowState state;
+    VM::FlowState state;
     for (const auto &stmt:result)
         stmt->checkControlFlow(state, errors);
 
     for(const auto&stmt:result)
-        stmt->solveDeclarations(declaration_stack,errors);
+        stmt->solveDeclarations(virtual_machine.getDeclarationStack(),errors);
 }
 
 

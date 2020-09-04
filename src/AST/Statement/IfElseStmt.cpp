@@ -16,13 +16,13 @@ namespace AST {
 
     }
 
-    void IfElseStmt::checkControlFlow(AST::FlowState &state, std::vector<Error> &errors) const {
+    void IfElseStmt::checkControlFlow(VM::FlowState &state, std::vector<Error> &errors) const {
         ifbranch->checkControlFlow(state, errors);
         if (elsebranch != nullptr)
             elsebranch->checkControlFlow(state, errors);
     }
 
-    void IfElseStmt::solveDeclarations(AST::DeclarationStack &stack, std::vector<Error> &errors) {
+    void IfElseStmt::solveDeclarations(VM::DeclarationStack &stack, std::vector<Error> &errors) {
         condition->solveVarReferences(stack, errors);
         ifbranch->solveDeclarations(stack, errors);
         if (elsebranch != nullptr)

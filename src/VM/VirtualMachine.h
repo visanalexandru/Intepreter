@@ -7,10 +7,12 @@
 
 #include<vector>
 #include<iostream>
+#include "Preprocess/DeclarationStack.h"
 #include "Value/Value.h"
 #include "Value/Arithmetic.h"
 #include "Opcode.h"
 #include "BytecodeChunk.h"
+#include "CoreFunction/CoreFunction.h"
 
 namespace VM {
 
@@ -28,6 +30,8 @@ namespace VM {
 
         /*The stack pointer*/
         unsigned stack_ptr;
+
+        VM::DeclarationStack declaration_stack;
 
         Value &popValue();
 
@@ -49,6 +53,8 @@ namespace VM {
         void disassemble();
 
         BytecodeChunk &getChunk();
+
+        VM::DeclarationStack&getDeclarationStack();
 
         void run();
 
