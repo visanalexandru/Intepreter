@@ -23,11 +23,12 @@ namespace AST {
 
 
     void FunctionCallExp::emitBytecode(VM::VirtualMachine &vm, VM::BytecodeChunk &chunk) const {
-        expression->emitBytecode(vm,chunk);
 
         for(const auto&argument:arguments){
             argument->emitBytecode(vm,chunk);
         }
+
+        expression->emitBytecode(vm,chunk);
 
         chunk.pushOpcode(VM::Opcode::FUNCTION_CALL);
         chunk.pushUInt(arguments.size());

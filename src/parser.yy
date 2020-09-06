@@ -121,7 +121,7 @@ expression: LITERAL {$$=std::make_unique<AST::LiteralExp>(@1,$1);}
 | "(" expression ")"          { $$ = std::move($2); }
 | IDENTIFIER "=" expression   { $$=std::make_unique<AST::VariableExp>(@2,std::move($1),std::move($3));}
 | IDENTIFIER                  { $$=std::make_unique<AST::VariableExp>(@1,std::move($1));}
-| expression argument_list  {std::cout<<@1<<std::endl; $$=std::make_unique<AST::FunctionCallExp>(@1,std::move($1),std::move($2));}
+| expression argument_list  {$$=std::make_unique<AST::FunctionCallExp>(@1,std::move($1),std::move($2));}
 
 ;
 

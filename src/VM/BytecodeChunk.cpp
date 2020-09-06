@@ -42,8 +42,8 @@ namespace VM{
         size+=1;
     }
 
-    Opcode BytecodeChunk::readOpcode() {
-        return (Opcode)bytecode[cursor++];
+    uint8_t BytecodeChunk::readByte() {
+        return bytecode[cursor++];
     }
 
     void BytecodeChunk::jump(unsigned location) {

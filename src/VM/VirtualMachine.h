@@ -48,7 +48,7 @@ namespace VM {
 
         unsigned getLiteralCount() const;
 
-        void executeOpcode(Opcode opcode);
+        void executeOpcode(uint8_t opcode);
 
         void disassemble();
 

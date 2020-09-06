@@ -37,7 +37,7 @@ namespace VM {
         return bytecode;
     }
 
-    void VirtualMachine::executeOpcode(Opcode opcode) {
+    void VirtualMachine::executeOpcode(uint8_t opcode) {
         switch (opcode) {
             case Opcode::LOAD_LITERAL:
                 pushValue(literals[bytecode.readUInt()]);
@@ -137,7 +137,7 @@ namespace VM {
         std::cout << "Bytecode chunk size " << bytecode.getBytecodeSize() << std::endl;
         while (!bytecode.reachedEnd()) {
             std::cout << bytecode.getCursor() << " ";
-            auto op = bytecode.readOpcode();
+            auto op = bytecode.readByte();
             switch (op) {
 
                 case Opcode::LOAD_LITERAL:
@@ -219,7 +219,7 @@ namespace VM {
     void VirtualMachine::run() {
         bytecode.jump(0);
         while (!bytecode.reachedEnd()) {
-            executeOpcode(bytecode.readOpcode());
+            executeOpcode(bytecode.readByte());
         }
 
         for(unsigned i=0;i<stack_ptr;i++){

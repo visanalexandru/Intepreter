@@ -36,7 +36,7 @@ namespace VM {
 
         uint32_t readUInt();
 
-        Opcode readOpcode();
+        uint8_t readByte();
 
         void jump(unsigned location);
 
