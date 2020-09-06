@@ -5,7 +5,7 @@
 namespace VM{
 
     Value print(Value*ptr){
-        std::cout<<toString(*ptr);
+        std::cout<<"PRINT:"<<toString(*ptr)<<std::endl;
         return makeNullValue();
     }
 

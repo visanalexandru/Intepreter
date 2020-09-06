@@ -25,9 +25,19 @@ namespace VM{
 
     struct NativeFunctionObj{
         Object header;
+        std::string name;
         unsigned arity;
         Value(*data)(Value*);
     };
+
+    inline std::string objectTypeToString(ObjectType type){
+        switch (type) {
+            case ObjectType::String:
+                return "String";
+            case ObjectType::NativeFunction:
+                return "NativeFunction";
+        }
+    }
 }
 
 

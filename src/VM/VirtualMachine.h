@@ -13,6 +13,7 @@
 #include "Opcode.h"
 #include "BytecodeChunk.h"
 #include "CoreFunction/CoreFunction.h"
+#include "SymbolTable/SymbolTable.h"
 
 namespace VM {
 
@@ -33,12 +34,13 @@ namespace VM {
 
         VM::DeclarationStack declaration_stack;
 
-        Value &popValue();
+        const Value&popValue();
 
         void pushValue(const Value &value);
 
         Value&topOfStack();
 
+        void call(const Value&value,unsigned num_parameters);
     public:
         VirtualMachine();
 

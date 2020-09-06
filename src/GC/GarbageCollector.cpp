@@ -26,11 +26,12 @@ namespace GC {
         return obj;
     }
 
-    VM::Object * GarbageCollector::makeNativeFunctionObj(VM::Value (*func_ptr)(VM::Value *),unsigned arity) {
+    VM::Object * GarbageCollector::makeNativeFunctionObj(std::string name,unsigned arity,VM::Value (*func_ptr)(VM::Value *)) {
         VM::NativeFunctionObj* fn=new VM::NativeFunctionObj;
         fn->header.type=VM::ObjectType::NativeFunction;
         fn->data=func_ptr;
         fn->arity=arity;
+        fn->name=std::move(name);
         VM::Object*obj=(VM::Object*)fn;
         addObj(obj);
         return obj;
