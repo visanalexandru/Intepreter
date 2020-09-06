@@ -8,12 +8,12 @@
 namespace VM{
     struct VariableLocation {
         /*The index in frame stack in which the variable exists*/
-        unsigned long location_in_stack;
+        unsigned location_in_stack;
 
         /*If is local, search for the variable in the current stack frame, else search in the global stack frame*/
         bool is_local;
 
-        VariableLocation(unsigned long location, bool local) : location_in_stack(location), is_local(local) {
+        VariableLocation(unsigned location, bool local) : location_in_stack(location), is_local(local) {
 
         }
 

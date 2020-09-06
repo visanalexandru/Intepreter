@@ -14,13 +14,13 @@ namespace VM{
     struct Symbol {
         std::string symbol_name;
 
-        unsigned long symbol_id;
+        unsigned symbol_id;
 
         Symbol():symbol_name(),symbol_id(0){
 
         }
 
-        Symbol(std::string name, unsigned long id):symbol_name(std::move(name)),symbol_id(id){
+        Symbol(std::string name, unsigned id):symbol_name(std::move(name)),symbol_id(id){
 
         }
     };

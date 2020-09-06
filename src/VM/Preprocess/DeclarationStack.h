@@ -20,15 +20,15 @@ namespace VM{
         struct VariableDeclaration {
             Symbol variable_symbol;
 
-            unsigned long scope_depth;
+            unsigned scope_depth;
 
-            VariableDeclaration(Symbol symbol, unsigned long depth) : variable_symbol(std::move(symbol)),
+            VariableDeclaration(Symbol symbol, unsigned depth) : variable_symbol(std::move(symbol)),
                                                                       scope_depth(depth) {
             }
         };
 
         struct StackFrame {
-            unsigned long scope_depth;
+            unsigned scope_depth;
 
             std::vector<VariableDeclaration> declarations;
 
@@ -56,7 +56,7 @@ namespace VM{
         bool variableInCurrentScope(const Symbol &var_symbol) const;
 
         /*Returns the number of variables in the current scope.*/
-        unsigned long variablesInScope() const;
+        unsigned variablesInScope() const;
 
         /*Set the location parameter to the variable location. If the variable was not found, return false*/
         bool getVariableLocation(const Symbol &var_symbol, VariableLocation &location) const;

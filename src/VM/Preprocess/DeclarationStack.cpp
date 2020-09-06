@@ -26,7 +26,7 @@ namespace VM{
 
         for (auto iter = current_stack_frame.rbegin(); iter != current_stack_frame.rend(); iter++) {
             if (iter->variable_symbol.symbol_id == var_symbol.symbol_id) {
-                unsigned long index = current_stack_frame.rend() - iter-1;
+                unsigned index = current_stack_frame.rend() - iter-1;
                 location = {index, true};
                 return true;
             }
@@ -36,7 +36,7 @@ namespace VM{
             const auto &global_stack_frame = stack_frames[0].declarations;
             for (auto iter = global_stack_frame.rbegin(); iter != global_stack_frame.rend(); iter++) {
                 if (iter->variable_symbol.symbol_id == var_symbol.symbol_id) {
-                    unsigned long index = global_stack_frame.rend() - iter-1;
+                    unsigned index = global_stack_frame.rend() - iter-1;
                     location = {index, false};
                     return true;
                 }
@@ -54,7 +54,7 @@ namespace VM{
     }
 
     void DeclarationStack::popScope() {
-        unsigned long depth = stack_frames.back().scope_depth;
+        unsigned depth = stack_frames.back().scope_depth;
         auto&current_stack_frame=stack_frames.back().declarations;
         while (!current_stack_frame.empty()&&current_stack_frame.back().scope_depth==depth){
             current_stack_frame.pop_back();
@@ -62,9 +62,9 @@ namespace VM{
         stack_frames.back().scope_depth--;
     }
 
-    unsigned long DeclarationStack::variablesInScope() const {
-        unsigned long result=0;
-        unsigned long depth = stack_frames.back().scope_depth;
+    unsigned DeclarationStack::variablesInScope() const {
+        unsigned result=0;
+        unsigned depth = stack_frames.back().scope_depth;
         auto&current_stack_frame=stack_frames.back().declarations;
         for(const VariableDeclaration&declaration:current_stack_frame){
             if(declaration.scope_depth==depth)

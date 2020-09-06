@@ -15,10 +15,10 @@ namespace VM{
     class SymbolTable {
     private:
         /*A mapping between strings and their unique indexes*/
-        std::unordered_map<std::string, unsigned long> map;
+        std::unordered_map<std::string, unsigned> map;
 
         /*The number of symbols that were added*/
-        unsigned long num_symbols;
+        unsigned num_symbols;
 
     public:
         /*Adds a new symbol and returns its index. If the symbol was already in the map,
@@ -32,7 +32,7 @@ namespace VM{
         Symbol getSymbol(const std::string &symbol);
 
         /*Returns the number of distinct symbols in the table*/
-        int getNumSymbols() const;
+        unsigned getNumSymbols() const;
 
         SymbolTable();
     };

@@ -13,7 +13,7 @@ namespace AST{
     private:
         std::vector<std::unique_ptr<StmtNode>> statements;
 
-        unsigned long to_pop;/*The number of declarations in the block scope*/
+        unsigned to_pop;/*The number of declarations in the block scope*/
 
     public:
         CompoundStmt(yy::location loc, std::vector<std::unique_ptr<StmtNode>> stmts);

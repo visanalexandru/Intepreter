@@ -28,7 +28,7 @@ namespace VM{
         return {symbol,0};
     }
 
-    int SymbolTable::getNumSymbols() const {
+    unsigned SymbolTable::getNumSymbols() const {
         return num_symbols;
     }
 }
