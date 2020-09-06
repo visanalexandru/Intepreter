@@ -48,20 +48,29 @@ namespace VM{
         switch (value.type) {
             case ValueType::None:
                 return "None";
+
             case ValueType::Bool:
                 if (asBool(value))
                     return "true";
                 return "false";
+
             case ValueType::Float:
                 return std::to_string(asFloat(value));
+
             case ValueType::Int:
                 return std::to_string(asInt(value));
+
+
             case ValueType::Object:
                 Object*obj=asObject(value);
-                if(obj->type==ObjectType::String){
-                    return ((StringObj*)obj)->data;
+                switch (obj->type) {
+                    case VM::ObjectType::String:
+                        return ((StringObj*)obj)->data;
+                    case VM::ObjectType::NativeFunction:
+                        return "<built in function " +((NativeFunctionObj*)obj)->name+ ">";
+                    default:
+                        return "Object";
                 }
-                return "Object";
         }
     }
 
