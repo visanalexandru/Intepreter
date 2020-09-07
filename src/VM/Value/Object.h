@@ -44,6 +44,19 @@ namespace VM {
 
     };
 
+    struct DefinedFunctionObj : public Object {
+        std::string name;
+        unsigned arity;
+        BytecodeChunk bytecode;
+
+
+        DefinedFunctionObj(std::string id, unsigned params, BytecodeChunk chunk) : name(std::move(id)),
+                                                                                   arity(params),
+                                                                                   bytecode(std::move(chunk)) {
+
+        }
+    };
+
 }
 
 

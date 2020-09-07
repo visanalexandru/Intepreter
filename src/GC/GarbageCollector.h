@@ -18,6 +18,8 @@ namespace GC{
         VM::StringObj*makeStringObj(std::string data);
 
         VM::NativeFunctionObj*makeNativeFunctionObj(std::string name,unsigned arity,VM::Value(*func_ptr)(VM::Value*));
+
+        VM::DefinedFunctionObj*makeDefinedFunctionObj(std::string name,unsigned arity,VM::BytecodeChunk chunk);
     };
 
     extern GarbageCollector globalGc;

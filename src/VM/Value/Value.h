@@ -19,6 +19,7 @@ namespace VM{
             bool bval;
             StringObj*sval;
             NativeFunctionObj*nfval;
+            DefinedFunctionObj*dfval;
 
         } data;
         ValueType type;

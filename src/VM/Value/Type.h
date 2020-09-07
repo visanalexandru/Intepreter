@@ -15,7 +15,8 @@ namespace VM{
         Bool,
         None,
         String,
-        NativeFunction
+        NativeFunction,
+        DefinedFunction
     };
 
 
@@ -34,6 +35,8 @@ namespace VM{
                 return "String";
             case ValueType::NativeFunction:
                 return "NativeFunction";
+            case ValueType::DefinedFunction:
+                return "DefinedFunction";
         }
     }
 }

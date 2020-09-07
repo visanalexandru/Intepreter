@@ -28,4 +28,11 @@ namespace GC {
         addObj(fn);
         return fn;
     }
+
+    VM::DefinedFunctionObj * GarbageCollector::makeDefinedFunctionObj(std::string name, unsigned int arity,
+                                                                      VM::BytecodeChunk chunk) {
+        auto*fn=new VM::DefinedFunctionObj(std::move(name),arity,std::move(chunk));
+        addObj(fn);
+        return fn;
+    }
 }

@@ -33,6 +33,10 @@ namespace VM{
         return Value{{.nfval=data},ValueType::NativeFunction};
     }
 
+    inline Value makeDefinedFunctionObjValue(DefinedFunctionObj*data){
+        return Value{{.dfval=data},ValueType::DefinedFunction};
+    }
+
     inline double asFloat(const Value &value) {
         return value.data.fval;
     }
@@ -51,6 +55,10 @@ namespace VM{
 
     inline NativeFunctionObj* asNativeFunctionObj(const Value&value){
         return value.data.nfval;
+    }
+
+    inline DefinedFunctionObj* asDefinedFunctionObj(const Value&value){
+        return value.data.dfval;
     }
 
     inline std::string toString(const Value &value) {
@@ -73,6 +81,8 @@ namespace VM{
                 return asStringObj(value)->data;
             case ValueType::NativeFunction:
                 return "<built in function "+asNativeFunctionObj(value)->name+">";
+            case ValueType::DefinedFunction:
+                return "<function "+asDefinedFunctionObj(value)->name+">";
         }
     }
 
