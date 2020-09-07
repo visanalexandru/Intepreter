@@ -41,6 +41,8 @@ namespace VM {
         Value&topOfStack();
 
         void call(const Value&value,unsigned num_parameters);
+
+        void disassembleChunk(BytecodeChunk&chunk,const std::string&prefix);
     public:
         VirtualMachine();
 

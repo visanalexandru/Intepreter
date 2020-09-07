@@ -159,17 +159,24 @@ namespace VM {
         return literals.size();
     }
 
-    void VirtualMachine::disassemble() {
-        bytecode.jump(0);
-        std::cout << "Bytecode chunk size " << bytecode.getBytecodeSize() << std::endl;
-        while (!bytecode.reachedEnd()) {
-            std::cout << bytecode.getCursor() << " ";
-            auto op = bytecode.readByte();
+    void VirtualMachine::disassembleChunk(BytecodeChunk &chunk, const std::string &prefix) {
+        chunk.jump(0);
+        std::cout <<prefix+"Bytecode chunk size " << chunk.getBytecodeSize() << std::endl;
+        while (!chunk.reachedEnd()) {
+            std::cout << prefix << chunk.getCursor() << " ";
+            auto op = chunk.readByte();
             switch (op) {
 
-                case Opcode::LOAD_LITERAL:
-                    std::cout << "LOAD_LITERAL " << toString(literals[bytecode.readUInt()]) << std::endl;
+                case Opcode::LOAD_LITERAL: {
+                    Value &literal = literals[chunk.readUInt()];
+                    std::cout << "LOAD_LITERAL " << toString(literal) << std::endl;
+                    if(literal.type==ValueType::DefinedFunction){
+                        auto fn=asDefinedFunctionObj(literal);
+                        std::cout<<"\tFUNCTION "<<fn->name<<std::endl;
+                        disassembleChunk(fn->bytecode,prefix+"\t");
+                    }
                     break;
+                }
                 case Opcode::BINARY_ADD:
                     std::cout << "BINARY_ADD " << std::endl;
                     break;
@@ -201,13 +208,13 @@ namespace VM {
                     std::cout << "BINARY_GREATEREQ" << std::endl;
                     break;
                 case Opcode::JUMP_IF_FALSE:
-                    std::cout << "JUMP_IF_FALSE " << bytecode.readUInt() << std::endl;
+                    std::cout << "JUMP_IF_FALSE " << chunk.readUInt() << std::endl;
                     break;
                 case Opcode::JUMP_IF_TRUE:
-                    std::cout << "JUMP_IF_TRUE " << bytecode.readUInt() << std::endl;
+                    std::cout << "JUMP_IF_TRUE " << chunk.readUInt() << std::endl;
                     break;
                 case Opcode::JUMP:
-                    std::cout << "JUMP " << bytecode.readUInt() << std::endl;
+                    std::cout << "JUMP " << chunk.readUInt() << std::endl;
                     break;
                 case Opcode::POP:
                     std::cout << "POP" << std::endl;
@@ -222,25 +229,29 @@ namespace VM {
                     std::cout << "UNARY_MINUS" << std::endl;
                     break;
                 case Opcode::LOAD_LOCAL:
-                    std::cout << "LOAD_LOCAL " << bytecode.readUInt() << std::endl;
+                    std::cout << "LOAD_LOCAL " << chunk.readUInt() << std::endl;
                     break;
                 case Opcode::LOAD_GLOBAL:
-                    std::cout << "LOAD_GLOBAL " << bytecode.readUInt() << std::endl;
+                    std::cout << "LOAD_GLOBAL " << chunk.readUInt() << std::endl;
                     break;
                 case Opcode::ASSIGN_LOCAL:
-                    std::cout << "ASSIGN_LOCAL " << bytecode.readUInt() << std::endl;
+                    std::cout << "ASSIGN_LOCAL " << chunk.readUInt() << std::endl;
                     break;
                 case Opcode::ASSIGN_GLOBAL:
-                    std::cout << "ASSIGN_GLOBAL " << bytecode.readUInt() << std::endl;
+                    std::cout << "ASSIGN_GLOBAL " << chunk.readUInt() << std::endl;
                     break;
                 case Opcode::FUNCTION_CALL:
-                    std::cout << "FUNCTION_CALL " << bytecode.readUInt() << std::endl;
+                    std::cout << "FUNCTION_CALL " << chunk.readUInt() << std::endl;
                     break;
                 default:
                     std::cout << "UNKNOWN" << std::endl;
                     break;
             }
         }
+    }
+
+    void VirtualMachine::disassemble() {
+        disassembleChunk(bytecode, " ");
     }
 
     void VirtualMachine::run() {
