@@ -17,7 +17,8 @@ namespace VM{
             int ival;
             double fval;
             bool bval;
-            Object*oval;
+            StringObj*sval;
+            NativeFunctionObj*nfval;
 
         } data;
         ValueType type;

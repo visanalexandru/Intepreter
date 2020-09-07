@@ -129,7 +129,7 @@ yy::parser::symbol_type make_STRING(const std::string &s, const yy::parser::loca
         cursor++;
   }
 
-  return yy::parser::make_LITERAL (VM::makeObjValue(GC::globalGc.makeStringObj(buff)), loc);
+  return yy::parser::make_LITERAL (VM::makeStringObjValue(GC::globalGc.makeStringObj(buff)), loc);
 }
 
 yy::parser::symbol_type make_SYMBOL(const std::string &s, const yy::parser::location_type& loc)

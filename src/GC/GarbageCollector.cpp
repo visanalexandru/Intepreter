@@ -17,23 +17,15 @@ namespace GC {
         head = obj;
     }
 
-    VM::Object *GarbageCollector::makeStringObj(std::string data) {
-        VM::StringObj *str = new VM::StringObj;
-        str->header.type = VM::ObjectType::String;
-        str->data = std::move(data);
-        VM::Object *obj = (VM::Object *) str;
-        addObj(obj);
-        return obj;
+    VM::StringObj*GarbageCollector::makeStringObj(std::string data) {
+        auto *str = new VM::StringObj(std::move(data));
+        addObj(str);
+        return str;
     }
 
-    VM::Object * GarbageCollector::makeNativeFunctionObj(std::string name,unsigned arity,VM::Value (*func_ptr)(VM::Value *)) {
-        VM::NativeFunctionObj* fn=new VM::NativeFunctionObj;
-        fn->header.type=VM::ObjectType::NativeFunction;
-        fn->data=func_ptr;
-        fn->arity=arity;
-        fn->name=std::move(name);
-        VM::Object*obj=(VM::Object*)fn;
-        addObj(obj);
-        return obj;
+    VM::NativeFunctionObj* GarbageCollector::makeNativeFunctionObj(std::string name,unsigned arity,VM::Value (*func_ptr)(VM::Value *)) {
+        auto * fn=new VM::NativeFunctionObj(std::move(name),arity,func_ptr);
+        addObj(fn);
+        return fn;
     }
 }

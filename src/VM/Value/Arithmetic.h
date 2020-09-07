@@ -25,8 +25,12 @@ namespace VM{
         return Value{{.bval=data}, ValueType::Bool};
     }
 
-    inline Value makeObjValue(Object*data){
-        return Value{{.oval=data},ValueType::Object};
+    inline Value makeStringObjValue(StringObj*data){
+        return Value{{.sval=data},ValueType::String};
+    }
+
+    inline Value makeNativeFunctionObjValue(NativeFunctionObj*data){
+        return Value{{.nfval=data},ValueType::NativeFunction};
     }
 
     inline double asFloat(const Value &value) {
@@ -41,9 +45,14 @@ namespace VM{
         return value.data.bval;
     }
 
-    inline Object*asObject(const Value&value){
-        return value.data.oval;
+    inline StringObj*asStringObj(const Value&value){
+        return value.data.sval;
     }
+
+    inline NativeFunctionObj* asNativeFunctionObj(const Value&value){
+        return value.data.nfval;
+    }
+
     inline std::string toString(const Value &value) {
         switch (value.type) {
             case ValueType::None:
@@ -60,17 +69,10 @@ namespace VM{
             case ValueType::Int:
                 return std::to_string(asInt(value));
 
-
-            case ValueType::Object:
-                Object*obj=asObject(value);
-                switch (obj->type) {
-                    case VM::ObjectType::String:
-                        return ((StringObj*)obj)->data;
-                    case VM::ObjectType::NativeFunction:
-                        return "<built in function " +((NativeFunctionObj*)obj)->name+ ">";
-                    default:
-                        return "Object";
-                }
+            case ValueType::String:
+                return asStringObj(value)->data;
+            case ValueType::NativeFunction:
+                return "<built in function "+asNativeFunctionObj(value)->name+">";
         }
     }
 

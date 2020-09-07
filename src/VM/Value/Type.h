@@ -14,7 +14,8 @@ namespace VM{
         Int,
         Bool,
         None,
-        Object
+        String,
+        NativeFunction
     };
 
 
@@ -29,8 +30,10 @@ namespace VM{
                 return "None";
             case ValueType::Bool:
                 return "Bool";
-            case ValueType::Object:
-                return "Object";
+            case ValueType::String:
+                return "String";
+            case ValueType::NativeFunction:
+                return "NativeFunction";
         }
     }
 }

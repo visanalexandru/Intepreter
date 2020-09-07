@@ -4,40 +4,46 @@
 
 #ifndef INTERPRETER_OBJECT_H
 #define INTERPRETER_OBJECT_H
+
 #include<string>
-namespace VM{
+#include "VM/BytecodeChunk.h"
+
+namespace VM {
     class Value;
-    enum class ObjectType {
-        String,
-        NativeFunction
-    };
 
     struct Object {
-        ObjectType type;
         Object *next;//the object that was allocated after this object
         Object *previous;//the object that was allocated before this object
+        Object() : previous(nullptr), next(nullptr) {
+
+        }
+
+        virtual ~Object() = default;
     };
 
-    struct StringObj {
-        Object header;
+    struct StringObj : public Object {
         std::string data;
+
+        explicit StringObj(std::string str) : data(std::move(str)) {
+
+        }
     };
 
-    struct NativeFunctionObj{
-        Object header;
+    struct NativeFunctionObj : public Object {
         std::string name;
         unsigned arity;
-        Value(*data)(Value*);
+
+        Value (*data)(Value *);
+
+        NativeFunctionObj(std::string id, unsigned params, Value(*func)(Value *)) :
+                name(std::move(id)),
+                arity(params),
+                data(func) {
+
+        }
+
     };
 
-    inline std::string objectTypeToString(ObjectType type){
-        switch (type) {
-            case ObjectType::String:
-                return "String";
-            case ObjectType::NativeFunction:
-                return "NativeFunction";
-        }
-    }
 }
 
 

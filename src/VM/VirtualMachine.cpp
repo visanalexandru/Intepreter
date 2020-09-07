@@ -10,15 +10,15 @@ namespace VM {
     VirtualMachine::VirtualMachine() : stack_size(1048576), stack_ptr(0) {
         stack = new Value[stack_size];
         declaration_stack.addVariable(globalSymtable.addSymbol("print"));
-        pushValue(makeObjValue(GC::globalGc.makeNativeFunctionObj("print", 1, print)));
+        pushValue(makeNativeFunctionObjValue(GC::globalGc.makeNativeFunctionObj("print", 1, print)));
     }
 
-    VM::DeclarationStack & VirtualMachine::getDeclarationStack() {
+    VM::DeclarationStack &VirtualMachine::getDeclarationStack() {
         return declaration_stack;
     }
 
     VirtualMachine::~VirtualMachine() {
-        delete []stack;
+        delete[]stack;
     }
 
     const Value &VirtualMachine::popValue() {
@@ -40,21 +40,17 @@ namespace VM {
     }
 
     void VirtualMachine::call(const Value &value, unsigned int num_parameters) {
-        if (value.type != ValueType::Object) {
+        if (value.type != ValueType::NativeFunction) {
             throw std::runtime_error(typeToString(value.type) + " is not callable");
         } else {
-            Object *obj = asObject(value);
-            if (obj->type == ObjectType::NativeFunction) {
-                NativeFunctionObj *native = (NativeFunctionObj *) obj;
-                if (num_parameters != native->arity) {
-                    throw std::runtime_error(
-                            native->name + "() requires " + std::to_string(native->arity) +
-                            " parameters but " + std::to_string(num_parameters) + " were provided");
-                }
-                stack_ptr -= num_parameters;
-                pushValue(native->data(&stack[stack_ptr]));
+            NativeFunctionObj *native = asNativeFunctionObj(value);
+            if (num_parameters != native->arity) {
+                throw std::runtime_error(
+                        native->name + "() requires " + std::to_string(native->arity) +
+                        " parameters but " + std::to_string(num_parameters) + " were provided");
             }
-            else throw std::runtime_error(objectTypeToString(obj->type)+" is not callable");
+            stack_ptr -= num_parameters;
+            pushValue(native->data(&stack[stack_ptr]));
         }
     }
 
