@@ -27,8 +27,7 @@ namespace VM{
     }
 
     uint32_t BytecodeChunk::readUInt() {
-        uint32_t result;
-        memcpy(&result,&bytecode[cursor],4);
+        uint32_t result=*(uint32_t*)&bytecode[cursor];
         cursor+= 4;
         return result;
     }

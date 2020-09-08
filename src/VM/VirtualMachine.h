@@ -26,11 +26,14 @@ namespace VM {
         /*Literals.*/
         std::vector<Value> literals;
 
-        /*The value stack*/
-        Value *stack;
+        /*The stack*/
+        Value*stack;
+
+        /*The stack base pointer*/
+        Value *stack_base;
 
         /*The stack pointer*/
-        unsigned stack_ptr;
+        Value*stack_ptr;
 
         VM::DeclarationStack declaration_stack;
 

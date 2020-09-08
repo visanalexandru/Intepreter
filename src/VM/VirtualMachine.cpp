@@ -7,8 +7,11 @@
 
 namespace VM {
 
-    VirtualMachine::VirtualMachine() : stack_size(1048576), stack_ptr(0) {
-        stack = new Value[stack_size];
+    VirtualMachine::VirtualMachine() : stack_size(1048576), stack_ptr(nullptr) {
+        stack= new Value[stack_size];
+        stack_base=stack;
+        stack_ptr=stack_base;
+
         declaration_stack.addVariable(globalSymtable.addSymbol("print"));
         pushValue(makeNativeFunctionObjValue(GC::globalGc.makeNativeFunctionObj("print", 1, print)));
     }
@@ -22,17 +25,18 @@ namespace VM {
     }
 
     const Value &VirtualMachine::popValue() {
-        Value &to_return = stack[stack_ptr - 1];
+        Value &to_return = *(stack_ptr - 1);
         stack_ptr--;
         return to_return;
     }
 
     void VirtualMachine::pushValue(const Value &value) {
-        stack[stack_ptr++] = value;
+        *stack_ptr=value;
+        stack_ptr++;
     }
 
     Value &VirtualMachine::topOfStack() {
-        return stack[stack_ptr - 1];
+        return *(stack_ptr-1);
     }
 
     BytecodeChunk &VirtualMachine::getChunk() {
@@ -50,7 +54,7 @@ namespace VM {
                         " parameters but " + std::to_string(num_parameters) + " were provided");
             }
             stack_ptr -= num_parameters;
-            pushValue(native->data(&stack[stack_ptr]));
+            pushValue(native->data(stack_ptr));
         }
     }
 
@@ -119,21 +123,21 @@ namespace VM {
                 popValue();
                 break;
             case Opcode::LOAD_LOCAL:
-                pushValue(stack[bytecode.readUInt()]);
+                pushValue(stack_base[bytecode.readUInt()]);
                 break;
             case Opcode::LOAD_GLOBAL:
-                pushValue(stack[bytecode.readUInt()]);
+                pushValue(stack_base[bytecode.readUInt()]);
                 break;
             case Opcode::ASSIGN_LOCAL: {
                 const Value &to_assign = popValue();
-                stack[bytecode.readUInt()] = to_assign;
+                stack_base[bytecode.readUInt()] = to_assign;
                 pushValue(to_assign);
                 break;
             }
 
             case Opcode::ASSIGN_GLOBAL: {
                 const Value &to_assign = popValue();
-                stack[bytecode.readUInt()] = to_assign;
+                stack_base[bytecode.readUInt()] = to_assign;
                 pushValue(to_assign);
                 break;
             }
@@ -258,10 +262,6 @@ namespace VM {
         bytecode.jump(0);
         while (!bytecode.reachedEnd()) {
             executeOpcode(bytecode.readByte());
-        }
-
-        for (unsigned i = 0; i < stack_ptr; i++) {
-            std::cout << toString(stack[i]) << " ";
         }
     }
 
