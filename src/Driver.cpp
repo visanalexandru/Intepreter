@@ -25,11 +25,12 @@ void Driver::start() {
     if (errors.empty()) {
         std::cout << "Parsing successful" << std::endl;
         VM::VirtualMachine vm;
+        VM::BytecodeChunk main;
         for (const auto &stmt :result)
-            stmt->emitBytecode(vm,vm.getChunk());
-        vm.disassemble();
+            stmt->emitBytecode(vm,main);
+        vm.disassembleChunk(main,"");
         float a=clock();
-        vm.run();
+        vm.executeChunk(main);
         std::cout<<"Took "<<(clock()-a)/CLOCKS_PER_SEC;
     } else {
         std::cerr << "Errors:" << std::endl;

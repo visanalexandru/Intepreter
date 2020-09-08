@@ -8,9 +8,8 @@
 namespace VM {
 
     VirtualMachine::VirtualMachine() : stack_size(1048576), stack_ptr(nullptr) {
-        stack= new Value[stack_size];
-        stack_base=stack;
-        stack_ptr=stack_base;
+        stack = new Value[stack_size];
+        stack_ptr = stack;
 
         declaration_stack.addVariable(globalSymtable.addSymbol("print"));
         pushValue(makeNativeFunctionObjValue(GC::globalGc.makeNativeFunctionObj("print", 1, print)));
@@ -31,17 +30,14 @@ namespace VM {
     }
 
     void VirtualMachine::pushValue(const Value &value) {
-        *stack_ptr=value;
+        *stack_ptr = value;
         stack_ptr++;
     }
 
     Value &VirtualMachine::topOfStack() {
-        return *(stack_ptr-1);
+        return *(stack_ptr - 1);
     }
 
-    BytecodeChunk &VirtualMachine::getChunk() {
-        return bytecode;
-    }
 
     void VirtualMachine::call(const Value &value, unsigned int num_parameters) {
         if (value.type != ValueType::NativeFunction) {
@@ -58,99 +54,104 @@ namespace VM {
         }
     }
 
-    void VirtualMachine::executeOpcode(uint8_t opcode) {
-        switch (opcode) {
-            case Opcode::LOAD_LITERAL:
-                pushValue(literals[bytecode.readUInt()]);
-                break;
-            case Opcode::BINARY_ADD:
-                pushValue(add(popValue(), popValue()));
-                break;
-            case Opcode::BINARY_SUBTRACT:
-                pushValue(subtract(popValue(), popValue()));
-                break;
-            case Opcode::BINARY_MULTIPLY:
-                pushValue(multiply(popValue(), popValue()));
-                break;
-            case Opcode::BINARY_DIVIDE:
-                pushValue(divide(popValue(), popValue()));
-                break;
-            case Opcode::BINARY_EQUAL:
-                pushValue(equal(popValue(), popValue()));
-                break;
-            case Opcode::BINARY_NEQUAL:
-                pushValue(nequal(popValue(), popValue()));
-                break;
-            case Opcode::BINARY_LESS:
-                pushValue(less(popValue(), popValue()));
-                break;
-            case Opcode::BINARY_LESSEQ:
-                pushValue(lesseq(popValue(), popValue()));
-                break;
-            case Opcode::BINARY_GREATER:
-                pushValue(greater(popValue(), popValue()));
-                break;
-            case Opcode::BINARY_GREATEREQ:
-                pushValue(greatereq(popValue(), popValue()));
-                break;
-            case Opcode::BINARY_MODULUS:
-                pushValue(modulo(popValue(), popValue()));
-                break;
-            case Opcode::UNARY_MINUS:
-                pushValue(uminus(popValue()));
-                break;
-            case Opcode::UNARY_NOT:
-                pushValue(makeBoolValue(!asBool(castToBool(popValue()))));
-                break;
-            case Opcode::JUMP_IF_TRUE: {
-                unsigned to_jump = bytecode.readUInt();
-                if (asBool(topOfStack()))
-                    bytecode.jump(to_jump);
-                break;
-            }
-            case Opcode::JUMP_IF_FALSE: {
-                unsigned to_jump = bytecode.readUInt();
-                if (!asBool(topOfStack())) {
-                    bytecode.jump(to_jump);
+    void VirtualMachine::executeChunk(BytecodeChunk &chunk) {
+        uint8_t opcode;
+        chunk.jump(0);
+        while (!chunk.reachedEnd()) {
+            opcode=chunk.readByte();
+            switch (opcode) {
+                case Opcode::LOAD_LITERAL:
+                    pushValue(literals[chunk.readUInt()]);
+                    break;
+                case Opcode::BINARY_ADD:
+                    pushValue(add(popValue(), popValue()));
+                    break;
+                case Opcode::BINARY_SUBTRACT:
+                    pushValue(subtract(popValue(), popValue()));
+                    break;
+                case Opcode::BINARY_MULTIPLY:
+                    pushValue(multiply(popValue(), popValue()));
+                    break;
+                case Opcode::BINARY_DIVIDE:
+                    pushValue(divide(popValue(), popValue()));
+                    break;
+                case Opcode::BINARY_EQUAL:
+                    pushValue(equal(popValue(), popValue()));
+                    break;
+                case Opcode::BINARY_NEQUAL:
+                    pushValue(nequal(popValue(), popValue()));
+                    break;
+                case Opcode::BINARY_LESS:
+                    pushValue(less(popValue(), popValue()));
+                    break;
+                case Opcode::BINARY_LESSEQ:
+                    pushValue(lesseq(popValue(), popValue()));
+                    break;
+                case Opcode::BINARY_GREATER:
+                    pushValue(greater(popValue(), popValue()));
+                    break;
+                case Opcode::BINARY_GREATEREQ:
+                    pushValue(greatereq(popValue(), popValue()));
+                    break;
+                case Opcode::BINARY_MODULUS:
+                    pushValue(modulo(popValue(), popValue()));
+                    break;
+                case Opcode::UNARY_MINUS:
+                    pushValue(uminus(popValue()));
+                    break;
+                case Opcode::UNARY_NOT:
+                    pushValue(makeBoolValue(!asBool(castToBool(popValue()))));
+                    break;
+                case Opcode::JUMP_IF_TRUE: {
+                    unsigned to_jump = chunk.readUInt();
+                    if (asBool(topOfStack()))
+                        chunk.jump(to_jump);
+                    break;
                 }
-                break;
-            }
+                case Opcode::JUMP_IF_FALSE: {
+                    unsigned to_jump = chunk.readUInt();
+                    if (!asBool(topOfStack())) {
+                        chunk.jump(to_jump);
+                    }
+                    break;
+                }
 
-            case Opcode::JUMP:
-                bytecode.jump(bytecode.readUInt());
-                break;
-            case Opcode::POP:
-                popValue();
-                break;
-            case Opcode::LOAD_LOCAL:
-                pushValue(stack_base[bytecode.readUInt()]);
-                break;
-            case Opcode::LOAD_GLOBAL:
-                pushValue(stack_base[bytecode.readUInt()]);
-                break;
-            case Opcode::ASSIGN_LOCAL: {
-                const Value &to_assign = popValue();
-                stack_base[bytecode.readUInt()] = to_assign;
-                pushValue(to_assign);
-                break;
-            }
+                case Opcode::JUMP:
+                    chunk.jump(chunk.readUInt());
+                    break;
+                case Opcode::POP:
+                    popValue();
+                    break;
+                case Opcode::LOAD_LOCAL:
+                    pushValue(stack[chunk.readUInt()]);
+                    break;
+                case Opcode::LOAD_GLOBAL:
+                    pushValue(stack[chunk.readUInt()]);
+                    break;
+                case Opcode::ASSIGN_LOCAL: {
+                    const Value &to_assign = popValue();
+                    stack[chunk.readUInt()] = to_assign;
+                    pushValue(to_assign);
+                    break;
+                }
 
-            case Opcode::ASSIGN_GLOBAL: {
-                const Value &to_assign = popValue();
-                stack_base[bytecode.readUInt()] = to_assign;
-                pushValue(to_assign);
-                break;
-            }
+                case Opcode::ASSIGN_GLOBAL: {
+                    const Value &to_assign = popValue();
+                    stack[chunk.readUInt()] = to_assign;
+                    pushValue(to_assign);
+                    break;
+                }
 
-            case Opcode::FUNCTION_CALL: {
-                const Value &func = popValue();
-                unsigned arity = bytecode.readUInt();
-                call(func, arity);
-                break;
-            }
+                case Opcode::FUNCTION_CALL: {
+                    const Value &func = popValue();
+                    unsigned arity = chunk.readUInt();
+                    call(func, arity);
+                    break;
+                }
 
-            default:
-                break;
+                default:
+                    break;
+            }
         }
     }
 
@@ -165,7 +166,7 @@ namespace VM {
 
     void VirtualMachine::disassembleChunk(BytecodeChunk &chunk, const std::string &prefix) {
         chunk.jump(0);
-        std::cout <<prefix+"Bytecode chunk size " << chunk.getBytecodeSize() << std::endl;
+        std::cout << prefix + "Bytecode chunk size " << chunk.getBytecodeSize() << std::endl;
         while (!chunk.reachedEnd()) {
             std::cout << prefix << chunk.getCursor() << " ";
             auto op = chunk.readByte();
@@ -174,10 +175,10 @@ namespace VM {
                 case Opcode::LOAD_LITERAL: {
                     Value &literal = literals[chunk.readUInt()];
                     std::cout << "LOAD_LITERAL " << toString(literal) << std::endl;
-                    if(literal.type==ValueType::DefinedFunction){
-                        auto fn=asDefinedFunctionObj(literal);
-                        std::cout<<"\tFUNCTION "<<fn->name<<std::endl;
-                        disassembleChunk(fn->bytecode,prefix+"\t");
+                    if (literal.type == ValueType::DefinedFunction) {
+                        auto fn = asDefinedFunctionObj(literal);
+                        std::cout << "\tFUNCTION " << fn->name << std::endl;
+                        disassembleChunk(fn->bytecode, prefix + "\t");
                     }
                     break;
                 }
@@ -251,17 +252,6 @@ namespace VM {
                     std::cout << "UNKNOWN" << std::endl;
                     break;
             }
-        }
-    }
-
-    void VirtualMachine::disassemble() {
-        disassembleChunk(bytecode, " ");
-    }
-
-    void VirtualMachine::run() {
-        bytecode.jump(0);
-        while (!bytecode.reachedEnd()) {
-            executeOpcode(bytecode.readByte());
         }
     }
 

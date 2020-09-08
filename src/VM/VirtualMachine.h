@@ -21,16 +21,11 @@ namespace VM {
     private:
         const unsigned stack_size;
 
-        BytecodeChunk bytecode;
-
         /*Literals.*/
         std::vector<Value> literals;
 
         /*The stack*/
         Value*stack;
-
-        /*The stack base pointer*/
-        Value *stack_base;
 
         /*The stack pointer*/
         Value*stack_ptr;
@@ -45,7 +40,6 @@ namespace VM {
 
         void call(const Value&value,unsigned num_parameters);
 
-        void disassembleChunk(BytecodeChunk&chunk,const std::string&prefix);
     public:
         VirtualMachine();
 
@@ -55,15 +49,11 @@ namespace VM {
 
         unsigned getLiteralCount() const;
 
-        void executeOpcode(uint8_t opcode);
+        void disassembleChunk(BytecodeChunk&chunk,const std::string&prefix);
 
-        void disassemble();
-
-        BytecodeChunk &getChunk();
+        void executeChunk(BytecodeChunk&chunk);
 
         VM::DeclarationStack&getDeclarationStack();
-
-        void run();
 
     };
 
