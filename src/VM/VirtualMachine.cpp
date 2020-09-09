@@ -11,6 +11,8 @@ namespace VM {
         stack = new Value[stack_size];
         stack_ptr = stack;
 
+        pushLiteral(makeNullValue());
+
         declaration_stack.addVariable(globalSymtable.addSymbol("print"));
         pushValue(makeNativeFunctionObjValue(GC::globalGc.makeNativeFunctionObj("print", 1, print)));
     }

@@ -20,10 +20,8 @@ namespace AST {
         if (expression != nullptr) {
             expression->emitBytecode(vm, chunk);
         } else {
-            unsigned index = vm.getLiteralCount();
-            vm.pushLiteral(VM::makeNullValue());
             chunk.pushOpcode(VM::LOAD_LITERAL);
-            chunk.pushUInt(index);
+            chunk.pushUInt(0);//load null value
         }
 
         chunk.pushOpcode(VM::Opcode::RETURN_VALUE);

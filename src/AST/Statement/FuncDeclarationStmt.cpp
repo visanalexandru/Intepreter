@@ -43,15 +43,14 @@ namespace AST {
         for (const auto &statement:to_execute) {
             statement->emitBytecode(vm, function_chunk);
         }
-        unsigned index = vm.getLiteralCount();
-        vm.pushLiteral(VM::makeNullValue());
         function_chunk.pushOpcode(VM::Opcode::LOAD_LITERAL);
-        function_chunk.pushUInt(index);
+        function_chunk.pushUInt(0);//load null value
+
         function_chunk.pushOpcode(VM::Opcode::RETURN_VALUE);
 
         VM::DefinedFunctionObj *func = GC::globalGc.makeDefinedFunctionObj(function_symbol.symbol_name,
                                                                            parameter_symbols.size(), function_chunk);
-        index = vm.getLiteralCount();
+        unsigned index = vm.getLiteralCount();
         vm.pushLiteral(VM::makeDefinedFunctionObjValue(func));
         chunk.pushOpcode(VM::Opcode::LOAD_LITERAL);
         chunk.pushUInt(index);

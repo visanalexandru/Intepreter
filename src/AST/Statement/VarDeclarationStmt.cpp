@@ -35,9 +35,8 @@ namespace AST {
         }
         else{
             unsigned literal_count=vm.getLiteralCount();
-            vm.pushLiteral(VM::makeNullValue());
             chunk.pushOpcode(VM::Opcode::LOAD_LITERAL);
-            chunk.pushUInt(literal_count);
+            chunk.pushUInt(0);
         }
     }
 }
