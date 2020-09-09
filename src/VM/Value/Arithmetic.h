@@ -105,9 +105,9 @@ namespace VM{
     inline Value castToBool(const Value &value) {
         switch (value.type) {
             case ValueType::Int:
-                return makeFloatValue((bool) asInt(value));
+                return makeBoolValue((bool) asInt(value));
             case ValueType::Float:
-                return makeFloatValue((bool) asFloat(value));
+                return makeBoolValue((bool) asFloat(value));
             case ValueType::Bool:
                 return value;
             case ValueType::None:
