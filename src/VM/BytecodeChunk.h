@@ -17,30 +17,16 @@ namespace VM {
     private:
         std::vector<uint8_t> bytecode;
 
-        unsigned cursor;
-
-        unsigned size;
-
     public:
-        BytecodeChunk();
-
-        bool reachedEnd() const;
-
         unsigned getBytecodeSize() const;
+
+        uint8_t* getData();
 
         void pushUInt(uint32_t to_push);
 
         void pushOpcode(Opcode opcode);
 
         void patchUInt(uint32_t to_patch, unsigned index);
-
-        uint32_t readUInt();
-
-        uint8_t readByte();
-
-        void jump(unsigned location);
-
-        unsigned getCursor() const;
     };
 }
 

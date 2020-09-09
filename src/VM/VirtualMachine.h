@@ -14,11 +14,27 @@
 #include "BytecodeChunk.h"
 #include "CoreFunction/CoreFunction.h"
 #include "SymbolTable/SymbolTable.h"
+#include "Utils.h"
 
 namespace VM {
 
     class VirtualMachine {
     private:
+
+        struct CallFrame{
+            Value*base;
+
+            uint8_t *chunk;
+
+            unsigned ip;//instruction pointer
+        };
+
+        CallFrame frames[1000];
+
+        unsigned call_frames;
+
+        CallFrame*current_call_frame;
+
         const unsigned stack_size;
 
         /*Literals.*/

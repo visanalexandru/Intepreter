@@ -5,17 +5,12 @@
 #include "BytecodeChunk.h"
 
 namespace VM{
-
-    BytecodeChunk::BytecodeChunk():cursor(0),size(0) {
-
-    }
-
-    bool BytecodeChunk::reachedEnd() const {
-        return cursor==size;
+    uint8_t * BytecodeChunk::getData() {
+        return &bytecode[0];
     }
 
     unsigned int BytecodeChunk::getBytecodeSize() const {
-        return size;
+        return bytecode.size();
     }
 
     void BytecodeChunk::pushUInt(uint32_t to_push){
@@ -23,13 +18,6 @@ namespace VM{
         bytecode.push_back((to_push >> 8u) & 0xffu);
         bytecode.push_back((to_push >> 16u) & 0xffu);
         bytecode.push_back((to_push >> 24u) & 0xffu);
-        size+=4;
-    }
-
-    uint32_t BytecodeChunk::readUInt() {
-        uint32_t result=*(uint32_t*)&bytecode[cursor];
-        cursor+= 4;
-        return result;
     }
 
     void BytecodeChunk::patchUInt(uint32_t to_patch, unsigned int index) {
@@ -38,18 +26,5 @@ namespace VM{
 
     void BytecodeChunk::pushOpcode(Opcode opcode) {
         bytecode.push_back((uint8_t)opcode);
-        size+=1;
-    }
-
-    uint8_t BytecodeChunk::readByte() {
-        return bytecode[cursor++];
-    }
-
-    void BytecodeChunk::jump(unsigned location) {
-        cursor=location;
-    }
-
-    unsigned int BytecodeChunk::getCursor() const {
-        return cursor;
     }
 }

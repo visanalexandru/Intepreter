@@ -31,7 +31,8 @@ namespace VM {
         LOAD_LOCAL,
         LOAD_GLOBAL,
         ASSIGN_LOCAL,
-        ASSIGN_GLOBAL
+        ASSIGN_GLOBAL,
+        RETURN_VALUE
     };
 
 }

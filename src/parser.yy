@@ -31,6 +31,8 @@
   #include "VM/SymbolTable/Symbol.h"
   #include "AST/Statement/CompoundStmt.h"
   #include "AST/Expression/FunctionCallExp.h"
+  #include "AST/Statement/FuncDeclarationStmt.h"
+  #include "AST/Statement/ReturnStmt.h"
   class Driver;
 }
 
@@ -78,12 +80,16 @@
 %nterm <std::unique_ptr<AST::ExpressionStmt>> expression_stmt
 %nterm <std::unique_ptr<AST::IfElseStmt>> ifelse_stmt
 %nterm <std::unique_ptr<AST::WhileStmt>> while_stmt
+%nterm <std::unique_ptr<AST::FuncDeclarationStmt>> func_decl_stmt
+%nterm <std::unique_ptr<AST::ReturnStmt>> return_stmt;
 %nterm <std::unique_ptr<AST::StmtNode>> statement;
 %nterm <std::unique_ptr<AST::CompoundStmt>> compound_stmt;
 %nterm <std::vector<std::unique_ptr<AST::StmtNode>>> block //a list of statements
 
 %nterm <std::vector<std::unique_ptr<AST::ExpNode>>> expression_list;//1 or more comma separated expressions
-%nterm <std::vector<std::unique_ptr<AST::ExpNode>>> argument_list;//0 or more comma separated expresssions
+%nterm <std::vector<std::unique_ptr<AST::ExpNode>>> argument_list;//0 or more comma separated expressions between parentheses
+%nterm <std::vector<VM::Symbol>> identifier_list;//1 or more comma separated identifiers
+%nterm <std::vector<VM::Symbol>> argument_identifier_list;//0 or more comma separated identifiers between parentheses
 //Precedence
 %right "="
 %left "||"
@@ -133,6 +139,14 @@ argument_list: "(" ")"      {}
 |"(" expression_list ")"    {$$=std::move($2);}
 ;
 
+identifier_list: IDENTIFIER {$$.push_back(std::move($1));}
+|identifier_list "," IDENTIFIER {$1.push_back(std::move($3));$$=std::move($1);}
+
+argument_identifier_list: "(" ")" {}
+| "(" identifier_list ")" {$$=std::move($2);}
+
+
+
 
 block:
 %empty          {}
@@ -145,6 +159,8 @@ statement: var_declaration_stmt {$$=std::move($1);}
 |expression_stmt {$$=std::move($1);}
 |ifelse_stmt     {$$=std::move($1);}
 |while_stmt      {$$=std::move($1);}
+|func_decl_stmt  {$$=std::move($1);}
+|return_stmt     {$$=std::move($1);}
 |compound_stmt   {$$=std::move($1);}
 
 var_declaration_stmt: "var" IDENTIFIER "=" expression ";" {$$=std::make_unique<AST::VarDeclarationStmt>(@1,std::move($2),std::move($4));}
@@ -160,6 +176,10 @@ ifelse_stmt: "if" "(" expression ")" compound_stmt{$$=std::make_unique<AST::IfEl
 
 while_stmt: "while" "(" expression ")" compound_stmt{$$=std::make_unique<AST::WhileStmt>(@1,std::move($3),std::move($5));}
 
+func_decl_stmt: "func" IDENTIFIER argument_identifier_list "{" block "}" {$$=std::make_unique<AST::FuncDeclarationStmt>(@1,std::move($2),std::move($3),std::move($5));}
+
+return_stmt: "return" expression ";" {$$=std::make_unique<AST::ReturnStmt>(@1,std::move($2));}
+| "return"  ";" {$$=std::make_unique<AST::ReturnStmt>(@1);}
 %%
 
 void

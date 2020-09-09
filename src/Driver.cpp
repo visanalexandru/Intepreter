@@ -28,6 +28,7 @@ void Driver::start() {
         VM::BytecodeChunk main;
         for (const auto &stmt :result)
             stmt->emitBytecode(vm,main);
+        main.pushOpcode(VM::Opcode::RETURN_VALUE);
         vm.disassembleChunk(main,"");
         float a=clock();
         vm.executeChunk(main);
