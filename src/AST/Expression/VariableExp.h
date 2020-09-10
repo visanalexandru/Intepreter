@@ -25,6 +25,9 @@ namespace AST {
 
         VariableExp(yy::location loc,VM::Symbol sym,std::unique_ptr<ExpNode> to_assign);
 
+        /*Convert the variable symbol to a VariableLocation, that holds information about the
+         * location in the stack of the var. If the assign expression is not null, resolve variables
+         * for it too.*/
         void solveVarReferences(VM::DeclarationStack &stack, std::vector<Error> &errors) override;
 
         void emitBytecode(VM::VirtualMachine&vm,VM::BytecodeChunk&chunk) const override;

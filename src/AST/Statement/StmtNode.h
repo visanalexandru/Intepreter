@@ -27,6 +27,7 @@ namespace AST {
         /*Report duplicate declarations of functions/variables , solve variable references.*/
         virtual void solveDeclarations(VM::DeclarationStack &stack, std::vector<Error> &error) = 0;
 
+        /*Convert AST into bytecode*/
         virtual void emitBytecode(VM::VirtualMachine &vm, VM::BytecodeChunk &chunk) const = 0;
 
         explicit StmtNode(yy::location loc);

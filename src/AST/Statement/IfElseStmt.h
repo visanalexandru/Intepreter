@@ -12,11 +12,11 @@
 
 namespace AST {
     /*This class represents an if-else-statement in the interpreted language.*/
-    /*Calling execute() will evaluate the condition expression, create a new scope and execute the block
-     *that is required (if the exp evaluated to true, execute the first block, else execute the second block) */
     class IfElseStmt : public StmtNode {
     private:
+        /*Condition to be evaluated*/
         std::unique_ptr<ExpNode> condition;
+
         std::unique_ptr<CompoundStmt> ifbranch;
         std::unique_ptr<CompoundStmt> elsebranch;
 
@@ -27,6 +27,7 @@ namespace AST {
 
         void emitBytecode(VM::VirtualMachine&vm,VM::BytecodeChunk&chunk) const override;
 
+        /*Solve declarations for the condition and the 2 branches*/
         void solveDeclarations(VM::DeclarationStack&stack,std::vector<Error>&errors)override ;
     };
 }

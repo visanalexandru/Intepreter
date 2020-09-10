@@ -16,7 +16,9 @@ namespace AST {
     public:
         LiteralExp(yy::location loc,VM::Value val);
 
+        /*No variable reference is done here, so this function is left empty*/
         void solveVarReferences(VM::DeclarationStack &stack, std::vector<Error> &errors) override {};
+
         /*Add the literal to the literal list, and emit a LOAD_LITERAL bytecode*/
         void emitBytecode(VM::VirtualMachine&vm,VM::BytecodeChunk&chunk) const override;
     };

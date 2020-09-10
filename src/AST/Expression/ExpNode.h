@@ -22,6 +22,7 @@ namespace AST {
 
         virtual ~ExpNode() = default;
 
+        /*Solves declarations, converts symbols to the location in the stack where the variable will be*/
         virtual void solveVarReferences(VM::DeclarationStack&stack,std::vector<Error>&errors)=0 ;
 
         /*Converts the expression syntax tree into bytecode*/

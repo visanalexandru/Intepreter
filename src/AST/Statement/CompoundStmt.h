@@ -8,7 +8,8 @@
 
 namespace AST{
 
-
+    /*This class represents a compound statement in the interpreted program. It is
+     * just a list of statements that execute in a new scope*/
     class CompoundStmt: public StmtNode {
     private:
         std::vector<std::unique_ptr<StmtNode>> statements;
@@ -20,6 +21,8 @@ namespace AST{
 
         void checkControlFlow(VM::FlowState&state,std::vector<Error>&errors) const override;
 
+        /*Push a new scope in the declaration stack and then solve declarations for all the statements
+         * in it's body*/
         void solveDeclarations(VM::DeclarationStack&stack,std::vector<Error>&errors) override;
 
         void emitBytecode(VM::VirtualMachine&vm,VM::BytecodeChunk&chunk) const override;

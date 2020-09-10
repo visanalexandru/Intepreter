@@ -20,6 +20,7 @@ namespace AST {
 
         void emitBytecode(VM::VirtualMachine&vm,VM::BytecodeChunk&chunk) const override;
 
+        /*Solve declarations for the expression*/
         void solveDeclarations(VM::DeclarationStack&stack,std::vector<Error>&errors) override ;
     };
 

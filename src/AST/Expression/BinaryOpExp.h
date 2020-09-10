@@ -24,6 +24,7 @@ namespace AST {
     public:
         BinaryOpExp(yy::location loc, BinaryOperator t, std::unique_ptr<ExpNode> l, std::unique_ptr<ExpNode> r);
 
+        /*Recursively solve references for the two expressions*/
         void solveVarReferences(VM::DeclarationStack &stack, std::vector<Error> &errors) override;
 
         void emitBytecode(VM::VirtualMachine&vm,VM::BytecodeChunk&chunk) const override;

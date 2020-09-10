@@ -10,7 +10,7 @@
 #include "VM/SymbolTable/Symbol.h"
 #include "VM/Value/Arithmetic.h"
 namespace AST {
-    /*This class is responsible for the declaration of a variable at runtime*/
+    /*This class represents a variable declaration*/
     class VarDeclarationStmt : public StmtNode {
     private:
         const VM::Symbol symbol;
