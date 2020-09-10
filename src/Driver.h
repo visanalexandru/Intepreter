@@ -32,8 +32,6 @@ public:
 private:
     VM::VirtualMachine virtual_machine;
 
-    void init();
-
     /*Solve function calls,variables, apply semantic analysis etc.*/
     void preprocess();
 

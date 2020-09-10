@@ -15,12 +15,8 @@ void Driver::preprocess() {
     semanticAnalysis();
 }
 
-void Driver::init() {
-
-}
 
 void Driver::start() {
-    init();
     preprocess();
     if (errors.empty()) {
         std::cout << "Parsing successful" << std::endl;
