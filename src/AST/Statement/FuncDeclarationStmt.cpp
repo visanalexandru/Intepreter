@@ -57,11 +57,13 @@ namespace AST {
     }
 
     void FuncDeclarationStmt::checkControlFlow(VM::FlowState &state, std::vector<Error> &errors) const {
+        bool in_function=state.isInFunction();
         state.enterFunction();
         for (const auto &stmt:to_execute) {
             stmt->checkControlFlow(state, errors);
         }
-        state.exitFunction();
+        if(!in_function)
+            state.exitFunction();
     }
 
 }
