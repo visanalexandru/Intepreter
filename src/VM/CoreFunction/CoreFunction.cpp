@@ -9,4 +9,9 @@ namespace VM{
         return makeNullValue();
     }
 
+    Value time(Value*ptr){
+        double seconds= (double)(clock())/CLOCKS_PER_SEC;
+        return makeFloatValue(seconds);
+    }
+
 }

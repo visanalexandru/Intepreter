@@ -34,7 +34,6 @@ namespace AST {
             value->emitBytecode(vm,chunk);
         }
         else{
-            unsigned literal_count=vm.getLiteralCount();
             chunk.pushOpcode(VM::Opcode::LOAD_LITERAL);
             chunk.pushUInt(0);
         }

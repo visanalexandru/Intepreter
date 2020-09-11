@@ -12,6 +12,8 @@ namespace VM{
 
     Value print(Value*ptr);
 
+    Value time(Value*ptr);
+
 
 }
 

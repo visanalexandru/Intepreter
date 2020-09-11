@@ -15,6 +15,9 @@ namespace VM {
 
         declaration_stack.addVariable(globalSymtable.addSymbol("print"));
         pushValue(makeNativeFunctionObjValue(GC::globalGc.makeNativeFunctionObj("print", 1, print)));
+
+        declaration_stack.addVariable(globalSymtable.addSymbol("time"));
+        pushValue(makeNativeFunctionObjValue(GC::globalGc.makeNativeFunctionObj("time", 0, time)));
     }
 
     VM::DeclarationStack &VirtualMachine::getDeclarationStack() {
