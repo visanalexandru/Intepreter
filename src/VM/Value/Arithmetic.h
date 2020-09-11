@@ -145,7 +145,7 @@ namespace VM{
 
         if (isNumerical(a) && isNumerical(b)) {
             if (a.type == ValueType::Float || b.type == ValueType::Float) {
-                return makeFloatValue(asFloat(castToFloat(a)) + asFloat(castToFloat(b)));
+                return makeFloatValue(asFloat(castToFloat(a)) - asFloat(castToFloat(b)));
             }
             return makeIntValue(asInt(a) - asInt(b));
         }
