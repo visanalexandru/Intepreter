@@ -167,10 +167,10 @@ namespace VM{
 
     inline Value divide(const Value &a, const Value &b) {
         if (isNumerical(a) && isNumerical(b)) {
-            return makeFloatValue(asFloat(castToFloat(a)) * asFloat(castToFloat(b)));
+            return makeFloatValue(asFloat(castToFloat(a)) / asFloat(castToFloat(b)));
         }
         throw std::runtime_error(
-                "Unsupported operand types for *: " + typeToString(a.type) + " and " + typeToString(b.type));
+                "Unsupported operand types for /: " + typeToString(a.type) + " and " + typeToString(b.type));
     }
 
     inline Value uminus(const Value &a) {
