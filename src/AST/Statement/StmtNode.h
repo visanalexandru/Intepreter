@@ -34,6 +34,8 @@ namespace AST {
 
         virtual ~StmtNode() = default;
 
+        yy::location getLocation() const;
+
     };
 }
 

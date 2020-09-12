@@ -10,4 +10,9 @@ namespace AST {
 
     }
 
+
+    yy::location StmtNode::getLocation() const {
+        return location;
+    }
+
 }
