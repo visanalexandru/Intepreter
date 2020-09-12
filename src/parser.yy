@@ -100,6 +100,8 @@
 %left "*" "/" "%"
 %right "!"
 %left  "("
+%nonassoc "then"
+%nonassoc "else"
 
 
 
@@ -171,8 +173,8 @@ expression_stmt: expression ";" {$$=std::make_unique<AST::ExpressionStmt>(@1,std
 ;
 
 
-ifelse_stmt: "if" "(" expression ")" compound_stmt{$$=std::make_unique<AST::IfElseStmt>(@1,std::move($3),std::move($5));}
-|"if" "(" expression ")" compound_stmt "else" compound_stmt {$$=std::make_unique<AST::IfElseStmt>(@1,std::move($3),std::move($5),std::move($7));}
+ifelse_stmt: "if" "(" expression ")" statement %prec "then" {$$=std::make_unique<AST::IfElseStmt>(@1,std::move($3),std::move($5));}
+|"if" "(" expression ")" statement "else" statement {$$=std::make_unique<AST::IfElseStmt>(@1,std::move($3),std::move($5),std::move($7));}
 
 while_stmt: "while" "(" expression ")" compound_stmt{$$=std::make_unique<AST::WhileStmt>(@1,std::move($3),std::move($5));}
 

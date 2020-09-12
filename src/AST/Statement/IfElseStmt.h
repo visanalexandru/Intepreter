@@ -21,7 +21,7 @@ namespace AST {
         std::unique_ptr<CompoundStmt> elsebranch;
 
     public:
-        IfElseStmt(yy::location loc, std::unique_ptr<ExpNode> cond, std::unique_ptr<CompoundStmt> ifb,std::unique_ptr<CompoundStmt>elseb= nullptr);
+        IfElseStmt(yy::location loc, std::unique_ptr<ExpNode> cond, std::unique_ptr<StmtNode> ifb,std::unique_ptr<StmtNode>elseb= nullptr);
 
         void checkControlFlow(VM::FlowState&state,std::vector<Error>&errors) const override;
 

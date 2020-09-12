@@ -12,6 +12,10 @@ namespace AST {
 
     }
 
+    CompoundStmt::CompoundStmt(yy::location loc, std::unique_ptr<StmtNode> stmt):StmtNode(loc),to_pop(0) {
+        statements.push_back(std::move(stmt));
+    }
+
     void CompoundStmt::checkControlFlow(VM::FlowState &state, std::vector<Error> &errors) const {
         for(const auto&stmt:statements){
             stmt->checkControlFlow(state,errors);

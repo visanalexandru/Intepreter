@@ -17,7 +17,12 @@ namespace AST{
         unsigned to_pop;/*The number of declarations in the block scope*/
 
     public:
+        /*Create a compound statement using a list of statements*/
         CompoundStmt(yy::location loc, std::vector<std::unique_ptr<StmtNode>> stmts);
+
+        /*Create a compound statement using just a statement. Useful for having non-compound
+         * statements in while/if etc statements.*/
+        CompoundStmt(yy::location loc, std::unique_ptr<StmtNode> stmt);
 
         void checkControlFlow(VM::FlowState&state,std::vector<Error>&errors) const override;
 

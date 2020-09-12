@@ -6,14 +6,15 @@
 
 namespace AST {
 
-    IfElseStmt::IfElseStmt(yy::location loc, std::unique_ptr<ExpNode> cond, std::unique_ptr<CompoundStmt> ifb,
-                           std::unique_ptr<CompoundStmt> elseb) :
+    IfElseStmt::IfElseStmt(yy::location loc, std::unique_ptr<ExpNode> cond, std::unique_ptr<StmtNode> ifb,
+                           std::unique_ptr<StmtNode> elseb) :
             StmtNode(loc),
-            condition(std::move(cond)),
-            ifbranch(std::move(ifb)),
-            elsebranch(std::move(elseb)) {
+            condition(std::move(cond)),elsebranch(nullptr){
 
-
+        ifbranch=std::make_unique<CompoundStmt>(ifb->getLocation(),std::move(ifb));
+        if(elseb!= nullptr){
+            elsebranch=std::make_unique<CompoundStmt>(elseb->getLocation(),std::move(elseb));
+        }
     }
 
     void IfElseStmt::checkControlFlow(VM::FlowState &state, std::vector<Error> &errors) const {
