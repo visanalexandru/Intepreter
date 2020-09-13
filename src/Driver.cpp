@@ -11,26 +11,19 @@ int Driver::parse(const std::string &f) {
     return res;
 }
 
-void Driver::logErrors() {
-    for (const Error &err:errors)
-        err.log();
-}
-
 void Driver::preprocess() {
     semanticAnalysis();
 }
 
 
 void Driver::start() {
-    if (!errors.empty()) {
-        std::cerr<<"Syntax errors:"<<std::endl;
-        logErrors();
-        return;
+    if (errors.empty()) {
+        preprocess();
     }
-    preprocess();
     if (!errors.empty()) {
-        std::cerr<<"Semantic errors:"<<std::endl;
-        logErrors();
+        std::cerr<<"Errors:"<<std::endl;
+        for (const Error &err:errors)
+            err.log();
         return;
     }
 
