@@ -6,11 +6,10 @@
 
 namespace AST {
 
-    WhileStmt::WhileStmt(yy::location loc, std::unique_ptr<ExpNode> cond, std::unique_ptr<CompoundStmt> stmts)
+    WhileStmt::WhileStmt(yy::location loc, std::unique_ptr<ExpNode> cond, std::unique_ptr<StmtNode> stmt)
             : StmtNode(loc),
-              condition(std::move(cond)),
-              body(std::move(stmts)) {
-
+              condition(std::move(cond)){
+        body=std::make_unique<CompoundStmt>(loc,std::move(stmt));
     }
 
     void WhileStmt::checkControlFlow(VM::FlowState &state, std::vector<Error> &errors) const {

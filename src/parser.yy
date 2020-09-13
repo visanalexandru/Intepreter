@@ -176,7 +176,7 @@ expression_stmt: expression ";" {$$=std::make_unique<AST::ExpressionStmt>(@1,std
 ifelse_stmt: "if" "(" expression ")" statement %prec "then" {$$=std::make_unique<AST::IfElseStmt>(@1,std::move($3),std::move($5));}
 |"if" "(" expression ")" statement "else" statement {$$=std::make_unique<AST::IfElseStmt>(@1,std::move($3),std::move($5),std::move($7));}
 
-while_stmt: "while" "(" expression ")" compound_stmt{$$=std::make_unique<AST::WhileStmt>(@1,std::move($3),std::move($5));}
+while_stmt: "while" "(" expression ")" statement {$$=std::make_unique<AST::WhileStmt>(@1,std::move($3),std::move($5));}
 
 func_decl_stmt: "func" IDENTIFIER argument_identifier_list "{" block "}" {$$=std::make_unique<AST::FuncDeclarationStmt>(@1,std::move($2),std::move($3),std::move($5));}
 

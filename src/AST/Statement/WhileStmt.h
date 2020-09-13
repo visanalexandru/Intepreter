@@ -20,7 +20,7 @@ namespace AST {
         std::unique_ptr<ExpNode> condition;
 
     public:
-        WhileStmt(yy::location loc,std::unique_ptr<ExpNode>cond,std::unique_ptr<CompoundStmt> stmts);
+        WhileStmt(yy::location loc,std::unique_ptr<ExpNode>cond,std::unique_ptr<StmtNode> stmt);
 
         /*Check for loop statements (break,continue etc.);*/
         void checkControlFlow(VM::FlowState &state, std::vector<Error> &errors) const override;
