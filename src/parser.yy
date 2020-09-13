@@ -130,7 +130,6 @@ expression: LITERAL {$$=std::make_unique<AST::LiteralExp>(@1,$1);}
 | IDENTIFIER "=" expression   { $$=std::make_unique<AST::VariableExp>(@2,std::move($1),std::move($3));}
 | IDENTIFIER                  { $$=std::make_unique<AST::VariableExp>(@1,std::move($1));}
 | expression argument_list  {$$=std::make_unique<AST::FunctionCallExp>(@1,std::move($1),std::move($2));}
-
 ;
 
 expression_list: expression {$$.push_back(std::move($1));}
@@ -164,6 +163,7 @@ statement: var_declaration_stmt {$$=std::move($1);}
 |func_decl_stmt  {$$=std::move($1);}
 |return_stmt     {$$=std::move($1);}
 |compound_stmt   {$$=std::move($1);}
+|error           {}
 
 var_declaration_stmt: "var" IDENTIFIER "=" expression ";" {$$=std::make_unique<AST::VarDeclarationStmt>(@1,std::move($2),std::move($4));}
 | "var" IDENTIFIER ";"                                    {$$=std::make_unique<AST::VarDeclarationStmt>(@1,std::move($2));}

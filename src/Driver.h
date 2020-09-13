@@ -47,6 +47,9 @@ private:
     /*end the scanning phase,implemented in the flex scanner file*/
     void scan_end();
 
+    /*Log errors to the console*/
+    void logErrors();
+
 };
 
 #endif //DRIVER_H

@@ -11,29 +11,39 @@ int Driver::parse(const std::string &f) {
     return res;
 }
 
+void Driver::logErrors() {
+    for (const Error &err:errors)
+        err.log();
+}
+
 void Driver::preprocess() {
     semanticAnalysis();
 }
 
 
 void Driver::start() {
-    preprocess();
-    if (errors.empty()) {
-        std::cout << "Parsing successful" << std::endl;
-        VM::VirtualMachine vm;
-        VM::BytecodeChunk main;
-        for (const auto &stmt :result)
-            stmt->emitBytecode(vm,main);
-        main.pushOpcode(VM::Opcode::RETURN_VALUE);
-        vm.disassembleChunk(main,"");
-        float a=clock();
-        vm.executeChunk(main);
-        std::cout<<"Took "<<(clock()-a)/CLOCKS_PER_SEC;
-    } else {
-        std::cerr << "Errors:" << std::endl;
-        for (const Error &error:errors)
-            error.log();
+    if (!errors.empty()) {
+        std::cerr<<"Syntax errors:"<<std::endl;
+        logErrors();
+        return;
     }
+    preprocess();
+    if (!errors.empty()) {
+        std::cerr<<"Semantic errors:"<<std::endl;
+        logErrors();
+        return;
+    }
+
+    std::cout << "Parsing successful" << std::endl;
+    VM::VirtualMachine vm;
+    VM::BytecodeChunk main;
+    for (const auto &stmt :result)
+        stmt->emitBytecode(vm, main);
+    main.pushOpcode(VM::Opcode::RETURN_VALUE);
+    vm.disassembleChunk(main, "");
+    float a = clock();
+    vm.executeChunk(main);
+    std::cout << "Took " << (clock() - a) / CLOCKS_PER_SEC;
 }
 
 void Driver::semanticAnalysis() {
@@ -41,8 +51,8 @@ void Driver::semanticAnalysis() {
     for (const auto &stmt:result)
         stmt->checkControlFlow(state, errors);
 
-    for(const auto&stmt:result)
-        stmt->solveDeclarations(virtual_machine.getDeclarationStack(),errors);
+    for (const auto &stmt:result)
+        stmt->solveDeclarations(virtual_machine.getDeclarationStack(), errors);
 }
 
 
