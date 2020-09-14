@@ -39,4 +39,9 @@ namespace AST {
             chunk.pushOpcode(VM::Opcode::POP);
         }
     }
+
+
+    const std::vector<std::unique_ptr<StmtNode>>&CompoundStmt::getStatements() const {
+        return statements;
+    }
 }

@@ -32,6 +32,9 @@ namespace AST{
 
         void emitBytecode(VM::VirtualMachine&vm,VM::BytecodeChunk&chunk) const override;
 
+        /*Return a reference to the list of statements*/
+        const std::vector<std::unique_ptr<StmtNode>>& getStatements() const;
+
     };
 
 
