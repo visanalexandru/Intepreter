@@ -7,11 +7,11 @@
 namespace AST {
     FuncDeclarationStmt::FuncDeclarationStmt(yy::location loc, VM::Symbol symbol,
                                              std::vector<VM::Symbol> params,
-                                             std::vector<std::unique_ptr<StmtNode>> stmts) :
+                                             std::unique_ptr<CompoundStmt> function_body) :
             StmtNode(loc),
             function_symbol(std::move(symbol)),
             parameter_symbols(std::move(params)),
-            to_execute(std::move(stmts)) {
+            body(std::move(function_body)) {
 
 
     }
@@ -31,8 +31,8 @@ namespace AST {
             }
             stack.addVariable(symbol);
         }
-
-        for (const auto &statement:to_execute) {
+        auto&stmts=body->getStatements();
+        for (const auto &statement:stmts) {
             statement->solveDeclarations(stack, errors);
         }
         stack.popStackFrame();
@@ -40,7 +40,8 @@ namespace AST {
 
     void FuncDeclarationStmt::emitBytecode(VM::VirtualMachine &vm, VM::BytecodeChunk &chunk) const {
         VM::BytecodeChunk function_chunk;
-        for (const auto &statement:to_execute) {
+        auto&stmts=body->getStatements();
+        for (const auto &statement:stmts) {
             statement->emitBytecode(vm, function_chunk);
         }
         function_chunk.pushOpcode(VM::Opcode::LOAD_LITERAL);
@@ -59,7 +60,8 @@ namespace AST {
     void FuncDeclarationStmt::checkControlFlow(VM::FlowState &state, std::vector<Error> &errors) const {
         bool in_function=state.isInFunction();
         state.enterFunction();
-        for (const auto &stmt:to_execute) {
+        auto&stmts=body->getStatements();
+        for (const auto &stmt:stmts) {
             stmt->checkControlFlow(state, errors);
         }
         if(!in_function)

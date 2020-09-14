@@ -7,12 +7,13 @@
 
 #include "StmtNode.h"
 #include "GC/GarbageCollector.h"
+#include "CompoundStmt.h"
 namespace AST {
     /*This class represents a function declaration in the interpreted program*/
     class FuncDeclarationStmt : public StmtNode {
     private:
         /*The function body*/
-        std::vector<std::unique_ptr<StmtNode>> to_execute;
+        std::unique_ptr<CompoundStmt> body;
         /*The function symbols*/
         VM::Symbol function_symbol;
 
@@ -21,7 +22,7 @@ namespace AST {
 
 
     public:
-        FuncDeclarationStmt(yy::location loc,VM::Symbol symbol,std::vector<VM::Symbol> params,std::vector<std::unique_ptr<StmtNode>> stmts);
+        FuncDeclarationStmt(yy::location loc,VM::Symbol symbol,std::vector<VM::Symbol> params,std::unique_ptr<CompoundStmt> body);
 
         /*Push a new stack frame to the declaration stack,push the parameter symbols into the declaration stack */
         void solveDeclarations(VM::DeclarationStack&stack,std::vector<Error>&errors) override;

@@ -107,7 +107,9 @@
 
 %%
 %start unit;
-unit:block{ drv.result = std::move($1); };
+unit:block{ drv.result = std::move($1); }
+| %empty  {}
+;
 
 
 expression: LITERAL {$$=std::make_unique<AST::LiteralExp>(@1,$1);}
@@ -142,19 +144,22 @@ argument_list: "(" ")"      {}
 
 identifier_list: IDENTIFIER {$$.push_back(std::move($1));}
 |identifier_list "," IDENTIFIER {$1.push_back(std::move($3));$$=std::move($1);}
+;
 
 argument_identifier_list: "(" ")" {}
 | "(" identifier_list ")" {$$=std::move($2);}
+;
 
 
 
 
-block:
-%empty          {}
+block:statement {$$.push_back(std::move($1));}
 |block statement{ $1.push_back(std::move($2));$$=std::move($1);}
 ;
 
 compound_stmt: "{" block "}" {$$=std::make_unique<AST::CompoundStmt>(@1,std::move($2));}
+| "{"  "}"                   {$$=std::make_unique<AST::CompoundStmt>(@1,std::vector<std::unique_ptr<AST::StmtNode>>());}
+;
 
 statement: var_declaration_stmt {$$=std::move($1);}
 |expression_stmt {$$=std::move($1);}
@@ -164,6 +169,7 @@ statement: var_declaration_stmt {$$=std::move($1);}
 |return_stmt     {$$=std::move($1);}
 |compound_stmt   {$$=std::move($1);}
 |error           {}
+;
 
 var_declaration_stmt: "var" IDENTIFIER "=" expression ";" {$$=std::make_unique<AST::VarDeclarationStmt>(@1,std::move($2),std::move($4));}
 | "var" IDENTIFIER ";"                                    {$$=std::make_unique<AST::VarDeclarationStmt>(@1,std::move($2));}
@@ -175,13 +181,15 @@ expression_stmt: expression ";" {$$=std::make_unique<AST::ExpressionStmt>(@1,std
 
 ifelse_stmt: "if" "(" expression ")" statement %prec "then" {$$=std::make_unique<AST::IfElseStmt>(@1,std::move($3),std::move($5));}
 |"if" "(" expression ")" statement "else" statement {$$=std::make_unique<AST::IfElseStmt>(@1,std::move($3),std::move($5),std::move($7));}
+;
 
 while_stmt: "while" "(" expression ")" statement {$$=std::make_unique<AST::WhileStmt>(@1,std::move($3),std::move($5));}
 
-func_decl_stmt: "func" IDENTIFIER argument_identifier_list "{" block "}" {$$=std::make_unique<AST::FuncDeclarationStmt>(@1,std::move($2),std::move($3),std::move($5));}
+func_decl_stmt: "func" IDENTIFIER argument_identifier_list compound_stmt {$$=std::make_unique<AST::FuncDeclarationStmt>(@1,std::move($2),std::move($3),std::move($4));}
 
 return_stmt: "return" expression ";" {$$=std::make_unique<AST::ReturnStmt>(@1,std::move($2));}
 | "return"  ";" {$$=std::make_unique<AST::ReturnStmt>(@1);}
+;
 %%
 
 void
